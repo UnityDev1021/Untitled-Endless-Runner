@@ -18,8 +18,6 @@ namespace Untitled_Endless_Runner
         public ObstaclePool[] obstaclesPool;
         public Dictionary<string, Queue<GameObject>> obstaclesDictionary;
 
-        [Header("Local Reference Objects")]
-        [SerializeField] private Transform cameraTransform;
 
         #region Singleton
         private static ObstaclePoolManager _instance;
@@ -54,7 +52,6 @@ namespace Untitled_Endless_Runner
                 {
                     GameObject tempObstacle = Instantiate(obstaclePool.prefab, poolHolder.transform);
                     tempObstacle.SetActive(false);
-                    tempObstacle.GetComponent<ObstacleController>().cameraTrasform = cameraTransform;
                     pool.Enqueue(tempObstacle);
                 }
                 

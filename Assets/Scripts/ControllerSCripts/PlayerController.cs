@@ -10,8 +10,10 @@ namespace Untitled_Endless_Runner
         private Rigidbody2D playerRB;
         [Range(3, 8f)]
         [SerializeField] private float jumpForce;
+        [SerializeField] private float health;
+
         private byte jumpCount;
-        private bool hasJumped;
+        private bool hasJumped, unAlive;
 
         // Start is called before the first frame update
         void Start()
@@ -71,6 +73,20 @@ namespace Untitled_Endless_Runner
                         break;
                     }
             }
+        }
+
+        public void UnAlive()
+        {
+            unAlive = true;
+            Debug.Log($"Player is unalived : {unAlive}");
+        }
+
+        public void TakeDamage(float damage)
+        {
+            health -= damage;
+
+            if (health <= 0)
+                UnAlive();
         }
     }
 }

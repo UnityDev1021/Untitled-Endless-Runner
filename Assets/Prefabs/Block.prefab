@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 595224284692141098}
   - component: {fileID: 595224284692141099}
-  - component: {fileID: -9035920930637846894}
+  - component: {fileID: -2697289532964802964}
   - component: {fileID: 206289393972780945}
   m_Layer: 0
   m_Name: Block
@@ -86,7 +86,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &-9035920930637846894
+--- !u!114 &-2697289532964802964
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -98,7 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f735846b915ffc84b8ec3a456527cb83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeedMultiplier: -0.05
+  moveSpeedMultiplier: -1
   cameraTrasform: {fileID: 0}
   _obstacleStat: {fileID: 11400000, guid: 6a0eeb503c244d7408c3669f179229a7, type: 2}
 --- !u!61 &206289393972780945

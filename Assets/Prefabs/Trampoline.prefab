@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3917808495613822769}
   - component: {fileID: 3917808495613822768}
-  - component: {fileID: 8716639691485342780}
+  - component: {fileID: -8444815785731034935}
   - component: {fileID: 441960111425378683}
   m_Layer: 0
   m_Name: Trampoline
@@ -86,7 +86,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8716639691485342780
+--- !u!114 &-8444815785731034935
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -95,12 +95,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 3917808495613822767}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f735846b915ffc84b8ec3a456527cb83, type: 3}
+  m_Script: {fileID: 11500000, guid: 151b2fba0df19164cbb6e1eb3ecc0bde, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeedMultiplier: -0.05
+  moveSpeedMultiplier: -1
   cameraTrasform: {fileID: 0}
   _obstacleStat: {fileID: 11400000, guid: 90894484e969c424495f128556c51ae6, type: 2}
+  trampolineForceMultiplier: 10
 --- !u!61 &441960111425378683
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -125,5 +126,5 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.23, y: 0.025}
+  m_Size: {x: 0.17572048, y: 0.024999999}
   m_EdgeRadius: 0

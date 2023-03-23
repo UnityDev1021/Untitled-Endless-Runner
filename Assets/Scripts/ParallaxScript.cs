@@ -16,7 +16,7 @@ namespace Untitled_Endless_Runner
         {
             startPos = transform.position.x;
             length = transform.GetChild(0).GetComponent<SpriteRenderer>().bounds.size.x;
-            Debug.Log($"Name : {transform.name}, Length : {length}, startpos : {startPos}");
+            //Debug.Log($"Name : {transform.name}, Length : {length}, startpos : {startPos}");
         }
 
         // Update is called once per frame

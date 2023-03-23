@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2889669728164266813}
   - component: {fileID: 2889669728164266812}
-  - component: {fileID: -6440191734463190724}
+  - component: {fileID: -4853697226414894834}
   - component: {fileID: 94286885537175875}
   m_Layer: 0
   m_Name: Fire
@@ -86,7 +86,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &-6440191734463190724
+--- !u!114 &-4853697226414894834
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -95,12 +95,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 2889669728164266815}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f735846b915ffc84b8ec3a456527cb83, type: 3}
+  m_Script: {fileID: 11500000, guid: fcb32a9f2d9171b4d9b5d5650a067e34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeedMultiplier: -0.05
+  moveSpeedMultiplier: -1
   cameraTrasform: {fileID: 0}
   _obstacleStat: {fileID: 11400000, guid: 54c6c387c669d574fb1595eff1ba0bfa, type: 2}
+  fanForce: 0
+  multiplier: 0
 --- !u!61 &94286885537175875
 BoxCollider2D:
   m_ObjectHideFlags: 0

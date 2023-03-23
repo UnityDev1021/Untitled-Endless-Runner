@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2278675318269974085}
   - component: {fileID: 2278675318269974084}
-  - component: {fileID: 502687799382381648}
+  - component: {fileID: -2007227538458451463}
   - component: {fileID: 6197877298159123019}
   m_Layer: 0
   m_Name: Saw
@@ -86,7 +86,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &502687799382381648
+--- !u!114 &-2007227538458451463
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -95,12 +95,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 2278675318269974083}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f735846b915ffc84b8ec3a456527cb83, type: 3}
+  m_Script: {fileID: 11500000, guid: 00bc39b3363bf6f4e98af133a17cc12b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeedMultiplier: -0.05
+  moveSpeedMultiplier: -1
   cameraTrasform: {fileID: 0}
   _obstacleStat: {fileID: 11400000, guid: 882e8f4a3d46cd743b38aee0ef2989f5, type: 2}
+  damage: 0.01
 --- !u!58 &6197877298159123019
 CircleCollider2D:
   m_ObjectHideFlags: 0

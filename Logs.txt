@@ -1,0 +1,26 @@
+-------------------------------------------------------------------
+							22nd March
+-------------------------------------------------------------------
+=> Making Groups :
+	(-) Fan Group :
+		[=] Making group with block does not makes much sense as both are boost obstacles. So Fan before block makes no sense.
+			[~] Can make the block group bigger, so the fan provides a boost to jump above the blocks.
+			
+_______________________________________________________________________________________________________________
+_______________________________________________________________________________________________________________
+
+=> Fans :
+	(-) Applying effect for now on (fanForce / distance), can also use inverse square law (fanForce / distance * distance)
+		[=] Also can use multiplier, to add on the effect of the fan, for as long as the player stays in the fan collider
+	(-) [Do] It should be that the fan feels arcady-ish :
+		[=] When the player moves in to the fan collider, the force should be the maximum
+		[=] When the player jumps, is in the mid air and enters collider, then the player should experience a force where the player shoots above with the same or respective force, which launches the player to the same height as when the player enters the collider from the ground.
+		[=] In both cases the jump limit should be capped to a specific height.
+		
+=> Trampoline :
+	(-) Force multiplier is 20
+	
+=> Rock Head :
+	(-) [Do] Rock head moves up slowly/ Slams back to the ground
+	(-) Cannot use animation for the vertical up/down movement as the script also needs to manipulate the transform position.
+	(-) Making child colliders as the colliders on the parent detects the player on every position.
