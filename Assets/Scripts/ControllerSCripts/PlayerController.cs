@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,9 +9,11 @@ namespace Untitled_Endless_Runner
         [Range(3, 8f)]
         [SerializeField] private float jumpForce;
         [SerializeField] private float health;
+        [SerializeField] private Animator playerAnimator;
 
         private byte jumpCount;
         private bool hasJumped, unAlive;
+        private int animationIndex;
 
         // Start is called before the first frame update
         void Start()
@@ -28,12 +28,36 @@ namespace Untitled_Endless_Runner
                 Debug.Log($"Jumping");
                 playerRB.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
                 jumpCount++;
+                playerAnimator.Play("Rotate", 0);
+                //playerAnimator.SetBool("Rotate", true);
+                animationIndex = 0;
+                Invoke(nameof(PlayAnimation), 1.01f);
 
                 if (jumpCount == 2)
                 {
                     jumpCount = 0;
                     hasJumped = true;
                 }
+            }
+        }
+
+        private void PlayAnimation()
+        {
+            switch(animationIndex)
+            {
+                case 0:
+                    {
+                        playerAnimator.SetBool("Rotate", false);
+
+                        break;
+                    }
+
+                default:
+                    {
+                        Debug.Log($"Wrong Case {animationIndex} chosen for Player Controller under PlayAnimation");
+
+                        break;
+                    }
             }
         }
 

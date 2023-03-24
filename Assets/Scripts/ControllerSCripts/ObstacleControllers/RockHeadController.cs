@@ -5,9 +5,14 @@ namespace Untitled_Endless_Runner
 {
     public class RockHeadController : BaseObstacleController
     {
-        [SerializeField] private float speedMultiplier = 0.02f;
+        [Header("Test Variables")]
+        [SerializeField] private float upSpeed;
+        [SerializeField] private float downSpeed;
+
+        [Space]
+        [SerializeField] private float speedMultiplier = 0.6f;
         private float time, bottomPos, topPos, tempPos;
-        private bool smashed;
+        private bool smashed, goingUp = false, enableVerticalMove = true;
 
         protected override void Start()
         {
@@ -27,24 +32,35 @@ namespace Untitled_Endless_Runner
             base.FixedUpdate();
 
             #region RockHeadVerticalMovement
-            time += speedMultiplier * Time.deltaTime;
-
-            if (time >= 1) 
+            if (enableVerticalMove)
             {
-                tempPos = topPos;
-                topPos = bottomPos;
-                bottomPos = tempPos;
-                time = 0;
-            }
+                time += speedMultiplier * Time.deltaTime;
 
-            transform.position = new Vector2(transform.position.x, Mathf.Lerp(bottomPos, topPos, time));
+                if (time >= 1)
+                {
+                    tempPos = topPos;
+                    topPos = bottomPos;
+                    bottomPos = tempPos;
+                    time = 0;
+
+                    speedMultiplier = !goingUp ? upSpeed : downSpeed;
+                    if (goingUp)
+                    {
+                        enableVerticalMove = false;
+                        Invoke(nameof(EnableMove), 0.5f);
+                    }
+                    goingUp = !goingUp;
+                }
+
+                transform.position = new Vector2(transform.position.x, Mathf.Lerp(bottomPos, topPos, time));
+            }
             #endregion RockHeadVerticalMovement
         }
 
-        //protected override void OnTriggerStay2D(Collider2D collision)
-        //{
-
-        //}
+        private void EnableMove()
+        {
+            enableVerticalMove = true;
+        }
 
         protected override void ApplyEffect(GameObject player)
         {

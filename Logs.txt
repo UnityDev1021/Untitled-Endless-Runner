@@ -12,6 +12,12 @@
 => Made Cartoon Wind Effect
 	(-) Made 2 effects for horizontal wind that goes against the player with varying time
 	(-) [Do] Make a function that detects whether the obstacle has any grouping or not. i.e. the obstacle is to be instantiated on top of each other or something like that.
+
+-------------------------------------------------------------------
+							24 March
+-------------------------------------------------------------------
+=> [Do] Decide whether it is good for animation or code to spawn different object groupings. i.e. on top of each other or something like that.
+=> [Do] Making an entrance animation.
 _______________________________________________________________________________________________________________
 _______________________________________________________________________________________________________________
 
@@ -22,11 +28,46 @@ ________________________________________________________________________________
 		[=] When the player moves in to the fan collider, the force should be the maximum
 		[=] When the player jumps, is in the mid air and enters collider, then the player should experience a force where the player shoots above with the same or respective force, which launches the player to the same height as when the player enters the collider from the ground.
 		[=] In both cases the jump limit should be capped to a specific height.
+	(-) Animations :
+		[=] Fan stays on the ground and spins.
 		
 => Trampoline :
 	(-) Force multiplier is 20
+	(-) Animations :
+		[=] Goes up and down when the player steps on it.
 	
 => Rock Head :
 	(-) [Do] Rock head moves up slowly/ Slams back to the ground
-	(-) Cannot use animation for the vertical up/down movement as the script also needs to manipulate the transform position.
+	(-) [Alternative] Cannot use animation for the vertical up/down movement as the script also needs to manipulate the transform position.
 	(-) Making child colliders as the colliders on the parent detects the player on every position.
+	(-) Animations :
+		[=] Single RockHead that goes up and down.
+		[=] Duo that goes up and down in their original rotation.
+		[=] Duo that goes up and down, while they are rotated 90.
+		[=] Group of 4 goes up and down side by side.
+		
+=> Saw :
+	(-) Animations :
+		[=] Saw goes up and down
+		[=] Saw moves horizontally in to adn fro motion
+		[=] Saw goes diagonally from top left to bottom right
+		[=] Saw goes diagonally from top right to bottom left
+		[=] Pair of 2 up and down, both moving horizontally in opp. directions
+		[=] Pair of 2, both moving vertically in opp. directions
+		
+=> SpikedHead :
+	(-) Animations :
+		[=] Same as RockHead, but with extra animations, such as going in vertical direction to and fro.
+		
+=> Spike :
+	(-) Animations :
+		[=] Just stays on the ground.
+		
+=> Fire :
+	(-) Animations :
+		[=] Just stays on th ground and lights up in intervals
+		[=] Might also light up in random intervals.
+		
+=> SpikedBall :
+	(-) Animations :
+		[=] Moves in an arc in to and fro motion.

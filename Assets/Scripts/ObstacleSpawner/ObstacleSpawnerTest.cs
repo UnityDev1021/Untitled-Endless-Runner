@@ -4,6 +4,10 @@ namespace Untitled_Endless_Runner
 {
     public class ObstacleSpawnerTest : MonoBehaviour
     {
+        [Header("Test Variables")]
+        [SerializeField] private bool enableSpawn;
+
+        [Space]
         [SerializeField] private Camera mainCamera;
         [SerializeField] private Vector3[] spawnPointsAbove, spawnPointsBelow;              //Why Vector3??
         [SerializeField] private float initialSpawnTime;
@@ -22,21 +26,26 @@ namespace Untitled_Endless_Runner
 
         public void SpawnObstacle()
         {
-            //obstacleGroupIndex = ChooseObstacleGroup();
-            for (int i = 0; i < obstacleGroups[obstacleGroupIndex].obstaclesIndex.Length; i++)
+            if (enableSpawn)
             {
-                SetObstaclePosition(ref obstacleGroups[obstacleGroupIndex].obstaclesIndex[i], obstacleGroups[obstacleGroupIndex].disX[i]);
-                GameObject tempObstacle = ObstaclePoolManager.instance.ReUseObstacle(enemyUnitStats[obstacleGroups[obstacleGroupIndex].obstaclesIndex[i]].tag, tempSpawnPos, Quaternion.identity);
+                enableSpawn = false;
 
-                if (obstacleGroups[obstacleGroupIndex].obstacleGroupType[i] != 0)
-                    tempObstacle.GetComponent<BaseObstacleController>().AssignGroupTypes();
+                //obstacleGroupIndex = ChooseObstacleGroup();
+                for (int i = 0; i < obstacleGroups[obstacleGroupIndex].obstaclesIndex.Length; i++)
+                {
+                    SetObstaclePosition(ref obstacleGroups[obstacleGroupIndex].obstaclesIndex[i], obstacleGroups[obstacleGroupIndex].disX[i]);
+                    GameObject tempObstacle = ObstaclePoolManager.instance.ReUseObstacle(enemyUnitStats[obstacleGroups[obstacleGroupIndex].obstaclesIndex[i]].tag, tempSpawnPos, Quaternion.identity);
+
+                    if (obstacleGroups[obstacleGroupIndex].obstacleGroupType[i] != 0)
+                        tempObstacle.GetComponent<BaseObstacleController>().AssignGroupTypes();
+                }
+
+                //SetObstaclePosition(ref obstacleGroups[obstacleGroupIndex].firstObstacleIndex);
+                //ObstaclePoolManager.instance.ReUseObstacle(enemyUnitStats[obstacleGroups[obstacleGroupIndex].firstObstacleIndex].tag, tempSpawnPos, Quaternion.identity);
+
+                Invoke("SpawnObstacle", obstacleGroups[obstacleGroupIndex].spawnNextAfter);
+                //Debug.Log($"Spawning Obstacle : {enemyUnitTags[enemyUnitIndex]}");
             }
-
-            //SetObstaclePosition(ref obstacleGroups[obstacleGroupIndex].firstObstacleIndex);
-            //ObstaclePoolManager.instance.ReUseObstacle(enemyUnitStats[obstacleGroups[obstacleGroupIndex].firstObstacleIndex].tag, tempSpawnPos, Quaternion.identity);
-
-            Invoke("SpawnObstacle", obstacleGroups[obstacleGroupIndex].spawnNextAfter) ;
-            //Debug.Log($"Spawning Obstacle : {enemyUnitTags[enemyUnitIndex]}");
         }
 
         private byte ChooseObstacleGroup()

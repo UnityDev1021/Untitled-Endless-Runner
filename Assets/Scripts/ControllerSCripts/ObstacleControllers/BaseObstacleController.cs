@@ -4,6 +4,10 @@ namespace Untitled_Endless_Runner
 {
     public class BaseObstacleController : MonoBehaviour
     {
+        [Header("Test Variables")]
+        [SerializeField] private bool enableMove;
+
+        [Space]
         [SerializeField] private float moveSpeedMultiplier = -1f;
         public Transform cameraTrasform;
         protected bool appliedEffect;
@@ -19,14 +23,17 @@ namespace Untitled_Endless_Runner
         // Update is called once per frame
         protected virtual void FixedUpdate()
         {
-            if (transform.position.x > (cameraTrasform.position.x - 12f))
+            if (enableMove)
             {
-                transform.position = new Vector2(transform.position.x + (Time.deltaTime * moveSpeedMultiplier),
-                                                transform.position.y);
-                //transform.Translate(transform.right * moveSpeedMultiplier);
+                if (transform.position.x > (cameraTrasform.position.x - 12f))
+                {
+                    transform.position = new Vector2(transform.position.x + (Time.deltaTime * moveSpeedMultiplier),
+                                                    transform.position.y);
+                    //transform.Translate(transform.right * moveSpeedMultiplier);
+                }
+                else
+                    gameObject.SetActive(false);
             }
-            else
-                gameObject.SetActive(false);
         }
 
         protected virtual void OnTriggerStay2D(Collider2D collision)
