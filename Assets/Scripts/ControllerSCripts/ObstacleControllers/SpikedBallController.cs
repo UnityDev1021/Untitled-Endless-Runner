@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Untitled_Endless_Runner
@@ -6,7 +5,8 @@ namespace Untitled_Endless_Runner
     public class SpikedBallController : BaseObstacleController
     {
         [SerializeField] private float damage, rotAngle, speedMultiplier = 0.02f;
-        private float time, tempRot, leftRot, rightRot, currentAngle;
+        private float tempRot, leftRot, rightRot, currentAngle;
+        public float time;
 
         protected override void Start()
         {
@@ -26,7 +26,7 @@ namespace Untitled_Endless_Runner
             #region SpikedBallMovement
             time += speedMultiplier * Time.deltaTime;
 
-            if (time >= 100)
+            if (time >= 1)
             {
                 tempRot = leftRot;
                 leftRot = rightRot;
@@ -34,7 +34,7 @@ namespace Untitled_Endless_Runner
                 time = 0;
             }
 
-            currentAngle = Mathf.Lerp(leftRot, rightRot, time) * Time.deltaTime;
+            currentAngle = Mathf.Lerp(leftRot, rightRot, time);// * Time.deltaTime;
             transform.rotation = Quaternion.Euler(0f, 0f, currentAngle);
             //transform.eulerAngles = new Vector3(0f, 0f, currentAngle);
 

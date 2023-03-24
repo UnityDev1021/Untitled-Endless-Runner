@@ -60,5 +60,6 @@ namespace Untitled_Endless_Runner
 
         protected virtual void ApplyEffect(GameObject player) { }
         protected virtual void ClearEffects() { }
+        public virtual void AssignGroupTypes() { }
     }
 }

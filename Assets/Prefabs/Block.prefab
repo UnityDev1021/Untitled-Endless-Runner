@@ -98,7 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f735846b915ffc84b8ec3a456527cb83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeedMultiplier: -1
+  moveSpeedMultiplier: -2
   cameraTrasform: {fileID: 0}
   _obstacleStat: {fileID: 11400000, guid: 6a0eeb503c244d7408c3669f179229a7, type: 2}
 --- !u!61 &206289393972780945

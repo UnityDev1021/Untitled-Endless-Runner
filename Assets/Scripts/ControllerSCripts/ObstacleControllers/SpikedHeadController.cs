@@ -6,8 +6,10 @@ namespace Untitled_Endless_Runner
     public class SpikedHeadController : BaseObstacleController
     {
         [SerializeField] private float speedMultiplier = 0.02f;
-        private float time, bottomPos, topPos, tempPos;
+        private float bottomPos, topPos, tempPos;
         private bool smashed;
+
+        public float time;
 
         protected override void Start()
         {
@@ -37,7 +39,7 @@ namespace Untitled_Endless_Runner
                 time = 0;
             }
 
-            transform.position = new Vector2(transform.position.x, Mathf.Lerp(bottomPos, topPos, time));
+            transform.position = new Vector2(transform.position.x, Mathf.Lerp(topPos, bottomPos, time));
             #endregion RockHeadVerticalMovement
         }
 

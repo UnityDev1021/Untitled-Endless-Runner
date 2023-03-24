@@ -12,7 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d1db9ca2b6fd8e43944925a27c8a843, type: 3}
   m_Name: Group_6 5
   m_EditorClassIdentifier: 
-  obstaclesIndex: 0605
-  distance:
+  obstaclesIndex: 060505
+  obstacleGroupType: 0000
+  disX:
   - 0
   - 2
+  - 2
+  spawnNextAfter: 5

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3708782691982978215}
   - component: {fileID: 2558896849814026923}
   - component: {fileID: 1440335527707562884}
+  - component: {fileID: -8246960007043510088}
   m_Layer: 0
   m_Name: Fan
   m_TagString: Obstacle
@@ -98,7 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcb32a9f2d9171b4d9b5d5650a067e34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeedMultiplier: -1
+  moveSpeedMultiplier: -2
   cameraTrasform: {fileID: 0}
   _obstacleStat: {fileID: 11400000, guid: 707d1dcd1f0974643aa447d5dae3a035, type: 2}
   fanForce: 20
@@ -129,3 +130,24 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.235, y: 0.7726693}
   m_EdgeRadius: 0
+--- !u!95 &-8246960007043510088
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3708782691982978214}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 7ab36e9593402004aa6a6b05146b1ad4, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
