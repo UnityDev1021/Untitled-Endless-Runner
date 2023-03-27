@@ -9,7 +9,8 @@ namespace Untitled_Endless_Runner
         [Range(3, 8f)]
         [SerializeField] private float jumpForce;
         [SerializeField] private float health;
-        [SerializeField] private Animator playerAnimator;
+        //[SerializeField] private Animator playerAnimator;
+        [SerializeField] private SpriteRenderer playerRenderer;
 
         private byte jumpCount;
         private bool hasJumped, unAlive;
@@ -28,7 +29,7 @@ namespace Untitled_Endless_Runner
                 Debug.Log($"Jumping");
                 playerRB.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
                 jumpCount++;
-                playerAnimator.Play("Rotate", 0);
+                //playerAnimator.Play("Rotate", 0);
                 //playerAnimator.SetBool("Rotate", true);
                 animationIndex = 0;
                 Invoke(nameof(PlayAnimation), 1.01f);
@@ -41,13 +42,18 @@ namespace Untitled_Endless_Runner
             }
         }
 
+        public void SetPlayerAfterEntry()
+        {
+            playerRenderer.maskInteraction = SpriteMaskInteraction.None;
+        }
+
         private void PlayAnimation()
         {
             switch(animationIndex)
             {
                 case 0:
                     {
-                        playerAnimator.SetBool("Rotate", false);
+                        //playerAnimator.SetBool("Rotate", false);
 
                         break;
                     }

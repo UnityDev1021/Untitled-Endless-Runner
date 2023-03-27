@@ -18,6 +18,13 @@
 -------------------------------------------------------------------
 => [Do] Decide whether it is good for animation or code to spawn different object groupings. i.e. on top of each other or something like that.
 => [Do] Making an entrance animation.
+
+-------------------------------------------------------------------
+							27 March
+-------------------------------------------------------------------
+=> [Do] When the player jumps, the animations follows but the players shifts a bit forward, and then when the player lands, the player get back to his oroginal position.
+=> Animation For Player Beta 1.0, done for now.
+
 _______________________________________________________________________________________________________________
 _______________________________________________________________________________________________________________
 
@@ -62,6 +69,7 @@ ________________________________________________________________________________
 => Spike :
 	(-) Animations :
 		[=] Just stays on the ground.
+		[=] Spikes will appear from the ground.
 		
 => Fire :
 	(-) Animations :
