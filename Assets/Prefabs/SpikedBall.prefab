@@ -130,12 +130,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2957393f29a964d4da12fc09c3d6f5e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enableMove: 0
   moveSpeedMultiplier: -2
+  parallaxEffect: 1.1
   cameraTrasform: {fileID: 0}
   _obstacleStat: {fileID: 11400000, guid: 4da76c27544e4ad4eb84dbcb28dc742a, type: 2}
   damage: 0
   rotAngle: 60
   speedMultiplier: 0.5
+  time: 0
 --- !u!1 &7073178696823078888
 GameObject:
   m_ObjectHideFlags: 0

@@ -6,9 +6,9 @@ namespace Untitled_Endless_Runner
 {
     public class ParallaxScript : MonoBehaviour
     {
-        private float length, startPos;
+        private float length, startPos, tempPosXVal, distance;
         public GameObject cam;
-        public float parallaxEffect, tempPosXVal, distance;
+        public float parallaxEffect;
         private int sceneMultiplier = 1, prevSceneIndex = 2;
 
         // Start is called before the first frame update
@@ -16,7 +16,8 @@ namespace Untitled_Endless_Runner
         {
             startPos = transform.position.x;
             length = transform.GetChild(0).GetComponent<SpriteRenderer>().bounds.size.x;
-            //Debug.Log($"Name : {transform.name}, Length : {length}, startpos : {startPos}");
+            prevSceneIndex = (transform.childCount - 1);                                    //The last scnen in line
+            Debug.Log($"Name : {transform.name}, Length : {length}, startpos : {startPos}");
         }
 
         // Update is called once per frame
@@ -32,7 +33,7 @@ namespace Untitled_Endless_Runner
             {
                 float tempPosX = transform.GetChild(prevSceneIndex).transform.position.x;
 
-                if (prevSceneIndex == 2)                
+                if (prevSceneIndex == (transform.childCount - 1))               // If the Scene at, the extreme end of the camera or last in line ,is about to go inside, then change to the one at the first in line
                     prevSceneIndex = 0;                
                 else
                     prevSceneIndex++;

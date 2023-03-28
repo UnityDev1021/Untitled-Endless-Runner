@@ -6,7 +6,7 @@ namespace Untitled_Endless_Runner
     public class PlayerController : MonoBehaviour
     {
         private Rigidbody2D playerRB;
-        [Range(3, 8f)]
+        [Range(8, 15f)]
         [SerializeField] private float jumpForce;
         [SerializeField] private float health;
         //[SerializeField] private Animator playerAnimator;
@@ -26,8 +26,8 @@ namespace Untitled_Endless_Runner
         {
             if (Keyboard.current[Key.Space].wasPressedThisFrame && !hasJumped)
             {
-                Debug.Log($"Jumping");
-                playerRB.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
+                //Debug.Log($"Jumping");
+                playerRB.velocity = transform.up * jumpForce;
                 jumpCount++;
                 //playerAnimator.Play("Rotate", 0);
                 //playerAnimator.SetBool("Rotate", true);

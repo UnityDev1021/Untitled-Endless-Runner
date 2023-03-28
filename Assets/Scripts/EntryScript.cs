@@ -1,3 +1,5 @@
+#define SKIP_ENTRY                          //For Testing
+
 using System.Collections;
 using UnityEditor.Timeline.Actions;
 using UnityEngine;
@@ -19,9 +21,18 @@ namespace Untitled_Endless_Runner
 
         private void Start()
         {
-            backgroundAnimator.Play("Entry", 0);                                   
+#if !SKIP_ENTRY
+            backgroundAnimator.Play("Entry", 0);
             Invoke(nameof(EnablePortal), 9.5f);
             Invoke(nameof(EnablePlayer), 10f);
+#else
+            player.transform.position = new Vector2(-5.3f, -3.7f);
+            player.SetActive(true);
+            backgroundAnimator.enabled = false;
+            localBG_Controller.enabled = true;                              //Enable BackGround Controller Script
+            player.GetComponent<PlayerController>().enabled = true;
+            player.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+#endif
 
             #region CheckAnimationClipLength;
             //AnimationClip[] clips = playerAnimator.runtimeAnimatorController.animationClips;
@@ -74,11 +85,13 @@ namespace Untitled_Endless_Runner
                     {
                         yield return new WaitForSeconds(seconds);
                         player.transform.position = new Vector2(-5.3f, -3.7f);
+                        player.GetComponent<PlayerController>().enabled = true;
+                        player.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
 
                         //backgroundAnimator.Play("NightAnim", 0);                        //If left to nothing, cannot manipulate transform as the animator would be on
                         backgroundAnimator.enabled = false;
 
-                        localBG_Controller.enabled = true;                              //Enable BackGround Controller
+                        localBG_Controller.enabled = true;                              //Enable BackGround Controller Script
                         localGameLogic.OnMainGameplayStarted?.Invoke();                 //Invoke Action of Main Gameplay has started
                         //Debug.Log($"Status : {localBG_Controller.enabled}");
 

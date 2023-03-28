@@ -160,10 +160,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30bc44c86eea7b5449e3afa4fa1ee7f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enableMove: 0
   moveSpeedMultiplier: -2
+  parallaxEffect: 1.1
   cameraTrasform: {fileID: 0}
   _obstacleStat: {fileID: 11400000, guid: bba85c447fc8a2040b84b96d0902b835, type: 2}
   speedMultiplier: 0.7
+  time: 0
 --- !u!61 &880500190023037051
 BoxCollider2D:
   m_ObjectHideFlags: 0

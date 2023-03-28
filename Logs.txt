@@ -24,7 +24,14 @@
 -------------------------------------------------------------------
 => [Do] When the player jumps, the animations follows but the players shifts a bit forward, and then when the player lands, the player get back to his oroginal position.
 => Animation For Player Beta 1.0, done for now.
+=> [Do] When the player slides, the player should accelerate for a moment but slows down after reaching a distance.
 
+-------------------------------------------------------------------
+							28 March
+-------------------------------------------------------------------
+=> [Do] Make Swipe Controls.
+=> Making The Collider of player as non trigger, and relying on triggers on obstacle to detect the player.
+=> [Do] Make better double jumps.
 _______________________________________________________________________________________________________________
 _______________________________________________________________________________________________________________
 
@@ -79,3 +86,10 @@ ________________________________________________________________________________
 => SpikedBall :
 	(-) Animations :
 		[=] Moves in an arc in to and fro motion.
+_______________________________________________________________________________________________________________
+
+													Spawn Combinations
+_______________________________________________________________________________________________________________
+
+=> Can Spawn spike with rockhead at a smaller distance such as 2 for harder difficulties.
+	[-] Spawning at more than 2 (i.e. 3) for now. The player will land directly on the spike if they dont jump at the correct distance.

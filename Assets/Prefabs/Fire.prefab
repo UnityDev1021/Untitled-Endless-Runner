@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2889669728164266812}
   - component: {fileID: -4853697226414894834}
   - component: {fileID: 94286885537175875}
+  - component: {fileID: 6711624058387661042}
   m_Layer: 0
   m_Name: Fire
   m_TagString: Obstacle
@@ -75,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 12
-  m_Sprite: {fileID: 21300000, guid: 7281cc67e59458a458c31e74f9298a6f, type: 3}
+  m_Sprite: {fileID: -1054041101, guid: adeb29003aa05fe49bfccdd4b78beb13, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -98,6 +99,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcb32a9f2d9171b4d9b5d5650a067e34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enableMove: 0
   moveSpeedMultiplier: -2
   cameraTrasform: {fileID: 0}
   _obstacleStat: {fileID: 11400000, guid: 54c6c387c669d574fb1595eff1ba0bfa, type: 2}
@@ -120,7 +122,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.16, y: 0.32}
+    oldSize: {x: 0.16, y: 0.69}
     newSize: {x: 0.16, y: 0.32}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -129,3 +131,24 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.16, y: 0.2}
   m_EdgeRadius: 0
+--- !u!95 &6711624058387661042
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2889669728164266815}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 84cdb5175fa7cea4ebe107b66d2f7358, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

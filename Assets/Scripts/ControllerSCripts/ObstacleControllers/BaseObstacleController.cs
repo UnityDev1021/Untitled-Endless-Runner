@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Untitled_Endless_Runner
@@ -23,17 +24,8 @@ namespace Untitled_Endless_Runner
         // Update is called once per frame
         protected virtual void FixedUpdate()
         {
-            if (enableMove)
-            {
-                if (transform.position.x > (cameraTrasform.position.x - 12f))
-                {
-                    transform.position = new Vector2(transform.position.x + (Time.deltaTime * moveSpeedMultiplier),
-                                                    transform.position.y);
-                    //transform.Translate(transform.right * moveSpeedMultiplier);
-                }
-                else
-                    gameObject.SetActive(false);
-            }
+            if (transform.position.x < (cameraTrasform.position.x - 12f))
+                gameObject.SetActive(false);
         }
 
         protected virtual void OnTriggerStay2D(Collider2D collision)
