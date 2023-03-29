@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d01532c85dea83f47881507cdeae1acd, type: 3}
   m_Name: RockHead_Obs
   m_EditorClassIdentifier: 
-  type: Attack
-  tag: RockHead
+  type: 0
+  tag: 1

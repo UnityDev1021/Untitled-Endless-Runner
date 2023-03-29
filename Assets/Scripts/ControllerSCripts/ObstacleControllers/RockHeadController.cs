@@ -64,10 +64,13 @@ namespace Untitled_Endless_Runner
 
         protected override void ApplyEffect(GameObject player)
         {
-            if (!smashed)
+            effectStatus = 1;
+
+            if (!smashed && goingUp)                //Apparently this is the opposite
             {
                 smashed = true;
-                player.GetComponent<PlayerController>().UnAlive();
+                localGameLogic.OnObstacleDetected?.Invoke(obstacleStat, 0f);
+                Invoke(nameof(ClearEffects), 1f);
             }
         }
     }

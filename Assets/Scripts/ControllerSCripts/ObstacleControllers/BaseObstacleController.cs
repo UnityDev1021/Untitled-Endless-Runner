@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -8,10 +9,13 @@ namespace Untitled_Endless_Runner
         [Header("Test Variables")]
         [SerializeField] private bool enableMove;
 
+        [Header("Local References")]
+        [SerializeField] protected GameLogic localGameLogic;
+
         [Space]
-        [SerializeField] private float moveSpeedMultiplier = -1f;
+        //[SerializeField] private float moveSpeedMultiplier = -1f;
         public Transform cameraTrasform;
-        protected bool appliedEffect;
+        [SerializeField] protected byte effectStatus;
 
         [SerializeField] private ObstacleStat _obstacleStat;
         public ObstacleStat obstacleStat { get { return _obstacleStat; } }
@@ -19,6 +23,7 @@ namespace Untitled_Endless_Runner
         protected virtual void Start()
         {
             cameraTrasform = GameManager.instance.cameraTransform;
+            localGameLogic = GameManager.instance.gameLogicReference;
         }
 
         // Update is called once per frame
@@ -30,31 +35,30 @@ namespace Untitled_Endless_Runner
 
         protected virtual void OnTriggerStay2D(Collider2D collision)
         {
-            if (collision.transform.CompareTag("Player") && collision.transform.GetComponent<PlayerController>() != null)
+            if (collision.transform.CompareTag("Player"))
             {
-                collision.transform.GetComponent<PlayerController>().ObstacleDetected(obstacleStat);
-                ApplyEffect(collision.gameObject);
+                //collision.transform.GetComponent<PlayerController>().ObstacleDetected(obstacleStat);
 
-                //if (!appliedEffect)
-                //{
-                //    //appliedEffect = true;
-                //    //Invoke("EnableEffectAgain", 1f);
-                //}
+                if ((effectStatus == 0 && effectStatus != 2) || effectStatus >= 3)      //3 - Continuos, 2 - Nothing, 0 - Once
+                {
+                    ApplyEffect(collision.gameObject);
+                    //Invoke("EnableEffectAgain", 1f);
+                }
             }
         }
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            if (collision.transform.CompareTag("Player") && collision.transform.GetComponent<PlayerController>() != null)
+            if (collision.transform.CompareTag("Player"))
             {
                 ClearEffects();
             }
         }
 
         //Restart the effect for reusing the obstacle
-        private void EnableEffectAgain()
+        protected void EnableEffectAgain()
         {
-            appliedEffect = false;
+            effectStatus = 0;
         }
 
         protected virtual void ApplyEffect(GameObject player) { }

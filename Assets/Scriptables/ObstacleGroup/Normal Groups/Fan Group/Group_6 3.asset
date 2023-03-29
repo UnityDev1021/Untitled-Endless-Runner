@@ -17,4 +17,4 @@ MonoBehaviour:
   disX:
   - 0
   - 2
-  spawnNextAfter: 0
+  spawnNextAfter: 5

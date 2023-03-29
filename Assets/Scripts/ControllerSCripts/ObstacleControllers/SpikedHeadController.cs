@@ -50,10 +50,14 @@ namespace Untitled_Endless_Runner
 
         protected override void ApplyEffect(GameObject player)
         {
+            effectStatus = 1;
+
             if (!smashed)
             {
                 smashed = true;
-                player.GetComponent<PlayerController>().UnAlive();
+                localGameLogic.OnObstacleDetected?.Invoke(obstacleStat, 0f);
+                Invoke(nameof(ClearEffects), 1f);
+                //player.GetComponent<PlayerController>().UnAlive();
             }
         }
     }

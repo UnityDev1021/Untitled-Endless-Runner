@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 6958880394189308189}
   - component: {fileID: 6958880394189308190}
   - component: {fileID: -2790952308399562974}
-  - component: {fileID: 5268227831072527094}
+  - component: {fileID: 5628184224856496813}
   m_Layer: 0
   m_Name: RockHead
-  m_TagString: Obstacle
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -100,13 +100,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enableMove: 0
-  moveSpeedMultiplier: -2
+  localGameLogic: {fileID: 0}
   cameraTrasform: {fileID: 0}
+  effectStatus: 0
   _obstacleStat: {fileID: 11400000, guid: 792c5a1238427e346b846e0df18c0198, type: 2}
   upSpeed: 4
   downSpeed: 0.7
   speedMultiplier: 0.7
---- !u!61 &5268227831072527094
+--- !u!61 &5628184224856496813
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -116,7 +117,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: -0.141}
@@ -145,9 +146,10 @@ GameObject:
   - component: {fileID: 8419822327903983513}
   - component: {fileID: 888701421000807307}
   - component: {fileID: 221443700776351365}
+  - component: {fileID: 8712019564107977851}
   m_Layer: 0
   m_Name: ColliderContainer
-  m_TagString: Untagged
+  m_TagString: Steppable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -270,4 +272,30 @@ BoxCollider2D:
   m_AutoTiling: 0
   serializedVersion: 2
   m_Size: {x: 0.245, y: 0.030000001}
+  m_EdgeRadius: 0
+--- !u!61 &8712019564107977851
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8204751541953613154}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0.162}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.42, y: 0.42}
+    newSize: {x: 0.42, y: 0.42}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.309, y: 0.014}
   m_EdgeRadius: 0

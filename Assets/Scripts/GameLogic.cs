@@ -6,15 +6,19 @@ namespace Untitled_Endless_Runner
     public class GameLogic : MonoBehaviour
     {
         public Action OnMainGameplayStarted;
+        public Action<ObstacleStat, float> OnObstacleDetected;
+        public Action OnPlayerHealthOver;
 
         private void OnEnable()
         {
             OnMainGameplayStarted += EnableObjects;
+            OnPlayerHealthOver += EndGame;
         }
 
         private void OnDisable()
         {
-            OnMainGameplayStarted -= EnableObjects;            
+            OnMainGameplayStarted -= EnableObjects;
+            OnPlayerHealthOver -= EndGame;
         }
 
         private void EnableObjects()
@@ -22,14 +26,7 @@ namespace Untitled_Endless_Runner
 
         }
 
-        // Start is called before the first frame update
-        void Start()
-        {
-
-        }
-
-        // Update is called once per frame
-        void Update()
+        private void EndGame()
         {
 
         }

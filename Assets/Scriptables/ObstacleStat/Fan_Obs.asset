@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Fan_Obs
   m_EditorClassIdentifier: 
   type: 1
-  tag: Fan
+  tag: 6

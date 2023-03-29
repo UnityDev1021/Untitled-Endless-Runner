@@ -55,25 +55,25 @@ namespace Untitled_Endless_Runner
                     pool.Enqueue(tempObstacle);
                 }
                 
-                obstaclesDictionary.Add(obstaclePool.stat.tag, pool);
+                obstaclesDictionary.Add(obstaclePool.stat.tag.ToString(), pool);
             }
 
         }
 
-        public GameObject ReUseObstacle(string tag, Vector3 pos, Quaternion Rot)
+        public GameObject ReUseObstacle(ObstacleTag tag, Vector3 pos, Quaternion Rot)
         {
-            if (!obstaclesDictionary.ContainsKey(tag))
+            if (!obstaclesDictionary.ContainsKey(tag.ToString()))
             {
                 Debug.LogError($"Dictionary does not contain pool with tag : {tag}");
             }
 
-            GameObject tempObstacle = obstaclesDictionary[tag].Dequeue();
+            GameObject tempObstacle = obstaclesDictionary[tag.ToString()].Dequeue();
 
             tempObstacle.SetActive(true);
             tempObstacle.transform.position = pos;
             tempObstacle.transform.rotation = Rot;
             
-            obstaclesDictionary[tag].Enqueue(tempObstacle);
+            obstaclesDictionary[tag.ToString()].Enqueue(tempObstacle);
             return tempObstacle;
         }
     }

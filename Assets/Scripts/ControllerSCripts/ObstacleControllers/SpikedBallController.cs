@@ -46,8 +46,12 @@ namespace Untitled_Endless_Runner
 
         protected override void ApplyEffect(GameObject player)
         {
+            effectStatus = 1;
+
             Debug.Log($"Applying Spike Effect");
-            player.GetComponent<PlayerController>().TakeDamage(damage);
+            //player.GetComponent<PlayerController>().TakeDamage(damage);
+            localGameLogic.OnObstacleDetected?.Invoke(obstacleStat, damage);
+            Invoke(nameof(ClearEffects), 0.5f);
         }
     }
 }

@@ -16,5 +16,5 @@ MonoBehaviour:
   obstacleGroupType: 0000
   disX:
   - 0
-  - 2
-  spawnNextAfter: 0
+  - 3.5
+  spawnNextAfter: 2.3

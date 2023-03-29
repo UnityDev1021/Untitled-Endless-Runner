@@ -1,3 +1,4 @@
+using UnityEditor.Timeline.Actions;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -12,9 +13,23 @@ namespace Untitled_Endless_Runner
         //[SerializeField] private Animator playerAnimator;
         [SerializeField] private SpriteRenderer playerRenderer;
 
+        [Header("Local Refernce Script")]
+        [SerializeField] private GameLogic localGameLogic;
+
+        [Space]
         private byte jumpCount;
         private bool hasJumped, unAlive;
         private int animationIndex;
+
+        private void OnEnable()
+        {
+            localGameLogic.OnObstacleDetected += ObstacleDetected;
+        }
+
+        private void OnDisable()
+        {
+            localGameLogic.OnObstacleDetected -= ObstacleDetected;            
+        }
 
         // Start is called before the first frame update
         void Start()
@@ -69,8 +84,10 @@ namespace Untitled_Endless_Runner
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.CompareTag("Ground"))
+            if (collision.CompareTag("Ground") || collision.CompareTag("Steppable"))
             {
+                jumpCount = 0;              //To ensure that the player can double jump from the obstacle
+
                 if (hasJumped)
                 {
                     hasJumped = false;
@@ -78,20 +95,98 @@ namespace Untitled_Endless_Runner
             }
         }
 
-        public void ObstacleDetected(ObstacleStat obstacleStat)
+        public void ObstacleDetected(ObstacleStat obstacleStat, float damage)
         {
             switch (obstacleStat.type)
             {
                 case ObstacleType.Attack:
                     {
-                        Debug.Log($"Attack Obstacle");
+                        switch (obstacleStat.tag)
+                        {
+                            case ObstacleTag.RockHead:
+                                {
+                                    UnAlive();
+
+                                    break;
+                                }
+
+                            case ObstacleTag.Saw:
+                                {
+                                    TakeDamage(damage);
+
+                                    break;
+                                }
+
+                            case ObstacleTag.SpikedBall:
+                                {
+                                    TakeDamage(damage);
+
+                                    break;
+                                }
+
+                            case ObstacleTag.SpikedHead:
+                                {
+                                    UnAlive();
+
+                                    break;
+                                }
+
+                            case ObstacleTag.Spike:
+                                {
+                                    TakeDamage(damage);
+
+                                    break;
+                                }
+
+                            case ObstacleTag.Fire:
+                                {
+
+                                    break;
+                                }
+
+                            default:
+                                {
+                                    Debug.LogError($"Attack Obstacle Not Found");
+
+                                    break;
+                                }
+                        }
+                        Debug.Log($"Attack Obstacle : {obstacleStat.tag.ToString()}");
 
                         break;
                     }
 
                 case ObstacleType.Boost:
                     {
-                        Debug.Log($"Boost Obstacle");
+                        switch (obstacleStat.tag)
+                        {
+                            case ObstacleTag.Block:
+                                {
+
+                                    break;
+                                }
+
+                            case ObstacleTag.Fan:
+                                {
+                                    //playerRB.AddForce(force * multiplier, ForceMode2D.Force);
+
+                                    break;
+                                }
+
+                            case ObstacleTag.Trampoline:
+                                {
+
+                                    break;
+                                }
+
+                            default:
+                                {
+                                    Debug.LogError($"Boost Obstacle Not Found");
+
+                                    break;
+                                }
+                        }
+                        Debug.Log($"Boost Obstacle : {obstacleStat.tag}");
 
                         break;
                     }
@@ -109,6 +204,7 @@ namespace Untitled_Endless_Runner
         {
             unAlive = true;
             Debug.Log($"Player is unalived : {unAlive}");
+            localGameLogic.OnPlayerHealthOver?.Invoke();
         }
 
         public void TakeDamage(float damage)
@@ -117,6 +213,8 @@ namespace Untitled_Endless_Runner
 
             if (health <= 0)
                 UnAlive();
+
+            Debug.Log($"Taking Damage : {health}, Damage : {damage}");
         }
     }
 }

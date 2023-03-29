@@ -69,12 +69,17 @@ namespace Untitled_Endless_Runner
         private void SetObstaclePosition(ref byte obstacleUnitIndex, float addDisX = 0f, float addDisY = 0f)
         {
             //Check where to spawn for different objects
-            if (obstacleUnitIndex < 5)
+            if (obstacleUnitIndex < 4)
             {
                 byte randomSpawnIndex = (byte)Random.Range(0, spawnPointsAbove.Length);              //Last point is for those obstacles that spawn on the ground
                 //byte randomSpawnIndex = 0;                            //Uncomment for test
                 tempSpawnPos = new Vector3(mainCamera.transform.position.x + 12f + addDisX, spawnPointsAbove[randomSpawnIndex] + mainCamera.transform.position.y, 0f);
                 //Debug.Log($"Chose Random Point : {randomSpawnIndex}");
+            }
+            else if (obstacleUnitIndex == 4)
+            {
+                byte randomSpawnIndex = (byte)Random.Range(spawnPointsAbove.Length - 3, spawnPointsAbove.Length);              //Last point is for those obstacles that spawn on the ground
+                tempSpawnPos = new Vector3(mainCamera.transform.position.x + 12f + addDisX, spawnPointsAbove[randomSpawnIndex] + mainCamera.transform.position.y, 0f);                
             }
             else if (obstacleUnitIndex == 5)
                 tempSpawnPos = new Vector3(mainCamera.transform.position.x + 12f + addDisX, spawnPointsBelow[0] + addDisY, 0f);

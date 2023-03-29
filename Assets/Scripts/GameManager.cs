@@ -6,6 +6,9 @@ namespace Untitled_Endless_Runner
 {
     public class GameManager : MonoBehaviour
     {
+        [Header("Local Reference Scripts")]
+        public GameLogic gameLogicReference;
+
         [Header("Local Reference Objects")]
         public Transform cameraTransform;
 
