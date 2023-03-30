@@ -5,8 +5,11 @@ namespace Untitled_Endless_Runner
 {
     public class GameLogic : MonoBehaviour
     {
+        private byte _totalHearts = 4;
+        public int totalHearts { get => _totalHearts; }
+
         public Action OnMainGameplayStarted;
-        public Action<ObstacleStat, float> OnObstacleDetected;
+        public Action<ObstacleStat> OnObstacleDetected;
         public Action OnPlayerHealthOver;
 
         private void OnEnable()

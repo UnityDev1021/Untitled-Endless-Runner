@@ -5,7 +5,7 @@ namespace Untitled_Endless_Runner
 {
     public class RockHeadController : BaseObstacleController
     {
-        [Header("Test Variables")]
+        [Header("Vertical Speeds")]
         [SerializeField] private float upSpeed;
         [SerializeField] private float downSpeed;
 
@@ -57,6 +57,35 @@ namespace Untitled_Endless_Runner
             #endregion RockHeadVerticalMovement
         }
 
+        public override void AssignGroupTypes(byte groupType)
+        {
+            switch (groupType)
+            {
+                case 1:
+                    {
+                        time = 0.5f;
+
+                        break;
+                    }
+
+                case 2:
+                    {
+                        time = 1f;
+
+                        break;
+                    }
+
+                default:
+                    {
+                        Debug.LogError($"GroupType not assigned for {obstacleStat.tag.ToString()}");
+
+                        break;
+                    }
+            }
+
+            transform.position = new Vector2(transform.position.x, Mathf.Lerp(bottomPos, topPos, time));
+        }
+
         private void EnableMove()
         {
             enableVerticalMove = true;
@@ -69,8 +98,8 @@ namespace Untitled_Endless_Runner
             if (!smashed && goingUp)                //Apparently this is the opposite
             {
                 smashed = true;
-                localGameLogic.OnObstacleDetected?.Invoke(obstacleStat, 0f);
-                Invoke(nameof(ClearEffects), 1f);
+                localGameLogic.OnObstacleDetected?.Invoke(obstacleStat);
+                Invoke(nameof(EnableEffectAgain), 1f);
             }
         }
     }

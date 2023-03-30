@@ -7,12 +7,12 @@ namespace Untitled_Endless_Runner
     public class MainGameplayUI : MonoBehaviour
     {
         [Header ("Heart Logic")]
-        private byte currentHeart;
-        private bool halfHeart; 
+        private byte currentHeart = 4;                      //By defautl will be 4. Will increase as time goes by or the player collects more hearts.
+        private bool halfHeart;
 
         [Header("UI")]
-        [SerializeField] private GameObject heartContainer;
         [SerializeField] private Sprite[] heartSprites;
+        [SerializeField] private GameObject heartContainer, gameOverPanel;
 
         [Header ("Prefabs List")]
         [SerializeField] private GameObject heartPrefab;
@@ -22,20 +22,21 @@ namespace Untitled_Endless_Runner
 
         private void OnEnable()
         {
-            localGameLogic.OnObstacleDetected += UpdateHealth;
+            localGameLogic.OnObstacleDetected += UpdateHeartUI;
             localGameLogic.OnPlayerHealthOver += DisplayEndGameScreen;
         }
         private void OnDisable()
         {
-            localGameLogic.OnObstacleDetected -= UpdateHealth;
+            localGameLogic.OnObstacleDetected -= UpdateHeartUI;
             localGameLogic.OnPlayerHealthOver -= DisplayEndGameScreen;
         }
+
         private void Start()
         {
-            currentHeart = (byte)(heartContainer.transform.childCount - 1);
+            currentHeart = (byte)(localGameLogic.totalHearts - 1);
         }
 
-        private void UpdateHealth(ObstacleStat obstacleStat, float dummyData2)
+        private void UpdateHeartUI(ObstacleStat obstacleStat)
         {
             if (obstacleStat.type.Equals(ObstacleType.Attack))
             {
@@ -55,7 +56,7 @@ namespace Untitled_Endless_Runner
 
         private void DisplayEndGameScreen()
         {
-
+            gameOverPanel.SetActive(true);
         }
     }
 }

@@ -10,5 +10,6 @@ namespace Untitled_Endless_Runner
     {
         public ObstacleType type;
         public ObstacleTag tag;
+        public bool activated;
     }
 }

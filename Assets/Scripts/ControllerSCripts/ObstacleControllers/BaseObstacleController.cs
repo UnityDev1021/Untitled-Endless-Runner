@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Runtime.CompilerServices;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -14,28 +15,61 @@ namespace Untitled_Endless_Runner
 
         [Space]
         //[SerializeField] private float moveSpeedMultiplier = -1f;
-        public Transform cameraTrasform;
+        private bool enableEffects = true;                  //true by default
+        public Transform cameraTransform;
         [SerializeField] protected byte effectStatus;
 
         [SerializeField] private ObstacleStat _obstacleStat;
         public ObstacleStat obstacleStat { get { return _obstacleStat; } }
 
-        protected virtual void Start()
+        private void OnEnable()
         {
-            cameraTrasform = GameManager.instance.cameraTransform;
+            Invoke(nameof(EnableActionFunctions), 0f);              //Apparently this works somehow.
+        }
+
+        private void OnDisable()
+        {
+            Invoke(nameof(DisableActionFunctions), 0f);
+        }
+
+        protected virtual void Start() { }
+
+        public void SetRefernces()
+        {
+            //Debug.Log($"Setting References");
+            cameraTransform = GameManager.instance.cameraTransform;
             localGameLogic = GameManager.instance.gameLogicReference;
+        }
+
+        //helper function as the gamemanager isnt initialised as soon as the game starts
+        private void EnableActionFunctions()
+        {
+            localGameLogic.OnPlayerHealthOver += SwitchEffectsOff;
+            //Debug.Log($"Enabling");
+        }
+
+        //helper function as the gamemanager isnt initialised as soon as the game starts
+        private void DisableActionFunctions()
+        {
+            localGameLogic.OnPlayerHealthOver -= SwitchEffectsOff;
+            //Debug.Log($"Disabling");
         }
 
         // Update is called once per frame
         protected virtual void FixedUpdate()
         {
-            if (transform.position.x < (cameraTrasform.position.x - 12f))
+            if (transform.position.x < (cameraTransform.position.x - 12f))
                 gameObject.SetActive(false);
+        }
+
+        private void SwitchEffectsOff()
+        {
+            enableEffects = false;
         }
 
         protected virtual void OnTriggerStay2D(Collider2D collision)
         {
-            if (collision.transform.CompareTag("Player"))
+            if (enableEffects && collision.transform.CompareTag("Player"))
             {
                 //collision.transform.GetComponent<PlayerController>().ObstacleDetected(obstacleStat);
 
@@ -63,6 +97,6 @@ namespace Untitled_Endless_Runner
 
         protected virtual void ApplyEffect(GameObject player) { }
         protected virtual void ClearEffects() { }
-        public virtual void AssignGroupTypes() { }
+        public virtual void AssignGroupTypes(byte groupType) { }
     }
 }

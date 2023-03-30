@@ -24,13 +24,16 @@ namespace Untitled_Endless_Runner
             if (effectStatus == 3)
             {
                 effectStatus = 4;
-                localGameLogic.OnObstacleDetected?.Invoke(obstacleStat, 0f);
+                obstacleStat.activated = true;
+                localGameLogic.OnObstacleDetected?.Invoke(obstacleStat);
+                Invoke(nameof(ClearEffects), 1.5f);
             }
             //multiplier += 0.01f;
         }
 
         protected override void ClearEffects()
         {
+            effectStatus = 3;
             //multiplier = 0f;
         }
     }

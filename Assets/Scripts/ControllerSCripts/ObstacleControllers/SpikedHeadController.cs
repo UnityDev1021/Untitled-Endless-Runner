@@ -5,11 +5,13 @@ namespace Untitled_Endless_Runner
 {
     public class SpikedHeadController : BaseObstacleController
     {
-        [SerializeField] private float speedMultiplier = 0.02f;
-        private float bottomPos, topPos, tempPos;
-        private bool smashed;
+        [Header("Vertical Speeds")]
+        [SerializeField] private float upSpeed;
+        [SerializeField] private float downSpeed;
 
-        public float time;
+        [SerializeField] private float speedMultiplier = 0.02f;
+        private float bottomPos, topPos, tempPos, time;
+        private bool smashed, goingUp = true, enableVerticalMove = true;
 
         protected override void Start()
         {
@@ -28,25 +30,37 @@ namespace Untitled_Endless_Runner
         {
             base.FixedUpdate();
 
-            #region RockHeadVerticalMovement
-            time += speedMultiplier * Time.deltaTime;
-
-            if (time >= 1) 
+            #region SpikeHeadVerticalMovement
+            if (enableVerticalMove)
             {
-                tempPos = topPos;
-                topPos = bottomPos;
-                bottomPos = tempPos;
-                time = 0;
-            }
 
-            transform.position = new Vector2(transform.position.x, Mathf.Lerp(topPos, bottomPos, time));
-            #endregion RockHeadVerticalMovement
+                time += speedMultiplier * Time.deltaTime;
+
+                if (time >= 1)
+                {
+                    tempPos = topPos;
+                    topPos = bottomPos;
+                    bottomPos = tempPos;
+                    time = 0;
+
+                    speedMultiplier = !goingUp ? upSpeed : downSpeed;
+                    if (goingUp)
+                    {
+                        enableVerticalMove = false;
+                        Invoke(nameof(EnableMove), 0.5f);
+                    }
+                    goingUp = !goingUp;
+                }
+
+                transform.position = new Vector2(transform.position.x, Mathf.Lerp(topPos, bottomPos, time));
+            }
+            #endregion SpikeHeadVerticalMovement
         }
 
-        //protected override void OnTriggerStay2D(Collider2D collision)
-        //{
-
-        //}
+        private void EnableMove()
+        {
+            enableVerticalMove = true;
+        }
 
         protected override void ApplyEffect(GameObject player)
         {
@@ -55,8 +69,8 @@ namespace Untitled_Endless_Runner
             if (!smashed)
             {
                 smashed = true;
-                localGameLogic.OnObstacleDetected?.Invoke(obstacleStat, 0f);
-                Invoke(nameof(ClearEffects), 1f);
+                localGameLogic.OnObstacleDetected?.Invoke(obstacleStat);
+                Invoke(nameof(EnableEffectAgain), 1f);
                 //player.GetComponent<PlayerController>().UnAlive();
             }
         }

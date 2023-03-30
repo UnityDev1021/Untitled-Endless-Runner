@@ -1,3 +1,14 @@
+_______________________________________________________________________________________________________________
+
+													Game Instructions
+_______________________________________________________________________________________________________________
+
+=> Always make sure that the currentHeart and totalHearts are the same in the MainGameplayUI and the GameLogic.
+=> Using ObstacleSpawnerTest for now as it is easier. Can make improvements in the original Spawner script and use it if efficiency needed.
+=> In Object Pooling, the objects are instantiated but, the start function will not be called as they are set to be inactive from the beginning. So need to call another function to propely set scripts references.
+_______________________________________________________________________________________________________________
+
+
 -------------------------------------------------------------------
 							22nd March
 -------------------------------------------------------------------
@@ -36,10 +47,28 @@
 -------------------------------------------------------------------
 							29 March
 -------------------------------------------------------------------
-=> [Working] Making hearts for health.
-=> [Working] Make Damage Mechanism
+=> [Done For now] Making hearts for health.
+=> [Done For now] Make Damage Mechanism
 => [Working] Make Boost Mechanism
 
+-------------------------------------------------------------------
+							30 March
+-------------------------------------------------------------------
+=> Each Obstacle will deal the same amount of damage. i.e. (-0.5) for half a heart
+=> By default, total hearts will be 4
+=> Heart mechanism done for now.
+=> [Done For Now] Making trampoline mechanics work.
+=> [Working] Working on Ending the Game.
+=> [Do] Remove damage variable from Obstacles.
+=> Increasing Collider Trigger of trampoline as the player sometimes goes through the trigger and the veocity applied goes negative. [Didn't Work] (Not Enough Force to Pull Player up, instead player goes through)
+=> Attaching Collider beneath the trampoline so as the player does not go through.
+=> Fixing Double Jump. Triple Jump does not work if the player enters fan/trampoline, the player can only jump once again when they enter the obstacle.
+=> [Working] Making Fire Group
+=> Fixed Fire Animation Colider Trigger
+=> [Done For Now] Made Player UnAlive animation.
+=> Making SpikeHead the same as RockHead.
+=> [Do] Fix SpikeHead. The player unalives as soon as the player touches the spikes. The player will unalive only when the player is beneath it.
+=> [Working] Making RockHead appear on different vertical positions.
 _______________________________________________________________________________________________________________
 _______________________________________________________________________________________________________________
 

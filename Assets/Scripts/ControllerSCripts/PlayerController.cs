@@ -9,9 +9,10 @@ namespace Untitled_Endless_Runner
         private Rigidbody2D playerRB;
         [Range(8, 15f)]
         [SerializeField] private float jumpForce;
-        [SerializeField] private float health;
+        [SerializeField] private float heart = 4f, damageFromObstacle = 0.5f;               //By default, total hearts will be 4
         //[SerializeField] private Animator playerAnimator;
         [SerializeField] private SpriteRenderer playerRenderer;
+        [SerializeField] private Animator playerAnimator;
 
         [Header("Local Refernce Script")]
         [SerializeField] private GameLogic localGameLogic;
@@ -35,6 +36,7 @@ namespace Untitled_Endless_Runner
         void Start()
         {
             playerRB = GetComponent<Rigidbody2D>();
+            heart = localGameLogic.totalHearts;
         }
 
         private void Update()
@@ -95,7 +97,7 @@ namespace Untitled_Endless_Runner
             }
         }
 
-        public void ObstacleDetected(ObstacleStat obstacleStat, float damage)
+        public void ObstacleDetected(ObstacleStat obstacleStat)
         {
             switch (obstacleStat.type)
             {
@@ -104,26 +106,6 @@ namespace Untitled_Endless_Runner
                         switch (obstacleStat.tag)
                         {
                             case ObstacleTag.RockHead:
-                                {
-                                    UnAlive();
-
-                                    break;
-                                }
-
-                            case ObstacleTag.Saw:
-                                {
-                                    TakeDamage(damage);
-
-                                    break;
-                                }
-
-                            case ObstacleTag.SpikedBall:
-                                {
-                                    TakeDamage(damage);
-
-                                    break;
-                                }
-
                             case ObstacleTag.SpikedHead:
                                 {
                                     UnAlive();
@@ -131,15 +113,12 @@ namespace Untitled_Endless_Runner
                                     break;
                                 }
 
+                            case ObstacleTag.Saw:
+                            case ObstacleTag.SpikedBall:
                             case ObstacleTag.Spike:
-                                {
-                                    TakeDamage(damage);
-
-                                    break;
-                                }
-
                             case ObstacleTag.Fire:
                                 {
+                                    TakeDamage();
 
                                     break;
                                 }
@@ -167,14 +146,10 @@ namespace Untitled_Endless_Runner
                                 }
 
                             case ObstacleTag.Fan:
-                                {
-                                    //playerRB.AddForce(force * multiplier, ForceMode2D.Force);
-
-                                    break;
-                                }
-
                             case ObstacleTag.Trampoline:
                                 {
+                                    if (jumpCount != 1)
+                                        jumpCount++;
 
                                     break;
                                 }
@@ -186,7 +161,7 @@ namespace Untitled_Endless_Runner
                                     break;
                                 }
                         }
-                        Debug.Log($"Boost Obstacle : {obstacleStat.tag}");
+                        //Debug.Log($"Boost Obstacle : {obstacleStat.tag}");
 
                         break;
                     }
@@ -205,16 +180,18 @@ namespace Untitled_Endless_Runner
             unAlive = true;
             Debug.Log($"Player is unalived : {unAlive}");
             localGameLogic.OnPlayerHealthOver?.Invoke();
+            playerAnimator.Play("Hit", 0);
+            playerRB.AddForce(transform.right * 12f, ForceMode2D.Impulse);
         }
 
-        public void TakeDamage(float damage)
+        public void TakeDamage()
         {
-            health -= damage;
+            heart -= damageFromObstacle;
 
-            if (health <= 0)
+            if (heart <= 0f)
                 UnAlive();
 
-            Debug.Log($"Taking Damage : {health}, Damage : {damage}");
+            Debug.Log($"Taking Damage : {heart}, Damage : {damageFromObstacle}");
         }
     }
 }

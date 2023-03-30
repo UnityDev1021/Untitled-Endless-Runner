@@ -4,7 +4,7 @@ namespace Untitled_Endless_Runner
 {
     public class SawController : BaseObstacleController
     {
-        [SerializeField] private float damage;
+        [SerializeField] private float damage, rotationSpeed = 6f;          //rotationSpeed will be 6 by default
 
         protected override void ApplyEffect(GameObject player)
         {
@@ -12,8 +12,14 @@ namespace Untitled_Endless_Runner
 
             //Debug.Log($"Applying Saw Effect");
             //player.GetComponent<PlayerController>().TakeDamage(damage);
-            localGameLogic.OnObstacleDetected?.Invoke(obstacleStat, damage);
-            Invoke(nameof(ClearEffects), 1f);
+            localGameLogic.OnObstacleDetected?.Invoke(obstacleStat);
+            Invoke(nameof(EnableEffectAgain), 1f);
+        }
+
+        protected override void FixedUpdate()
+        {
+            base.FixedUpdate();
+            transform.Rotate(new Vector3(0f, 0f, rotationSpeed));
         }
     }
 }

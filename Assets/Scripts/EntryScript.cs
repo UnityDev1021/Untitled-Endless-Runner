@@ -29,7 +29,7 @@ namespace Untitled_Endless_Runner
             player.transform.position = new Vector2(-5.3f, -3.7f);
             player.SetActive(true);
             backgroundAnimator.enabled = false;
-            localBG_Controller.enabled = true;                              //Enable BackGround Controller Script
+            //localBG_Controller.enabled = true;            //Enable BackGround Controller Script         //Enable For Actual Gameplay
             player.GetComponent<PlayerController>().enabled = true;
             player.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
 #endif

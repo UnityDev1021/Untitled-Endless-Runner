@@ -40,7 +40,9 @@ namespace Untitled_Endless_Runner
                     GameObject tempObstacle = ObstaclePoolManager.instance.ReUseObstacle(enemyUnitStats[obstacleGroups[obstacleGroupIndex].obstaclesIndex[i]].tag, tempSpawnPos, Quaternion.identity);
 
                     if (obstacleGroups[obstacleGroupIndex].obstacleGroupType[i] != 0)
-                        tempObstacle.GetComponent<BaseObstacleController>().AssignGroupTypes();
+                        tempObstacle.GetComponent<BaseObstacleController>().AssignGroupTypes(obstacleGroups[obstacleGroupIndex].obstacleGroupType[i]);
+
+                    tempObstacle.SetActive(true);
                 }
 
                 //SetObstaclePosition(ref obstacleGroups[obstacleGroupIndex].firstObstacleIndex);
@@ -78,7 +80,7 @@ namespace Untitled_Endless_Runner
             }
             else if (obstacleUnitIndex == 4)
             {
-                byte randomSpawnIndex = (byte)Random.Range(spawnPointsAbove.Length - 3, spawnPointsAbove.Length);              //Last point is for those obstacles that spawn on the ground
+                byte randomSpawnIndex = (byte)Random.Range(3, 5);              //Last point is for those obstacles that spawn on the ground
                 tempSpawnPos = new Vector3(mainCamera.transform.position.x + 12f + addDisX, spawnPointsAbove[randomSpawnIndex] + mainCamera.transform.position.y, 0f);                
             }
             else if (obstacleUnitIndex == 5)

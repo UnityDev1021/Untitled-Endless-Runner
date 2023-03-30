@@ -12,6 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d1db9ca2b6fd8e43944925a27c8a843, type: 3}
   m_Name: Group_0 0
   m_EditorClassIdentifier: 
-  firstObstacleIndex: 0
-  secondObstacleindex: 0
-  distance: 2
+  obstaclesIndex: 0000
+  obstacleGroupType: 0000
+  disX:
+  - 0
+  - 2
+  spawnNextAfter: 2

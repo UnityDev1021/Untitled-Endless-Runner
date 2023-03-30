@@ -50,8 +50,8 @@ namespace Untitled_Endless_Runner
 
             Debug.Log($"Applying Spike Effect");
             //player.GetComponent<PlayerController>().TakeDamage(damage);
-            localGameLogic.OnObstacleDetected?.Invoke(obstacleStat, damage);
-            Invoke(nameof(ClearEffects), 0.5f);
+            localGameLogic.OnObstacleDetected?.Invoke(obstacleStat);
+            Invoke(nameof(EnableEffectAgain), 0.5f);
         }
     }
 }

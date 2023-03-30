@@ -52,6 +52,7 @@ namespace Untitled_Endless_Runner
                 {
                     GameObject tempObstacle = Instantiate(obstaclePool.prefab, poolHolder.transform);
                     tempObstacle.SetActive(false);
+                    tempObstacle.GetComponent<BaseObstacleController>().SetRefernces();
                     pool.Enqueue(tempObstacle);
                 }
                 
@@ -69,9 +70,9 @@ namespace Untitled_Endless_Runner
 
             GameObject tempObstacle = obstaclesDictionary[tag.ToString()].Dequeue();
 
-            tempObstacle.SetActive(true);
             tempObstacle.transform.position = pos;
             tempObstacle.transform.rotation = Rot;
+            //tempObstacle.SetActive(true);
             
             obstaclesDictionary[tag.ToString()].Enqueue(tempObstacle);
             return tempObstacle;
