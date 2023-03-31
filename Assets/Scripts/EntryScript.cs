@@ -27,7 +27,7 @@ namespace Untitled_Endless_Runner
             Invoke(nameof(EnablePlayer), 10f);
 #else
             player.transform.position = new Vector2(-5.3f, -3.7f);
-            player.SetActive(true);
+            //player.SetActive(true);                                  //Enable For Actual Gameplay
             backgroundAnimator.enabled = false;
             //localBG_Controller.enabled = true;            //Enable BackGround Controller Script         //Enable For Actual Gameplay
             player.GetComponent<PlayerController>().enabled = true;

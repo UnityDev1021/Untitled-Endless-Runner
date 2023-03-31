@@ -133,10 +133,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enableMove: 0
   localGameLogic: {fileID: 0}
-  cameraTrasform: {fileID: 0}
+  cameraTransform: {fileID: 0}
   effectStatus: 0
   _obstacleStat: {fileID: 11400000, guid: 4da76c27544e4ad4eb84dbcb28dc742a, type: 2}
-  damage: 0
+  damage: 0.5
   rotAngle: 60
   speedMultiplier: 0.5
   time: 0

@@ -101,7 +101,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enableMove: 0
   localGameLogic: {fileID: 0}
-  cameraTrasform: {fileID: 0}
+  cameraTransform: {fileID: 0}
   effectStatus: 0
   _obstacleStat: {fileID: 11400000, guid: 792c5a1238427e346b846e0df18c0198, type: 2}
   upSpeed: 4

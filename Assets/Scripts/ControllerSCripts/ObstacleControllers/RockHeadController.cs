@@ -12,12 +12,12 @@ namespace Untitled_Endless_Runner
         [Space]
         [SerializeField] private float speedMultiplier = 0.6f;
         private float time, bottomPos, topPos, tempPos;
-        private bool smashed, goingUp = false, enableVerticalMove = true;
+        private bool smashed, goingUp = false, enableVerticalMove = true, firstGo = true;
 
         protected override void Start()
         {
             base.Start();
-            bottomPos = -3.54f;
+            tempPos = bottomPos = -3.54f;
             topPos = -1.4f;
         }
 
@@ -25,6 +25,7 @@ namespace Untitled_Endless_Runner
         private void OnEnable()
         {
             smashed = false;
+            firstGo = true;
         }
 
         protected override void FixedUpdate()
@@ -43,6 +44,9 @@ namespace Untitled_Endless_Runner
                     bottomPos = tempPos;
                     time = 0;
 
+                    if (firstGo)
+                        firstGo = false;
+
                     speedMultiplier = !goingUp ? upSpeed : downSpeed;
                     if (goingUp)
                     {
@@ -52,25 +56,29 @@ namespace Untitled_Endless_Runner
                     goingUp = !goingUp;
                 }
 
-                transform.position = new Vector2(transform.position.x, Mathf.Lerp(bottomPos, topPos, time));
+                if (firstGo)
+                    transform.position = new Vector2(transform.position.x, Mathf.Lerp(tempPos, topPos, time));
+                else
+                    transform.position = new Vector2(transform.position.x, Mathf.Lerp(bottomPos, topPos, time));
             }
             #endregion RockHeadVerticalMovement
         }
 
-        public override void AssignGroupTypes(byte groupType)
+        public override void AssignGroupTypes(byte groupType, float tempPosY)
         {
             switch (groupType)
             {
                 case 1:
                     {
-                        time = 0.5f;
+                        //time = 0.5f;
+                        tempPos = tempPosY;
 
                         break;
                     }
 
                 case 2:
                     {
-                        time = 1f;
+                        //time = 1f;
 
                         break;
                     }
@@ -83,7 +91,8 @@ namespace Untitled_Endless_Runner
                     }
             }
 
-            transform.position = new Vector2(transform.position.x, Mathf.Lerp(bottomPos, topPos, time));
+            transform.position = new Vector2(transform.position.x, Mathf.Lerp(tempPos, topPos, time));
+            //Debug.Log($"Assigning groupType : {groupType}, tempPosY : {tempPosY}");
         }
 
         private void EnableMove()

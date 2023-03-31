@@ -1711,7 +1711,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c7ee673c71a9a1547a01e0bdadfda857, type: 3}
   m_Name: 
@@ -5654,7 +5654,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!50 &1878208227
 Rigidbody2D:
   serializedVersion: 4
@@ -6321,31 +6321,34 @@ MonoBehaviour:
   obstaclesPool:
   - prefab: {fileID: 595224284692141096, guid: 351875df26d00c04c943056de5976587, type: 3}
     stat: {fileID: 11400000, guid: 6a0eeb503c244d7408c3669f179229a7, type: 2}
-    count: 6
+    count: 3
   - prefab: {fileID: 2889669728164266815, guid: 0870d4ad53c06f14aa7673d652c7c096, type: 3}
     stat: {fileID: 11400000, guid: 54c6c387c669d574fb1595eff1ba0bfa, type: 2}
-    count: 6
+    count: 3
   - prefab: {fileID: 6958880394189308191, guid: e64db7dd934a41a429e56f43055a4b31, type: 3}
     stat: {fileID: 11400000, guid: 792c5a1238427e346b846e0df18c0198, type: 2}
-    count: 6
+    count: 3
   - prefab: {fileID: 2278675318269974083, guid: f32f989a174e3ce41afb391e3578197c, type: 3}
     stat: {fileID: 11400000, guid: 882e8f4a3d46cd743b38aee0ef2989f5, type: 2}
-    count: 6
+    count: 3
   - prefab: {fileID: 4782819412185837419, guid: 1345bdf3642412d42b51ae42d9961fa8, type: 3}
     stat: {fileID: 11400000, guid: 437c1d0491c471d4cbc6b27bcbb71277, type: 2}
-    count: 6
+    count: 3
   - prefab: {fileID: 7017905620127647445, guid: 97fea69797c848f4782eb6c2617bb67d, type: 3}
     stat: {fileID: 11400000, guid: 4da76c27544e4ad4eb84dbcb28dc742a, type: 2}
-    count: 6
+    count: 3
   - prefab: {fileID: 8743368970612470441, guid: f57bd10f53dd79348a2ce1bd3d9897d0, type: 3}
     stat: {fileID: 11400000, guid: bba85c447fc8a2040b84b96d0902b835, type: 2}
-    count: 6
+    count: 3
   - prefab: {fileID: 3708782691982978214, guid: 150eddf9ae05bbf4ca186d4f4247c10c, type: 3}
     stat: {fileID: 11400000, guid: 707d1dcd1f0974643aa447d5dae3a035, type: 2}
-    count: 6
+    count: 1
   - prefab: {fileID: 3917808495613822767, guid: 981379568929eb341898669e0be390ff, type: 3}
     stat: {fileID: 11400000, guid: 90894484e969c424495f128556c51ae6, type: 2}
-    count: 6
+    count: 3
+  - prefab: {fileID: 595224284692141096, guid: 042e62d1ed4c7fa4a9908d95efc8bf4c, type: 3}
+    stat: {fileID: 11400000, guid: 59d96ac4ae6f18d48b84f833373d866b, type: 2}
+    count: 8
 --- !u!114 &1978294543
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6362,29 +6365,34 @@ MonoBehaviour:
   mainCamera: {fileID: 519420031}
   spawnPointsAbove:
   - -3.9
+  - -3.54
   - -3.12
   - -2.3
   - -1.72
+  - -1.4
   - -0.37
   spawnPointsBelow:
   - -4.09
   - -4.5
   - -4.25
   - -3.39
+  comboSpawnPoints:
+  - -0.37
   initialSpawnTime: 0
   enemyUnitStats:
   - {fileID: 11400000, guid: 6a0eeb503c244d7408c3669f179229a7, type: 2}
-  - {fileID: 11400000, guid: 792c5a1238427e346b846e0df18c0198, type: 2}
   - {fileID: 11400000, guid: 882e8f4a3d46cd743b38aee0ef2989f5, type: 2}
+  - {fileID: 11400000, guid: 792c5a1238427e346b846e0df18c0198, type: 2}
   - {fileID: 11400000, guid: bba85c447fc8a2040b84b96d0902b835, type: 2}
   - {fileID: 11400000, guid: 4da76c27544e4ad4eb84dbcb28dc742a, type: 2}
   - {fileID: 11400000, guid: 437c1d0491c471d4cbc6b27bcbb71277, type: 2}
   - {fileID: 11400000, guid: 707d1dcd1f0974643aa447d5dae3a035, type: 2}
   - {fileID: 11400000, guid: 90894484e969c424495f128556c51ae6, type: 2}
   - {fileID: 11400000, guid: 54c6c387c669d574fb1595eff1ba0bfa, type: 2}
+  - {fileID: 11400000, guid: 59d96ac4ae6f18d48b84f833373d866b, type: 2}
   obstacleGroupIndex: 0
   obstacleGroups:
-  - {fileID: 11400000, guid: b88f25fa02eb27140bc3092b867dbaf5, type: 2}
+  - {fileID: 11400000, guid: 5580ab1ea6136914ea520f0751aed1c6, type: 2}
 --- !u!114 &1978294544
 MonoBehaviour:
   m_ObjectHideFlags: 0

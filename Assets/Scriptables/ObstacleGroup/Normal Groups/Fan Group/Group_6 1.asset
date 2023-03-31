@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Group_6 1
   m_EditorClassIdentifier: 
   obstaclesIndex: 0601
-  obstacleGroupType: 0100
+  obstacleGroupType: 0001
   disX:
   - 0
   - 5

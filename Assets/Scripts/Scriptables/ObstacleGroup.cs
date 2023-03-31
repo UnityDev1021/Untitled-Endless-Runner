@@ -7,7 +7,7 @@ namespace Untitled_Endless_Runner
     public class ObstacleGroup : ScriptableObject
     {
         public byte[] obstaclesIndex, obstacleGroupType;
-        public float[] disX;
+        public float[] disX, disY;
         public float spawnNextAfter;
     }
 }

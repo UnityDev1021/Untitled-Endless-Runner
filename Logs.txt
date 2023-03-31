@@ -69,6 +69,18 @@ ________________________________________________________________________________
 => Making SpikeHead the same as RockHead.
 => [Do] Fix SpikeHead. The player unalives as soon as the player touches the spikes. The player will unalive only when the player is beneath it.
 => [Working] Making RockHead appear on different vertical positions.
+
+-------------------------------------------------------------------
+							31 March
+-------------------------------------------------------------------
+=> [Done For Now] RockHead spawns at different positions. Lerp works good for now.
+=> [Do] Make something to make the player that health has gone. i.e. Screen Shake, sound, screen goes red for a moment, blood appears on the sides of the window.
+=> [Working] Making obstacles combo so 2 or more obstacle can be sued as one. Would have to make separate scripts for them.
+=> Fixing Sprites
+=> Making Code to instantiate complex groups.
+=> The helper functions of OnEnable and OnDisable might cause Race consitions in current state if invoke with 0f value.
+=> Made Air animation coming out of the fan.
+
 _______________________________________________________________________________________________________________
 _______________________________________________________________________________________________________________
 

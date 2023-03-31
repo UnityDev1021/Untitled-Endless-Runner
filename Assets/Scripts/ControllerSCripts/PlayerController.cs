@@ -139,12 +139,6 @@ namespace Untitled_Endless_Runner
                     {
                         switch (obstacleStat.tag)
                         {
-                            case ObstacleTag.Block:
-                                {
-
-                                    break;
-                                }
-
                             case ObstacleTag.Fan:
                             case ObstacleTag.Trampoline:
                                 {
@@ -157,6 +151,50 @@ namespace Untitled_Endless_Runner
                             default:
                                 {
                                     Debug.LogError($"Boost Obstacle Not Found");
+
+                                    break;
+                                }
+                        }
+                        //Debug.Log($"Boost Obstacle : {obstacleStat.tag}");
+
+                        break;
+                    }
+
+                case ObstacleType.Normal:
+                    {
+                        switch (obstacleStat.tag)
+                        {
+                            case ObstacleTag.Block:
+                                {
+
+                                    break;
+                                }
+
+                            default:
+                                {
+                                    Debug.LogError($"Normal Obstacle Not Found");
+
+                                    break;
+                                }
+                        }
+                        //Debug.Log($"Boost Obstacle : {obstacleStat.tag}");
+
+                        break;
+                    }
+
+                case ObstacleType.Normal_Attack:
+                    {
+                        switch (obstacleStat.tag)
+                        {
+                            case ObstacleTag.Block:
+                                {
+
+                                    break;
+                                }
+
+                            default:
+                                {
+                                    Debug.LogError($"Normal Obstacle Not Found");
 
                                     break;
                                 }

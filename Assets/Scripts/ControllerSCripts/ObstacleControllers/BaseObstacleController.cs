@@ -24,19 +24,22 @@ namespace Untitled_Endless_Runner
 
         private void OnEnable()
         {
-            Invoke(nameof(EnableActionFunctions), 0f);              //Apparently this works somehow.
+            Invoke(nameof(EnableActionFunctions), 0.1f);              //Apparently this works somehow.        //Might cause Race Condition
         }
 
         private void OnDisable()
         {
-            Invoke(nameof(DisableActionFunctions), 0f);
+            Invoke(nameof(DisableActionFunctions), 0.1f);
         }
 
-        protected virtual void Start() { }
+        protected virtual void Start() 
+        {
+            //Debug.Log($"Name : {transform.name},Dimension : {GetComponent<SpriteRenderer>().bounds.size}");                  //Will Cause error for some Prefabs such as SpikedBall
+        }
 
         public void SetRefernces()
         {
-            //Debug.Log($"Setting References");
+            Debug.Log($"Setting References");
             cameraTransform = GameManager.instance.cameraTransform;
             localGameLogic = GameManager.instance.gameLogicReference;
         }
@@ -97,6 +100,6 @@ namespace Untitled_Endless_Runner
 
         protected virtual void ApplyEffect(GameObject player) { }
         protected virtual void ClearEffects() { }
-        public virtual void AssignGroupTypes(byte groupType) { }
+        public virtual void AssignGroupTypes(byte groupType, float tempPosY) { }
     }
 }

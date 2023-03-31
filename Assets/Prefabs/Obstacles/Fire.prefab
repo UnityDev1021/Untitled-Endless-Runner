@@ -105,8 +105,6 @@ MonoBehaviour:
   cameraTransform: {fileID: 0}
   effectStatus: 0
   _obstacleStat: {fileID: 11400000, guid: 54c6c387c669d574fb1595eff1ba0bfa, type: 2}
-  fanForce: 0
-  multiplier: 0
 --- !u!61 &94286885537175875
 BoxCollider2D:
   m_ObjectHideFlags: 0
