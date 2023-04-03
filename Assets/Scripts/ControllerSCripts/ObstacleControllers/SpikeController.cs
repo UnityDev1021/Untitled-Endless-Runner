@@ -5,6 +5,7 @@ namespace Untitled_Endless_Runner
     public class SpikeController : BaseObstacleController
     {
         [SerializeField] private float damage;
+        //[SerializeField] private byte mode = 0;
 
         protected override void ApplyEffect(GameObject player)
         {

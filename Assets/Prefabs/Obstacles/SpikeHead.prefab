@@ -192,8 +192,8 @@ MonoBehaviour:
   cameraTransform: {fileID: 0}
   effectStatus: 0
   _obstacleStat: {fileID: 11400000, guid: bba85c447fc8a2040b84b96d0902b835, type: 2}
-  upSpeed: 4
-  downSpeed: 0.7
+  upSpeed: 0.7
+  downSpeed: 4
   speedMultiplier: 0.7
 --- !u!61 &880500190023037051
 BoxCollider2D:

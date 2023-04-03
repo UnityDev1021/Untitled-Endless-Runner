@@ -1,19 +1,81 @@
+using System.Collections;
 using UnityEngine;
 
 namespace Untitled_Endless_Runner
 {
     public class BlockController : BaseObstacleController
     {
-        //[SerializeField] private float damage;
+        //[SerializeField] private byte mode = 0;
+        [SerializeField] private float emergeTime = 0.5f, speedMultiplier = 0.7f, topPos, bottomPos;
+        [SerializeField] private bool enableVerticalMove;
+        private float time, tempPos;
+        private Coroutine emergeOut;
 
-        //protected override void ApplyEffect(GameObject player)
-        //{
-        //    effectStatus = 1;
+        protected override void Start()
+        {
+            base.Start();
 
-        //    //Debug.Log($"Applying Saw Effect");
-        //    //player.GetComponent<PlayerController>().TakeDamage(damage);
-        //    localGameLogic.OnObstacleDetected?.Invoke(obstacleStat, damage);
-        //    Invoke(nameof(EnableEffectAgain), 1f);
-        //}
+            emergeOut = StartCoroutine(EmergeOut());
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnDisable();
+            if (emergeOut != null)
+                StopCoroutine(emergeOut);
+        }
+
+        public override void AssignGroupTypes(byte groupType, float dummyData)
+        {
+            switch (groupType)
+            {
+                case 1:
+                    {
+                        //Do Nothing
+                        break;
+                    }
+
+                case 2:
+                case 3:
+                case 4:
+                case 5:
+                case 6:
+                case 7:
+                case 8:
+                    {
+                        Destroy(this);
+
+                        break;
+                    }
+
+                default:
+                    {
+                        Debug.LogError($"GroupType not assigned for {obstacleStat.tag.ToString()}");
+
+                        break;
+                    }
+            }
+            time = 0f;
+        }
+
+        private IEnumerator EmergeOut()
+        {
+            while (enableVerticalMove)
+            {
+                time += speedMultiplier * Time.deltaTime;
+
+                if (time >= 1)
+                {
+                    tempPos = topPos;
+                    topPos = bottomPos;
+                    bottomPos = tempPos;
+                    time = 0;
+                }
+
+                transform.parent.localPosition = new Vector2(0f, Mathf.Lerp(bottomPos, topPos, time));
+
+                yield return null;
+            }
+        }
     }
 }

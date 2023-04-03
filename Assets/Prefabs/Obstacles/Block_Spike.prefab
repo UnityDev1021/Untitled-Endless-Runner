@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 595224284692141098}
   - component: {fileID: 595224284692141099}
-  - component: {fileID: -2697289532964802964}
+  - component: {fileID: 886228891755468254}
   - component: {fileID: 206289393972780945}
   - component: {fileID: 6932241158162980739}
   m_Layer: 0
@@ -88,7 +88,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &-2697289532964802964
+--- !u!114 &886228891755468254
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -97,7 +97,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 595224284692141096}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f735846b915ffc84b8ec3a456527cb83, type: 3}
+  m_Script: {fileID: 11500000, guid: 82baf39fb21600042a2b2d0909c82faf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   enableMove: 0
@@ -105,6 +105,11 @@ MonoBehaviour:
   cameraTransform: {fileID: 0}
   effectStatus: 2
   _obstacleStat: {fileID: 11400000, guid: 59d96ac4ae6f18d48b84f833373d866b, type: 2}
+  emergeTime: 0.5
+  speedMultiplier: 0.7
+  topPos: 1
+  bottomPos: -3.12
+  enableVerticalMove: 1
 --- !u!61 &206289393972780945
 BoxCollider2D:
   m_ObjectHideFlags: 0

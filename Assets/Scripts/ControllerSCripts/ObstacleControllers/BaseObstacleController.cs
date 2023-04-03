@@ -27,7 +27,7 @@ namespace Untitled_Endless_Runner
             Invoke(nameof(EnableActionFunctions), 0.1f);              //Apparently this works somehow.        //Might cause Race Condition
         }
 
-        private void OnDisable()
+        protected virtual void OnDisable()
         {
             Invoke(nameof(DisableActionFunctions), 0.1f);
         }
@@ -39,7 +39,7 @@ namespace Untitled_Endless_Runner
 
         public void SetRefernces()
         {
-            Debug.Log($"Setting References");
+            //Debug.Log($"Setting References");
             cameraTransform = GameManager.instance.cameraTransform;
             localGameLogic = GameManager.instance.gameLogicReference;
         }
