@@ -11,7 +11,7 @@ namespace Untitled_Endless_Runner
 
         [SerializeField] private float speedMultiplier = 0.02f;
         private float bottomPos, topPos, tempPos, time;
-        private bool smashed, goingUp = true, enableVerticalMove = true, firstGo = true;
+        private bool smashed, goingUp = true, enableVerticalMove = true;
 
         protected override void Start()
         {
@@ -27,7 +27,6 @@ namespace Untitled_Endless_Runner
         private void OnEnable()
         {
             smashed = false;
-            firstGo = true;
             enableVerticalMove = true;
             goingUp = true;
             time = 0f; 

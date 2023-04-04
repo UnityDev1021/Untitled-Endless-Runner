@@ -9,7 +9,9 @@ namespace Untitled_Endless_Runner
         private Rigidbody2D playerRB;
         [Range(8, 15f)]
         [SerializeField] private float jumpForce;
-        [SerializeField] private float heart = 4f, damageFromObstacle = 0.5f;               //By default, total hearts will be 4
+        [Range(3, 8f)]
+        [SerializeField] private float slideForce;
+        [SerializeField] private float heart = 4f, damageFromObstacle = 0.5f, tempPosX;               //By default, total hearts will be 4
         //[SerializeField] private Animator playerAnimator;
         [SerializeField] private SpriteRenderer playerRenderer;
         [SerializeField] private Animator playerAnimator;
@@ -19,7 +21,7 @@ namespace Untitled_Endless_Runner
 
         [Space]
         private byte jumpCount;
-        private bool hasJumped, unAlive;
+        private bool hasJumped, unAlive, isSliding;
         private int animationIndex;
 
         private void OnEnable()
@@ -41,15 +43,16 @@ namespace Untitled_Endless_Runner
 
         private void Update()
         {
+            //Player can only jump or slide
             if (Keyboard.current[Key.Space].wasPressedThisFrame && !hasJumped)
             {
-                //Debug.Log($"Jumping");
+                Debug.Log($"Jumping");
                 playerRB.velocity = transform.up * jumpForce;
                 jumpCount++;
-                //playerAnimator.Play("Rotate", 0);
+                playerAnimator.Play("Jump", 0, 0f);
                 //playerAnimator.SetBool("Rotate", true);
                 animationIndex = 0;
-                Invoke(nameof(PlayAnimation), 1.01f);
+                //Invoke(nameof(PlayAnimation), 1.01f);
 
                 if (jumpCount == 2)
                 {
@@ -57,6 +60,28 @@ namespace Untitled_Endless_Runner
                     hasJumped = true;
                 }
             }
+            else if (Keyboard.current[Key.LeftShift].wasPressedThisFrame && !isSliding)
+            {
+                isSliding = true;
+                tempPosX = transform.localPosition.x;               //Store current X Co-Ordinate
+                playerRB.velocity = transform.right * slideForce;
+            }
+            else if (isSliding)
+            {
+                if (playerRB.velocity.x <= 0.1f)
+                {
+                    if (transform.localPosition.x >= (tempPosX + 1.5f))
+                    {
+                        playerRB.AddForce(transform.right * slideForce * -3f, ForceMode2D.Force);           //Gravity Scale is 3f
+                        Debug.Log($"Applying Force");
+                    }
+                    else
+                    {
+                        isSliding = false;
+                    }
+                }
+            }
+
         }
 
         public void SetPlayerAfterEntry()
@@ -94,6 +119,13 @@ namespace Untitled_Endless_Runner
                 {
                     hasJumped = false;
                 }
+            }
+
+            if (collision.CompareTag("Captured"))
+            {
+                heart = 0f;
+                UnAlive();
+                localGameLogic.OnPlayerCaptured?.Invoke();
             }
         }
 

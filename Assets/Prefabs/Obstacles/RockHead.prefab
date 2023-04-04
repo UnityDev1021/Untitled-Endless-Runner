@@ -99,13 +99,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8257a8eff948b6a4eac6363d7b8005fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableMove: 0
   localGameLogic: {fileID: 0}
   cameraTransform: {fileID: 0}
   effectStatus: 0
   _obstacleStat: {fileID: 11400000, guid: 792c5a1238427e346b846e0df18c0198, type: 2}
-  upSpeed: 4
-  downSpeed: 0.7
+  upSpeed: 0.7
+  downSpeed: 4
   speedMultiplier: 0.7
 --- !u!61 &5628184224856496813
 BoxCollider2D:

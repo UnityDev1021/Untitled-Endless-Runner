@@ -8,13 +8,6 @@ namespace Untitled_Endless_Runner
         private float tempRot, leftRot, rightRot, currentAngle;
         public float time;
 
-        protected override void Start()
-        {
-            base.Start();
-            leftRot = rotAngle * -1f;
-            rightRot = rotAngle;
-        }
-
         protected override void FixedUpdate()
         {
             //Debug.Log($"Rotating Spikes");
@@ -42,6 +35,26 @@ namespace Untitled_Endless_Runner
             //transform.rotation = Quaternion.Euler(0f, 0f, currentAngle);
             //transform.eulerAngles = new Vector2(transform.position.x,Mathf.Lerp(leftRotValue, rightRotValue, time));      //For swimming motion            
             #endregion SpikedBallMovement
+        }
+
+        public override void AssignGroupTypes(byte groupType, float dummyData)
+        {
+            leftRot = rotAngle * -1f;
+            rightRot = rotAngle;
+
+            switch (groupType)
+            {
+                //Do Nothing
+                case 0:
+                    break;
+
+                default:
+                    {
+                        Debug.LogError($"GroupType not assigned for {obstacleStat.tag.ToString()}");
+
+                        break;
+                    }
+            }
         }
 
         protected override void ApplyEffect(GameObject player)

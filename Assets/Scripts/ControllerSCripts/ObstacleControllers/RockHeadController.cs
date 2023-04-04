@@ -12,18 +12,7 @@ namespace Untitled_Endless_Runner
         [Space]
         [SerializeField] private float speedMultiplier = 0.6f;
         private float time, bottomPos, topPos, tempPos;
-        private bool smashed, goingUp = true, enableVerticalMove = true;
-
-        protected override void Start()
-        {
-            base.Start();
-            bottomPos = -3.54f;
-            topPos = -1.4f;
-
-            //This is called after Assigning func is called
-            if (tempPos == 0)
-                tempPos = bottomPos;
-        }
+        private bool smashed, goingUp = true, enableMove = true, enableHorizontalMove = false;
 
         //Reset on Re-Use
         private void OnEnable()
@@ -36,36 +25,49 @@ namespace Untitled_Endless_Runner
             base.FixedUpdate();
 
             #region RockHeadVerticalMovement
-            if (enableVerticalMove)
+            if (enableMove)
             {
                 time += speedMultiplier * Time.deltaTime;
 
                 if (time >= 1)
                 {
-                    goingUp = !goingUp;
 
                     tempPos = topPos;
                     topPos = bottomPos;
                     bottomPos = tempPos;
                     time = 0;
 
-                    speedMultiplier = goingUp ? upSpeed : downSpeed;
-                    if (goingUp)
+                    if (!enableHorizontalMove)
                     {
-                        enableVerticalMove = false;
-                        Invoke(nameof(EnableMove), 0.5f);
+                        goingUp = !goingUp;
+                        speedMultiplier = goingUp ? upSpeed : downSpeed;
+                        if (goingUp)
+                        {
+                            enableMove = false;
+                            Invoke(nameof(EnableMove), 0.5f);
+                        }
                     }
                 }
                 
-                transform.position = new Vector2(transform.position.x, Mathf.Lerp(tempPos, topPos, time));
+                if (enableHorizontalMove)
+                    transform.localPosition = new Vector2(Mathf.Lerp(bottomPos, topPos, time), transform.localPosition.y);
+                else
+                    transform.localPosition = new Vector2(transform.localPosition.x, Mathf.Lerp(tempPos, topPos, time));
             }
             #endregion RockHeadVerticalMovement
         }
 
         public override void AssignGroupTypes(byte groupType, float dummyData)
         {
+            tempPos = bottomPos = -3.54f;
+            topPos = -1.4f;
+
             switch (groupType)
             {
+                //Do NOthing
+                case 0:
+                    break;
+
                 case 1:
                     {
                         //time = 0.5f;
@@ -93,6 +95,16 @@ namespace Untitled_Endless_Runner
                         break;
                     }
 
+                case 4:
+                    {
+                        //time = 1f;
+                        enableHorizontalMove = true;
+                        bottomPos = -2.5f;
+                        topPos = 2.5f;
+
+                        break;
+                    }
+
                 default:
                     {
                         Debug.LogError($"GroupType not assigned for {obstacleStat.tag.ToString()}");
@@ -101,17 +113,20 @@ namespace Untitled_Endless_Runner
                     }
             }
 
-            enableVerticalMove = true;
+            enableMove = true;
             goingUp = true;
             time = 0f;
 
-            transform.position = new Vector2(transform.position.x, Mathf.Lerp(tempPos, topPos, time));
+            if (enableHorizontalMove)
+                transform.localPosition = new Vector2(Mathf.Lerp(bottomPos, topPos, time), transform.localPosition.y);
+            else
+                transform.localPosition = new Vector2(transform.localPosition.x, Mathf.Lerp(tempPos, topPos, time));
             //Debug.Log($"Assigning groupType : {groupType}, tempPosY : {tempPosY}");
         }
 
         private void EnableMove()
         {
-            enableVerticalMove = true;
+            enableMove = true;
         }
 
         protected override void ApplyEffect(GameObject player)

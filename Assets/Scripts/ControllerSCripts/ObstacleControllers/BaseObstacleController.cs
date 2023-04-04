@@ -7,8 +7,8 @@ namespace Untitled_Endless_Runner
 {
     public class BaseObstacleController : MonoBehaviour
     {
-        [Header("Test Variables")]
-        [SerializeField] private bool enableMove;
+        //[Header("Test Variables")]
+        //[SerializeField] private bool enableMove;
 
         [Header("Local References")]
         [SerializeField] protected GameLogic localGameLogic;

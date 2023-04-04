@@ -6,7 +6,7 @@ namespace Untitled_Endless_Runner
     public class BlockController : BaseObstacleController
     {
         //[SerializeField] private byte mode = 0;
-        [SerializeField] private float emergeTime = 0.5f, speedMultiplier = 0.7f, topPos, bottomPos;
+        [SerializeField] private float speedMultiplier = 0.7f, topPos, bottomPos;
         [SerializeField] private bool enableVerticalMove;
         private float time, tempPos;
         private Coroutine emergeOut;
@@ -29,6 +29,7 @@ namespace Untitled_Endless_Runner
         {
             switch (groupType)
             {
+                case 0:
                 case 1:
                     {
                         //Do Nothing

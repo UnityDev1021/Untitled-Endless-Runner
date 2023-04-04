@@ -11,6 +11,7 @@ namespace Untitled_Endless_Runner
         public Action OnMainGameplayStarted;
         public Action<ObstacleStat> OnObstacleDetected;
         public Action OnPlayerHealthOver;
+        public Action OnPlayerCaptured;
 
         private void OnEnable()
         {

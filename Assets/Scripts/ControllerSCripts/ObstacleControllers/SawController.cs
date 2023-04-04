@@ -45,6 +45,10 @@ namespace Untitled_Endless_Runner
         {
             switch (groupType)
             {
+                //Do NOthing
+                case 0:
+                    break;
+
                 case 1:
                     {
                         enableVerticalMove = true;

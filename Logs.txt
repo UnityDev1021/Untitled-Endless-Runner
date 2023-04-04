@@ -82,7 +82,7 @@ ________________________________________________________________________________
 => Made Air animation coming out of the fan.
 
 -------------------------------------------------------------------
-							1 April
+							3 April
 -------------------------------------------------------------------
 => So the Spike Head was not moving properly, as the Assigning func was being called before the start, so the tempPos was being reset as soon as the obstacle was being activated. If the obstacle is not activated at the time of instantiation, then the Start func will never be called on time, and only after setActive has been called.
 => [Working] Determine time required to go up at the same speed, via controlling time. As when the spikeHead is instantiated, it will go slow, as the time required is 1 sec.
@@ -95,6 +95,20 @@ ________________________________________________________________________________
 	(-) Spikes come out of the metal plate.
 => [Working] Making Block Controller
 	(-) Block now controls the parent and moves the adjacent blocks with it.
+
+-------------------------------------------------------------------
+							4 April
+-------------------------------------------------------------------
+=> [Working] Making Horizontal controls for Heads.
+=> [Do] Make a base controller for Head as both the SpikeHead and RockHead are the same.
+=> [Working] Fixing Obstacle Controllers to have 0 as group type as the start is called after and thus ruins stuff.
+=> [Working] Making the character slide.
+	(-) Disable Jump if slide
+	(-) If the player has pressed jump, the player will not slide
+	(-) Made Logic
+	(-) [Do] Make Animation
+=> Made Animation for Double Jump
+=> [Working] Making Day/Night Cycle Animation
 
 
 _______________________________________________________________________________________________________________

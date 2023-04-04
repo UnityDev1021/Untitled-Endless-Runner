@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Drawing;
 using UnityEngine;
 
 namespace Untitled_Endless_Runner
@@ -49,6 +50,23 @@ namespace Untitled_Endless_Runner
             }
 
             Invoke(nameof(CallEmergeFunc), emergeTime);
+        }
+
+        public override void AssignGroupTypes(byte groupType, float dummyData)
+        {
+            switch (groupType)
+            {
+                //Do Nothing
+                case 0:
+                    break;
+
+                default:
+                    {
+                        Debug.LogError($"GroupType not assigned for {obstacleStat.tag.ToString()}");
+
+                        break;
+                    }
+            }
         }
 
         private void CallEmergeFunc()

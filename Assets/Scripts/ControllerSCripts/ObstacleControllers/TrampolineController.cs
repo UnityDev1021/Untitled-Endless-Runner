@@ -1,3 +1,4 @@
+using System.Drawing;
 using UnityEngine;
 
 namespace Untitled_Endless_Runner
@@ -19,6 +20,23 @@ namespace Untitled_Endless_Runner
             obstacleStat.activated = true;
             localGameLogic.OnObstacleDetected?.Invoke(obstacleStat);
             Invoke(nameof(EnableEffectAgain), 0.5f);
+        }
+
+        public override void AssignGroupTypes(byte groupType, float dummyData)
+        {
+            switch (groupType)
+            {
+                //Do Nothing
+                case 0:
+                    break;
+
+                default:
+                    {
+                        Debug.LogError($"GroupType not assigned for {obstacleStat.tag.ToString()}");
+
+                        break;
+                    }
+            }
         }
     }
 }

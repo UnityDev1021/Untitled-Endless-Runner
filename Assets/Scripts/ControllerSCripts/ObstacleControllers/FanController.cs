@@ -1,3 +1,4 @@
+using System.Drawing;
 using UnityEngine;
 
 namespace Untitled_Endless_Runner
@@ -29,6 +30,23 @@ namespace Untitled_Endless_Runner
                 Invoke(nameof(ClearEffects), 1.5f);
             }
             //multiplier += 0.01f;
+        }
+
+        public override void AssignGroupTypes(byte groupType, float dummyData)
+        {
+            switch (groupType)
+            {
+                //Do Nothing
+                case 0:
+                    break;
+
+                default:
+                    {
+                        Debug.LogError($"GroupType not assigned for {obstacleStat.tag.ToString()}");
+
+                        break;
+                    }
+            }
         }
 
         protected override void ClearEffects()

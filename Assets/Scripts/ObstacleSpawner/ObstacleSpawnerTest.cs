@@ -39,8 +39,8 @@ namespace Untitled_Endless_Runner
                     SetObstaclePosition(ref obstacleGroups[obstacleGroupIndex].obstaclesIndex[i], ref obstacleGroups[obstacleGroupIndex].disX[i]);
                     GameObject tempObstacle = ObstaclePoolManager.instance.ReUseObstacle(enemyUnitStats[obstacleGroups[obstacleGroupIndex].obstaclesIndex[i]].tag, tempSpawnPos, Quaternion.identity);
 
-                    if (obstacleGroups[obstacleGroupIndex].obstacleGroupType[i] != 0)
-                        tempObstacle.GetComponent<BaseObstacleController>().AssignGroupTypes(obstacleGroups[obstacleGroupIndex].obstacleGroupType[i], tempSpawnPos.y);
+                    //if (obstacleGroups[obstacleGroupIndex].obstacleGroupType[i] != 0)
+                    tempObstacle.GetComponent<BaseObstacleController>().AssignGroupTypes(obstacleGroups[obstacleGroupIndex].obstacleGroupType[i], tempSpawnPos.y);
 
                     //if (enemyUnitStats[obstacleGroups[obstacleGroupIndex].obstaclesIndex[i]].tag.CompareTo(ObstacleTag.MetalPlate_Spike) == 0)
                     //    tempObstacle.GetComponent<BlockController>().AssignIndex((byte)i);
@@ -52,7 +52,7 @@ namespace Untitled_Endless_Runner
                 //ObstaclePoolManager.instance.ReUseObstacle(enemyUnitStats[obstacleGroups[obstacleGroupIndex].firstObstacleIndex].tag, tempSpawnPos, Quaternion.identity);
 
                 Invoke("SpawnObstacle", obstacleGroups[obstacleGroupIndex].spawnNextAfter);
-                Debug.Log($"Spawning Obstacle : {obstacleGroups[obstacleGroupIndex].name}, Spawn After : {obstacleGroups[obstacleGroupIndex].spawnNextAfter}");
+                //Debug.Log($"Spawning Obstacle : {obstacleGroups[obstacleGroupIndex].name}, Spawn After : {obstacleGroups[obstacleGroupIndex].spawnNextAfter}");
             }
         }
 
@@ -118,7 +118,7 @@ namespace Untitled_Endless_Runner
                 tempSpawnPos = new Vector3(mainCamera.transform.position.x + 12f + addDisX, 
                     comboSpawnPoints[0] + addDisY, 0f);
 
-            //Debug.Log($"obstacleUnitIndex : {obstacleUnitIndex} ,tempSpawnPos : {tempSpawnPos}, addDisX : {addDisX}, addDisY : {addDisY}");
+            Debug.Log($"obstacleUnitIndex : {obstacleUnitIndex} ,tempSpawnPos : {tempSpawnPos}, addDisX : {addDisX}, addDisY : {addDisY}");
         }
     }
 }

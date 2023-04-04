@@ -21,20 +21,7 @@ namespace Untitled_Endless_Runner
 
         [SerializeField] private float speedMultiplier = 0.02f;
         private float bottomPos, topPos, tempPos, time;
-        private bool smashed, goingUp = true, enableVerticalMove = true;       //, firstGo = true
-
-        protected override void Start()
-        {
-            base.Start();
-            bottomPos = -3.54f;                     //Default Values
-            topPos = -1.4f;                     //Default Values
-
-            //This is called after Assigning func is called
-            if (tempPos == 0)
-                tempPos = bottomPos;
-
-            //Debug.Log("Starting");
-        }
+        private bool smashed, goingUp = true, enableMove = true, enableHorizontalMove = false;       //, firstGo = true
 
         //Reset on Re-Use
         private void OnEnable()
@@ -48,7 +35,7 @@ namespace Untitled_Endless_Runner
             base.FixedUpdate();
 
             #region SpikeHeadVerticalMovement
-            if (enableVerticalMove)
+            if (enableMove)
             {
 
                 time += speedMultiplier * Time.deltaTime;
@@ -56,27 +43,32 @@ namespace Untitled_Endless_Runner
 
                 if (time >= 1)
                 {
-                    goingUp = !goingUp;
-
                     //For the dirst time, the tempPos will be the custom one, after that the values will become default
                     tempPos = topPos;
                     topPos = bottomPos;
                     bottomPos = tempPos;
                     time = 0;
 
-                    //By default, the SpikeHead will be moving up, so when it reaches up, then the speed should toggle.
-                    //So, if goingUp is true by default, the speed should toggle to downSpeed when coming down/reached top position
-                    speedMultiplier = goingUp ? upSpeed : downSpeed;
-                    if (goingUp)               //Reached Ground
+                    if (!enableHorizontalMove)
                     {
-                        enableVerticalMove = false;
-                        Invoke(nameof(EnableMove), 0.5f);
-                    }
+                        goingUp = !goingUp;
 
+                        //By default, the SpikeHead will be moving up, so when it reaches up, then the speed should toggle.
+                        //So, if goingUp is true by default, the speed should toggle to downSpeed when coming down/reached top position
+                        speedMultiplier = goingUp ? upSpeed : downSpeed;
+                        if (goingUp)               //Reached Ground
+                        {
+                            enableMove = false;
+                            Invoke(nameof(EnableMove), 0.5f);
+                        }
+                    }
                     //Debug.Log($"Time's up, Going Up : {goingUp}");
                 }
 
-                transform.localPosition = new Vector2(transform.localPosition.x, Mathf.Lerp(tempPos, topPos, time));
+                if (enableHorizontalMove)
+                    transform.localPosition = new Vector2(Mathf.Lerp(bottomPos, topPos, time), transform.localPosition.x);
+                else
+                    transform.localPosition = new Vector2(transform.localPosition.x, Mathf.Lerp(tempPos, topPos, time));
                 //Debug.Log($"After Global Pos : {transform.position}, Local Pos : {transform.localPosition}, tempPos : {tempPos}");
             }
             #endregion SpikeHeadVerticalMovement
@@ -84,13 +76,20 @@ namespace Untitled_Endless_Runner
 
         private void EnableMove()
         {
-            enableVerticalMove = true;
+            enableMove = true;
         }
 
         public override void AssignGroupTypes(byte groupType, float dummyData)
         {
+            tempPos = bottomPos = -3.54f;
+            topPos = -1.4f;
+
             switch (groupType)
             {
+                //Do Nothing
+                case 0:
+                    break;
+
                 case 1:
                     {
                         //time = 0.5f;
@@ -118,6 +117,16 @@ namespace Untitled_Endless_Runner
                         break;
                     }
 
+                case 4:
+                    {
+                        //time = 1f;
+                        enableHorizontalMove = true;
+                        bottomPos = -2.5f;
+                        topPos = 2.5f;
+
+                        break;
+                    }
+
                 default:
                     {
                         Debug.LogError($"GroupType not assigned for {obstacleStat.tag.ToString()}");
@@ -127,12 +136,15 @@ namespace Untitled_Endless_Runner
             }
 
             //firstGo = true;
-            enableVerticalMove = true;
+            enableMove = true;
             goingUp = true;
             time = 0f;
             //tempPos = tempPosY;               //Setting Above
 
-            transform.position = new Vector2(transform.position.x, Mathf.Lerp(tempPos, topPos, time));
+            if (enableHorizontalMove)
+                transform.localPosition = new Vector2(Mathf.Lerp(bottomPos, topPos, time), transform.localPosition.y);
+            else
+                transform.localPosition = new Vector2(transform.localPosition.x, Mathf.Lerp(tempPos, topPos, time));
             //Debug.Log($"Assigning groupType : {groupType}, tempPosY : {tempPosY}, tempPos : {tempPos}");
             //Debug.Log($"Assigning Speed Multiplier : {speedMultiplier}");
         }

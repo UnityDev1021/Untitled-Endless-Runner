@@ -24,11 +24,13 @@ namespace Untitled_Endless_Runner
         {
             localGameLogic.OnObstacleDetected += UpdateHeartUI;
             localGameLogic.OnPlayerHealthOver += DisplayEndGameScreen;
+            localGameLogic.OnPlayerCaptured += EmptyHearts;
         }
         private void OnDisable()
         {
             localGameLogic.OnObstacleDetected -= UpdateHeartUI;
             localGameLogic.OnPlayerHealthOver -= DisplayEndGameScreen;
+            localGameLogic.OnPlayerCaptured -= EmptyHearts;
         }
 
         private void Start()
@@ -51,6 +53,14 @@ namespace Untitled_Endless_Runner
                     currentHeart--;
                     halfHeart = false;
                 }
+            }
+        }
+
+        private void EmptyHearts()
+        {
+            for (int i = 0; i < heartContainer.transform.childCount ; i++)
+            {
+                heartContainer.transform.GetChild(i).GetComponent<Image>().sprite = heartSprites[2];
             }
         }
 
