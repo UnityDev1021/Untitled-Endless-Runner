@@ -8,6 +8,7 @@ namespace Untitled_Endless_Runner
     {
         [Header("Local Reference Scripts")]
         public GameLogic gameLogicReference;
+        public PlayerController playerControllerReference;
 
         [Header("Local Reference Objects")]
         public Transform cameraTransform;

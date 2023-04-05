@@ -110,7 +110,15 @@ ________________________________________________________________________________
 => Made Animation for Double Jump
 => [Working] Making Day/Night Cycle Animation
 
-
+-------------------------------------------------------------------
+							5 April
+-------------------------------------------------------------------
+=> [working] Night To Day Transition
+=> [Working] Making Tap To Play Mechanism
+=> Player Entry Pos - (-8.43x, -2.3y)
+=> Fixed colliders for player when the players jump
+=> [Working] Making Pause Logic
+=> Made some UI for Pause, Resume, Restart, Home and some button logic
 _______________________________________________________________________________________________________________
 _______________________________________________________________________________________________________________
 

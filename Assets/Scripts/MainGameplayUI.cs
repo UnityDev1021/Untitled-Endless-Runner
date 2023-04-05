@@ -68,5 +68,23 @@ namespace Untitled_Endless_Runner
         {
             gameOverPanel.SetActive(true);
         }
+
+        //On Gameplay UI, under the pause/resume button
+        public void Pause_ResumeClicked(bool toggleValue)
+        {
+            localGameLogic.OnPause_ResumeClicked?.Invoke(toggleValue);
+        }
+
+        //On Pause Panel, under the restart button
+        public void RestartClicked()
+        {
+            localGameLogic.OnRestartClicked?.Invoke();
+        }
+
+        //On Pause Panel, under the restart button
+        public void HomeClicked()
+        {
+            localGameLogic.OnHomeClicked?.Invoke();
+        }
     }
 }

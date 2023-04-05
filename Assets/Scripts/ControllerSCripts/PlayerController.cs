@@ -22,6 +22,7 @@ namespace Untitled_Endless_Runner
         [Space]
         private byte jumpCount;
         private bool hasJumped, unAlive, isSliding;
+        public bool gameStarted;
         private int animationIndex;
 
         private void OnEnable()
@@ -64,6 +65,7 @@ namespace Untitled_Endless_Runner
             {
                 isSliding = true;
                 tempPosX = transform.localPosition.x;               //Store current X Co-Ordinate
+                playerAnimator.Play("Slide", 0, 0f);
                 playerRB.velocity = transform.right * slideForce;
             }
             else if (isSliding)
@@ -121,7 +123,7 @@ namespace Untitled_Endless_Runner
                 }
             }
 
-            if (collision.CompareTag("Captured"))
+            if (gameStarted && collision.CompareTag("Captured"))
             {
                 heart = 0f;
                 UnAlive();

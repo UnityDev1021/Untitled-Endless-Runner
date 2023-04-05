@@ -19,11 +19,25 @@ namespace Untitled_Endless_Runner
 
         //Obstacle Spawn Groups
         [SerializeField] private ObstacleGroup[] obstacleGroups;
+        private bool spawnEnabled;
+
+        [Header("Local Refernce Script")]
+        [SerializeField] private GameLogic localGameLogic;
+
+        private void OnEnable()
+        {
+            localGameLogic.OnPause_ResumeClicked += ToggleSpawn;
+        }
+
+        private void OnDisable()
+        {
+            localGameLogic.OnPause_ResumeClicked -= ToggleSpawn;
+        }
 
         // Start is called before the first frame update
         void Start()
         {
-            Invoke("SpawnObstacle", initialSpawnTime);
+            Invoke(nameof(SpawnObstacle), initialSpawnTime);
             startPosX = transform.position.x;
         }
 
@@ -51,9 +65,21 @@ namespace Untitled_Endless_Runner
                 //SetObstaclePosition(ref obstacleGroups[obstacleGroupIndex].firstObstacleIndex);
                 //ObstaclePoolManager.instance.ReUseObstacle(enemyUnitStats[obstacleGroups[obstacleGroupIndex].firstObstacleIndex].tag, tempSpawnPos, Quaternion.identity);
 
-                Invoke("SpawnObstacle", obstacleGroups[obstacleGroupIndex].spawnNextAfter);
+                if (spawnEnabled)
+                    Invoke(nameof(SpawnObstacle), obstacleGroups[obstacleGroupIndex].spawnNextAfter);
                 //Debug.Log($"Spawning Obstacle : {obstacleGroups[obstacleGroupIndex].name}, Spawn After : {obstacleGroups[obstacleGroupIndex].spawnNextAfter}");
             }
+        }
+
+        private void ToggleSpawn(bool toggleValue)
+        {
+            spawnEnabled = !toggleValue;
+
+            //In case the next obstacle is in the process of spawning and gets stopped as the spawn variable is not enabled
+            if (spawnEnabled)
+                Invoke(nameof(SpawnObstacle), obstacleGroups[obstacleGroupIndex].spawnNextAfter);
+            else
+                CancelInvoke(nameof(SpawnObstacle));
         }
 
         private void FixedUpdate()
