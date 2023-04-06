@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,17 +21,27 @@ namespace Untitled_Endless_Runner
         [Header ("Local References")]
         [SerializeField] private GameLogic localGameLogic;
 
+        [Header("Animation")]
+        [SerializeField] private Animator canvasAnimator;
+
+        [Space]
+        [SerializeField] private GameObject FadeScreen;
+
         private void OnEnable()
         {
             localGameLogic.OnObstacleDetected += UpdateHeartUI;
             localGameLogic.OnPlayerHealthOver += DisplayEndGameScreen;
             localGameLogic.OnPlayerCaptured += EmptyHearts;
+            localGameLogic.OnRestartFinished += CallFadeOut;
+            localGameLogic.OnRestartFinished += FillHearts;
         }
         private void OnDisable()
         {
             localGameLogic.OnObstacleDetected -= UpdateHeartUI;
             localGameLogic.OnPlayerHealthOver -= DisplayEndGameScreen;
             localGameLogic.OnPlayerCaptured -= EmptyHearts;
+            localGameLogic.OnRestartFinished -= CallFadeOut;
+            localGameLogic.OnRestartFinished -= FillHearts;
         }
 
         private void Start()
@@ -64,6 +75,16 @@ namespace Untitled_Endless_Runner
             }
         }
 
+        private void FillHearts()
+        {
+            currentHeart = (byte)(localGameLogic.totalHearts - 1);
+
+            for (int i = 0; i < heartContainer.transform.childCount; i++)
+            {
+                heartContainer.transform.GetChild(i).GetComponent<Image>().sprite = heartSprites[0];
+            }
+        }
+
         private void DisplayEndGameScreen()
         {
             gameOverPanel.SetActive(true);
@@ -78,7 +99,23 @@ namespace Untitled_Endless_Runner
         //On Pause Panel, under the restart button
         public void RestartClicked()
         {
-            localGameLogic.OnRestartClicked?.Invoke();
+            FadeScreen.SetActive(true);
+            canvasAnimator.Play("FadeIn", 0, 0f);
+            localGameLogic.OnRestartClicked?.Invoke(0);
+        }
+
+        private void CallFadeOut()
+        {
+            _ = StartCoroutine(FadeOut());
+        }
+
+        private IEnumerator FadeOut()
+        {
+            yield return new WaitForSeconds(1.1f);
+            canvasAnimator.Play("FadeOut", 0, 0f);
+
+            yield return new WaitForSeconds(1.1f);
+            FadeScreen.SetActive(false);
         }
 
         //On Pause Panel, under the restart button

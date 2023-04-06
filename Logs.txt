@@ -119,6 +119,18 @@ ________________________________________________________________________________
 => Fixed colliders for player when the players jump
 => [Working] Making Pause Logic
 => Made some UI for Pause, Resume, Restart, Home and some button logic
+=> [Do] Disable Jump if slide and vice versa.
+=> [Do] Fix Double Jump
+
+-------------------------------------------------------------------
+							6 April
+-------------------------------------------------------------------
+=> Made Exit Button/Mechanism for now.
+=> [Working] Making FadeIn/FadeOut Transition
+	(-) Made the transition.
+	(-) [Working] Making mechanism so that everything is reset before the FadeOut plays.
+=> [Working] Making Slide mechanism without manipulating the velocity of the player, instead increasing the camera speed for parallax.
+=> Fixed Double Jump For Now.
 _______________________________________________________________________________________________________________
 _______________________________________________________________________________________________________________
 

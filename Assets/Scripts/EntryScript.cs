@@ -1,6 +1,7 @@
-//#define SKIP_ENTRY                          //For Testing
+#define SKIP_ENTRY                          //For Testing
 
 using System.Collections;
+using UnityEditor.Animations;
 using UnityEditor.Timeline.Actions;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ namespace Untitled_Endless_Runner
     public class EntryScript : MonoBehaviour
     {
         [SerializeField] private Animator portalAnimator, playerAnimator, backgroundAnimator;
+        [SerializeField] private AnimatorController[] backgroundAnimatorControllers;
 
         [Header("Local Refernece Scripts")]
         [SerializeField] private GameLogic localGameLogic;
@@ -18,20 +20,35 @@ namespace Untitled_Endless_Runner
         [SerializeField] private GameObject[] disabledObjects;
         [SerializeField] private GameObject portal, TapToPlay, player;
 
+        private void OnEnable()
+        {
+            localGameLogic.OnRestartClicked += ResetPlayerPosition;
+        }
+
+        private void OnDisable()
+        {
+            localGameLogic.OnRestartClicked -= ResetPlayerPosition;
+        }
+
         private void Start()
         {
+            Debug.Log($"Starting Entry Script");
+
 #if !SKIP_ENTRY
+            disabledObjects[1].SetActive(true);
             backgroundAnimator.Play("Entry", 0);
             Invoke(nameof(EnablePortal), 9.5f);
             Invoke(nameof(EnablePlayer), 10f);
             player.transform.position = new Vector2(-8.43f, -2.3f);
 #else
             player.transform.position = new Vector2(-5.3f, -3.7f);
-            //player.SetActive(true);                                  //Enable For Actual Gameplay
-            backgroundAnimator.enabled = false;
+            player.SetActive(true);                                  //Enable For Actual Gameplay
             //localBG_Controller.enabled = true;            //Enable BackGround Controller Script         //Enable For Actual Gameplay
             player.GetComponent<PlayerController>().enabled = true;
             player.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+
+            backgroundAnimator.runtimeAnimatorController = backgroundAnimatorControllers[1];
+            TapToPlay.SetActive(true);
 #endif
 
             #region CheckAnimationClipLength;
@@ -69,6 +86,11 @@ namespace Untitled_Endless_Runner
             disabledObjects[2].SetActive(false);
         }
 
+        private void ResetPlayerPosition(int dummyData)
+        {
+            _ = StartCoroutine(DisableObjectsAfter(0, 1));
+        }
+
         private IEnumerator DisableObjectsAfter(float seconds, int objectIndex)
         {
             switch (objectIndex)
@@ -84,10 +106,11 @@ namespace Untitled_Endless_Runner
                 case 1:
                     {
                         yield return new WaitForSeconds(seconds);
-                        player.transform.position = new Vector2(-5.3f, -3.7f);
+                        player.transform.position = new Vector2(-5.58f, -3.7f);
                         player.GetComponent<PlayerController>().enabled = true;
                         player.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
 
+                        backgroundAnimator.runtimeAnimatorController = backgroundAnimatorControllers[1];
                         TapToPlay.SetActive(true);
 
                         //backgroundAnimator.Play("NightAnim", 0);                        //If left to nothing, cannot manipulate transform as the animator would be on

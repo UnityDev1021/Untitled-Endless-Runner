@@ -21,18 +21,19 @@ namespace Untitled_Endless_Runner
 
         [Space]
         private byte jumpCount;
-        private bool hasJumped, unAlive, isSliding;
+        private bool hasJumped, unAlive, isSliding, firstJump;
         public bool gameStarted;
-        private int animationIndex;
 
         private void OnEnable()
         {
             localGameLogic.OnObstacleDetected += ObstacleDetected;
+            localGameLogic.OnRestartClicked += PlayAnimation;
         }
 
         private void OnDisable()
         {
-            localGameLogic.OnObstacleDetected -= ObstacleDetected;            
+            localGameLogic.OnObstacleDetected -= ObstacleDetected;
+            localGameLogic.OnRestartClicked -= PlayAnimation;
         }
 
         // Start is called before the first frame update
@@ -52,38 +53,41 @@ namespace Untitled_Endless_Runner
                 jumpCount++;
                 playerAnimator.Play("Jump", 0, 0f);
                 //playerAnimator.SetBool("Rotate", true);
-                animationIndex = 0;
                 //Invoke(nameof(PlayAnimation), 1.01f);
 
-                if (jumpCount == 2)
-                {
-                    jumpCount = 0;
+                if (jumpCount == 1)
                     hasJumped = true;
-                }
             }
             else if (Keyboard.current[Key.LeftShift].wasPressedThisFrame && !isSliding)
             {
                 isSliding = true;
                 tempPosX = transform.localPosition.x;               //Store current X Co-Ordinate
                 playerAnimator.Play("Slide", 0, 0f);
-                playerRB.velocity = transform.right * slideForce;
+                //playerRB.velocity = transform.right * slideForce;                 //Manipulating BG
+                Invoke(nameof(SetSlideOn), 1f);
+                localGameLogic.OnPlayerSlide?.Invoke();
             }
-            else if (isSliding)
+            /*else if (isSliding)
             {
                 if (playerRB.velocity.x <= 0.1f)
                 {
                     if (transform.localPosition.x >= (tempPosX + 1.5f))
                     {
                         playerRB.AddForce(transform.right * slideForce * -3f, ForceMode2D.Force);           //Gravity Scale is 3f
-                        Debug.Log($"Applying Force");
+                        //Debug.Log($"Applying Force");
                     }
                     else
                     {
                         isSliding = false;
                     }
                 }
-            }
+            }*/
+        }
 
+        private void SetSlideOn()
+        {
+            isSliding = false;
+            //localGameLogic.OnPlayerSlide?.Invoke(false);
         }
 
         public void SetPlayerAfterEntry()
@@ -91,20 +95,21 @@ namespace Untitled_Endless_Runner
             playerRenderer.maskInteraction = SpriteMaskInteraction.None;
         }
 
-        private void PlayAnimation()
+        private void PlayAnimation(int animationIndex)
         {
             switch(animationIndex)
             {
                 case 0:
                     {
-                        //playerAnimator.SetBool("Rotate", false);
+                        playerAnimator.Play("Idle", 0, 0f);
+                        heart = localGameLogic.totalHearts;
 
                         break;
                     }
 
                 default:
                     {
-                        Debug.Log($"Wrong Case {animationIndex} chosen for Player Controller under PlayAnimation");
+                        Debug.LogError($"Wrong Case {animationIndex} chosen for Player Controller under PlayAnimation");
 
                         break;
                     }
@@ -113,14 +118,13 @@ namespace Untitled_Endless_Runner
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.CompareTag("Ground") || collision.CompareTag("Steppable"))
+            if (collision.CompareTag("Steppable") || collision.CompareTag("Ground"))
             {
+                //Debug.Log($"Resetting under Trigger");
                 jumpCount = 0;              //To ensure that the player can double jump from the obstacle
 
                 if (hasJumped)
-                {
                     hasJumped = false;
-                }
             }
 
             if (gameStarted && collision.CompareTag("Captured"))

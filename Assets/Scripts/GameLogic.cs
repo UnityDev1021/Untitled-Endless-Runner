@@ -9,12 +9,13 @@ namespace Untitled_Endless_Runner
         private byte _totalHearts = 4;
         public int totalHearts { get => _totalHearts; }
 
-        [SerializeField] private GameObject player;
+        [SerializeField] private GameObject player, mainCamera;
 
         public Action<ObstacleStat> OnObstacleDetected;
         public Action OnPlayerHealthOver, OnPlayerCaptured, OnGamePlayStarted, OnMainGameplayStarted, 
-            OnResumeClicked, OnRestartClicked, OnHomeClicked;
+            OnResumeClicked, OnHomeClicked, OnPlayerSlide, OnRestartFinished;
         public Action<bool> OnPause_ResumeClicked;
+        public Action<int> OnRestartClicked;
 
         [Header("Local Refernece Scripts")]
         [SerializeField] private BackGroundController localBG_Controller;
@@ -22,12 +23,12 @@ namespace Untitled_Endless_Runner
 
         [Header("Animator Refernece")]
         [SerializeField] private Animator backgroundAnimator;
-        [SerializeField] private AnimatorController[] backgroundAnimatorControllers;
+        [SerializeField] private Animator playerAnimator, canvasAnimator;
 
         private void OnEnable()
         {
             OnMainGameplayStarted += EnableObjects;
-            OnPlayerHealthOver += EndGame;
+            OnPlayerHealthOver += EndGamePlay;
             OnPause_ResumeClicked += ToggleGameStatus;
             OnRestartClicked += RestartGame;
             OnHomeClicked += GoHome;
@@ -36,7 +37,7 @@ namespace Untitled_Endless_Runner
         private void OnDisable()
         {
             OnMainGameplayStarted -= EnableObjects;
-            OnPlayerHealthOver -= EndGame;
+            OnPlayerHealthOver -= EndGamePlay;
             OnPause_ResumeClicked -= ToggleGameStatus;
             OnRestartClicked -= RestartGame;
             OnHomeClicked -= GoHome;
@@ -53,8 +54,10 @@ namespace Untitled_Endless_Runner
             localBG_Controller.enabled = true;
             localObstacleSpawner.enabled = true;
             //backgroundAnimator.keepAnimatorStateOnDisable = true;
-            //backgroundAnimator.Play("Day_Night_Cycle", 0, 0f);
-            backgroundAnimator.runtimeAnimatorController = backgroundAnimatorControllers[1];
+            backgroundAnimator.Play("Day_Night_Cycle", 0, 0f);
+
+            //playerAnimator.SetBool("RUN", true);
+            playerAnimator.Play("Idle_Run", 0, 0f);
             player.GetComponent<PlayerController>().enabled = true;
             player.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
         }
@@ -67,9 +70,21 @@ namespace Untitled_Endless_Runner
                 Time.timeScale = 1f;
         }
 
-        private void RestartGame()
+        private void RestartGame(int dummyData)
         {
+            ToggleGameStatus(false);
 
+            localBG_Controller.enabled = false;
+            localObstacleSpawner.enabled = false;
+
+            //backgroundAnimator.runtimeAnimatorController = backgroundAnimatorControllers[0];                  //Turn off Animator all together
+            backgroundAnimator.Play("Nothing", 0, 1f);
+
+            player.GetComponent<PlayerController>().enabled = false;
+            player.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
+
+            mainCamera.transform.position = new Vector3(0f, mainCamera.transform.position.y, mainCamera.transform.position.z);
+            OnRestartFinished?.Invoke();
         }
 
         private void GoHome()
@@ -77,9 +92,15 @@ namespace Untitled_Endless_Runner
 
         }
 
-        private void EndGame()
+        private void EndGamePlay()
         {
 
+        }
+
+        //On Main Menu, under the Exit button
+        public void ExitGame()
+        {
+           Application.Quit();
         }
     }
 }
