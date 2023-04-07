@@ -131,6 +131,34 @@ ________________________________________________________________________________
 	(-) [Working] Making mechanism so that everything is reset before the FadeOut plays.
 => [Working] Making Slide mechanism without manipulating the velocity of the player, instead increasing the camera speed for parallax.
 => Fixed Double Jump For Now.
+	(-) Changed the counter to 1 as the player is standing on the ground so when the player jumps, it gets reset to 1
+=> [Do] Fix Reset so that the obstacle spawner works when reset.
+
+-------------------------------------------------------------------
+							7 April
+-------------------------------------------------------------------
+=> [Working] Making Reset Mechanism
+	(-) Prop Positions :-
+		[=] sun_moon :- (0x, -6y, 0z)
+		[=] clouds :- (0x, -0.5y, 0z)
+		[=] clouds-b :- (0x, 0y, 0z)
+		[=] mountain-far :- (0x, 0y, 0z)
+		[=] mountains :- (0x, 0y, 0z)
+		[=] trees-bd :- (0x, 0.39y, 0z)
+		[=] trees-bl :- (0x, 0.39y, 0z)
+		[=] foreground-tree :- (0x, 1.23y, 0z)
+		[=] grass :- (0x, 0.39y, 0z)
+		[=] ground :- (0x, 0.39y, 0z)
+	(-) [Done For Now] Reset every child of the parent when doing reset.
+	(-) [Done] Moved Invoke call of Spawn method to OnEnable func.
+=> Fixed Slide mechanic where the player does not seem to slide in succession as the environment keeps stable. Now there is some cooldown time for the slide mechanism.
+=> Obstacle does not spawn correctly.
+=> Fixed the Spawn Code where the timing went off after pausing the game. Calculating the time difference, between the time of invoke of the spawn method and the time where the pause button was clicked.
+=> Made Coin Animation along with the colliders for every frame.
+	(-) Updating Colliders
+=> [Done For Now] Made mobile controls.
+	(-) Made some helper functions to detect that the button has been pressed and a temporary variable for the toggle.
+
 _______________________________________________________________________________________________________________
 _______________________________________________________________________________________________________________
 

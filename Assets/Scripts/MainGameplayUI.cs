@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -14,6 +15,7 @@ namespace Untitled_Endless_Runner
         [Header("UI")]
         [SerializeField] private Sprite[] heartSprites;
         [SerializeField] private GameObject heartContainer, gameOverPanel;
+        [SerializeField] private TMP_Text finalScoreTxt;
 
         [Header ("Prefabs List")]
         [SerializeField] private GameObject heartPrefab;
@@ -34,6 +36,7 @@ namespace Untitled_Endless_Runner
             localGameLogic.OnPlayerCaptured += EmptyHearts;
             localGameLogic.OnRestartFinished += CallFadeOut;
             localGameLogic.OnRestartFinished += FillHearts;
+            localGameLogic.OnGameOver += UpdateFinalScore;
         }
         private void OnDisable()
         {
@@ -42,6 +45,7 @@ namespace Untitled_Endless_Runner
             localGameLogic.OnPlayerCaptured -= EmptyHearts;
             localGameLogic.OnRestartFinished -= CallFadeOut;
             localGameLogic.OnRestartFinished -= FillHearts;
+            localGameLogic.OnGameOver -= UpdateFinalScore;
         }
 
         private void Start()
@@ -88,6 +92,12 @@ namespace Untitled_Endless_Runner
         private void DisplayEndGameScreen()
         {
             gameOverPanel.SetActive(true);
+            Debug.Log($"Game Over Panel Active : {gameOverPanel.activeSelf}");
+        }
+
+        private void UpdateFinalScore(int finalScore)
+        {
+            finalScoreTxt.text = finalScore.ToString();
         }
 
         //On Gameplay UI, under the pause/resume button

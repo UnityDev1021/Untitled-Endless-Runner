@@ -15,7 +15,9 @@ namespace Untitled_Endless_Runner
         public Action OnPlayerHealthOver, OnPlayerCaptured, OnGamePlayStarted, OnMainGameplayStarted, 
             OnResumeClicked, OnHomeClicked, OnPlayerSlide, OnRestartFinished;
         public Action<bool> OnPause_ResumeClicked;
-        public Action<int> OnRestartClicked;
+        public Action<int> OnRestartClicked, OnGameOver;
+
+        [SerializeField] private GameObject[] disabledObjects;
 
         [Header("Local Refernece Scripts")]
         [SerializeField] private BackGroundController localBG_Controller;
@@ -51,6 +53,8 @@ namespace Untitled_Endless_Runner
         //On the Start Panel under the "Tap To Play" button
         public void StartGame()
         {
+            disabledObjects[0].SetActive(true);
+
             localBG_Controller.enabled = true;
             localObstacleSpawner.enabled = true;
             //backgroundAnimator.keepAnimatorStateOnDisable = true;
@@ -65,9 +69,9 @@ namespace Untitled_Endless_Runner
         private void ToggleGameStatus(bool toggleValue)
         {
             if (toggleValue)
-                Time.timeScale = 0f;
-            else
                 Time.timeScale = 1f;
+            else
+                Time.timeScale = 0f;
         }
 
         private void RestartGame(int dummyData)
@@ -94,7 +98,7 @@ namespace Untitled_Endless_Runner
 
         private void EndGamePlay()
         {
-
+            disabledObjects[0].SetActive(false);
         }
 
         //On Main Menu, under the Exit button

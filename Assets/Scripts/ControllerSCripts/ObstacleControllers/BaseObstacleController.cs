@@ -22,7 +22,7 @@ namespace Untitled_Endless_Runner
         [SerializeField] private ObstacleStat _obstacleStat;
         public ObstacleStat obstacleStat { get { return _obstacleStat; } }
 
-        private void OnEnable()
+        protected virtual void OnEnable()
         {
             Invoke(nameof(EnableActionFunctions), 0.1f);              //Apparently this works somehow.        //Might cause Race Condition
         }
@@ -34,6 +34,7 @@ namespace Untitled_Endless_Runner
 
         protected virtual void Start() 
         {
+            CheckIfWithinPerimeter();
             //Debug.Log($"Name : {transform.name},Dimension : {GetComponent<SpriteRenderer>().bounds.size}");                  //Will Cause error for some Prefabs such as SpikedBall
         }
 
@@ -63,6 +64,14 @@ namespace Untitled_Endless_Runner
         {
             if (transform.position.x < (cameraTransform.position.x - 12f))
                 gameObject.SetActive(false);
+        }
+
+        private void CheckIfWithinPerimeter()
+        {
+            if (transform.position.x < (cameraTransform.position.x - 12f) || transform.position.x > (cameraTransform.position.x + 15f))
+                gameObject.SetActive(false);
+
+            Invoke(nameof(CheckIfWithinPerimeter), 1f);
         }
 
         private void SwitchEffectsOff()

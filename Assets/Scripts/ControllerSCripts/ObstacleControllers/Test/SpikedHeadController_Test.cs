@@ -24,7 +24,7 @@ namespace Untitled_Endless_Runner
         }
 
         //Reset on Re-Use
-        private void OnEnable()
+        protected override void OnEnable()
         {
             smashed = false;
             enableVerticalMove = true;

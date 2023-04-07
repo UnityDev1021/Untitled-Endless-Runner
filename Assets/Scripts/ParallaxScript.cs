@@ -11,6 +11,19 @@ namespace Untitled_Endless_Runner
         public float parallaxEffect;
         private int sceneMultiplier = 1, prevSceneIndex = 2;
 
+        [Header("Local Refernce Script")]
+        [SerializeField] private GameLogic localGameLogic;
+
+        private void OnEnable()
+        {
+            localGameLogic.OnRestartFinished += ResetStats;
+        }
+
+        private void OnDisable()
+        {
+            localGameLogic.OnRestartFinished -= ResetStats;
+        }
+
         // Start is called before the first frame update
         private void Start()
         {
@@ -46,6 +59,12 @@ namespace Untitled_Endless_Runner
             }
             else if (tempPosXVal < startPos - length)
                 startPos -= length;
+        }
+
+        private void ResetStats()
+        {
+            sceneMultiplier = 1;
+            prevSceneIndex = (transform.childCount - 1);                                    //The last scnen in line
         }
     }
 }

@@ -8,6 +8,7 @@ TagManager:
   - Obstacle
   - Steppable
   - Captured
+  - Coin
   layers:
   - Default
   - TransparentFX

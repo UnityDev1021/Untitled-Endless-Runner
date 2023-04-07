@@ -24,7 +24,7 @@ namespace Untitled_Endless_Runner
         private bool smashed, goingUp = true, enableMove = true, enableHorizontalMove = false;       //, firstGo = true
 
         //Reset on Re-Use
-        private void OnEnable()
+        protected override void OnEnable()
         {
             smashed = false;
             //Debug.Log($"On Enable");

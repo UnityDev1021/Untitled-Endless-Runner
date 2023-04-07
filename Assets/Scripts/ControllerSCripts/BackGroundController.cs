@@ -1,6 +1,6 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using Untitled_Endless_Runner;
 
@@ -10,6 +10,12 @@ public class BackGroundController : MonoBehaviour
     [SerializeField] private float moveSpeed = 0.05f;           //, manipulateSpeed;
     private bool scrollBackground = true;                      //Default is true
     private float time;
+    [SerializeField] private TMP_Text scoreTxt;
+    private int score;
+
+    [Header("BackGround Reference")]
+    [SerializeField] private GameObject BackGround;
+    [SerializeField] private float[] BackgroundPropsPos;
 
     [Header("Local Reference Script")]
     [SerializeField] private GameLogic localGameLogic;
@@ -18,19 +24,25 @@ public class BackGroundController : MonoBehaviour
     {
         localGameLogic.OnPlayerHealthOver += StopBackGroundScroll;
         localGameLogic.OnPlayerSlide += InvokeToggleSpeed;
+        localGameLogic.OnRestartClicked += ResetEnvironmentProps;
     }
 
     private void OnDisable()
     {
         localGameLogic.OnPlayerHealthOver -= StopBackGroundScroll;
         localGameLogic.OnPlayerSlide -= InvokeToggleSpeed;
+        localGameLogic.OnRestartClicked -= ResetEnvironmentProps;
     }
 
     // Update is called once per frame
     private void FixedUpdate()
     {
         if (scrollBackground)
+        {
             transform.Translate(new Vector3(moveSpeed , 0f, 0f));
+            score = (int)MathF.Round(transform.position.x);
+            scoreTxt.text = score.ToString();
+        }
     }
 
     private void InvokeToggleSpeed()
@@ -46,7 +58,7 @@ public class BackGroundController : MonoBehaviour
 
         while (true)
         {
-            time += 1.1f * Time.deltaTime;
+            time += 1.2f * Time.deltaTime;
 
             if (time >= 1)
             {
@@ -62,5 +74,42 @@ public class BackGroundController : MonoBehaviour
     private void StopBackGroundScroll()
     {
         scrollBackground = false;
+        localGameLogic.OnGameOver?.Invoke(score);
     }
+
+    //On the TapToPlay button, under the MainMenuPanel
+    public void StartBackGroundScroll()
+    {
+        scrollBackground = true;
+    }
+
+    private void ResetEnvironmentProps(int dummyData)
+    {
+        int totalGroups = BackGround.transform.childCount;
+        Debug.Log($"Total Groups : {totalGroups}");
+
+        for (int i = 6; i < totalGroups; i++)
+        {
+            int groupChildren = BackGround.transform.GetChild(i).childCount;
+            float spaceMultiplier = BackGround.transform.GetChild(i).GetChild(0).GetComponent<SpriteRenderer>().bounds.size.x;
+
+            Debug.Log($"groupChildren : {groupChildren}, spaceMultiplier : {spaceMultiplier}");
+
+            for  (int j = 0; j < groupChildren; j++)
+            {
+                BackGround.transform.GetChild(i).GetChild(j).localPosition =
+                    new Vector3(BackgroundPropsPos[i - 6] + (j * spaceMultiplier),
+                    BackGround.transform.GetChild(i).GetChild(j).localPosition.y, 
+                    BackGround.transform.GetChild(i).GetChild(j).localPosition.z);
+
+                Debug.Log($"Props Name : {BackGround.transform.GetChild(i).GetChild(j).name}, " +
+                    $"Local Position : {BackGround.transform.GetChild(i).GetChild(j).localPosition}");
+            }
+        }
+    }
+
+    //private Vector3 SetPosition()
+    //{
+    //    return new Vector3();
+    //}
 }

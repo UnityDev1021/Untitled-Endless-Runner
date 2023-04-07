@@ -21,19 +21,21 @@ namespace Untitled_Endless_Runner
 
         [Space]
         private byte jumpCount;
-        private bool hasJumped, unAlive, isSliding, firstJump;
+        private bool hasJumped, unAlive, isSliding, firstJump, mobile_Jump, mobile_Slide, disableSlide, disableJump;
         public bool gameStarted;
 
         private void OnEnable()
         {
             localGameLogic.OnObstacleDetected += ObstacleDetected;
             localGameLogic.OnRestartClicked += PlayAnimation;
+            localGameLogic.OnRestartFinished += ResetPlayerStats;
         }
 
         private void OnDisable()
         {
             localGameLogic.OnObstacleDetected -= ObstacleDetected;
             localGameLogic.OnRestartClicked -= PlayAnimation;
+            localGameLogic.OnRestartFinished -= ResetPlayerStats;
         }
 
         // Start is called before the first frame update
@@ -46,9 +48,12 @@ namespace Untitled_Endless_Runner
         private void Update()
         {
             //Player can only jump or slide
-            if (Keyboard.current[Key.Space].wasPressedThisFrame && !hasJumped)
+            if ((mobile_Jump || Keyboard.current[Key.Space].wasPressedThisFrame) && !hasJumped && !disableJump)
             {
                 Debug.Log($"Jumping");
+                mobile_Jump = false;
+
+                disableSlide = true;
                 playerRB.velocity = transform.up * jumpForce;
                 jumpCount++;
                 playerAnimator.Play("Jump", 0, 0f);
@@ -58,14 +63,20 @@ namespace Untitled_Endless_Runner
                 if (jumpCount == 1)
                     hasJumped = true;
             }
-            else if (Keyboard.current[Key.LeftShift].wasPressedThisFrame && !isSliding)
+            else if ((mobile_Slide || Keyboard.current[Key.S].wasPressedThisFrame) && !isSliding && !disableSlide)             //Default was left Shift
             {
+                Debug.Log($"Sliding");
+                mobile_Slide = false;
+
+                disableJump = true;
                 isSliding = true;
-                tempPosX = transform.localPosition.x;               //Store current X Co-Ordinate
-                playerAnimator.Play("Slide", 0, 0f);
-                //playerRB.velocity = transform.right * slideForce;                 //Manipulating BG
-                Invoke(nameof(SetSlideOn), 1f);
                 localGameLogic.OnPlayerSlide?.Invoke();
+                playerAnimator.Play("Slide", 0, 0f);
+
+                //tempPosX = transform.localPosition.x;               //Store current X Co-Ordinate
+                //playerRB.velocity = transform.right * slideForce;                 //Manipulating BG
+
+                Invoke(nameof(SetSlideOn), 1.25f);                  //Invoke after some time, as it takes time to slow down the moveSpeed of the BG_Controller
             }
             /*else if (isSliding)
             {
@@ -84,9 +95,29 @@ namespace Untitled_Endless_Runner
             }*/
         }
 
+        //On Jump button under the Main Gameplay Panel
+        public void Mobile_Jump()
+        {
+            if (!hasJumped)
+                mobile_Jump = true;
+        }
+
+        //On Slide button under the Main Gameplay Panel
+        public void Mobile_Silde()
+        {
+            if (!isSliding)
+                mobile_Slide = true;
+        }
+
+        private void ResetPlayerStats()
+        {
+            unAlive = false;
+        }
+
         private void SetSlideOn()
         {
             isSliding = false;
+            disableJump = false;
             //localGameLogic.OnPlayerSlide?.Invoke(false);
         }
 
@@ -122,6 +153,7 @@ namespace Untitled_Endless_Runner
             {
                 //Debug.Log($"Resetting under Trigger");
                 jumpCount = 0;              //To ensure that the player can double jump from the obstacle
+                disableSlide = false;
 
                 if (hasJumped)
                     hasJumped = false;
