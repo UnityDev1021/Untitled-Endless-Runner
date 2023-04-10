@@ -10,12 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8d1db9ca2b6fd8e43944925a27c8a843, type: 3}
-  m_Name: Group_8 4
+  m_Name: Group_11
   m_EditorClassIdentifier: 
-  obstaclesIndex: 0804
-  obstacleGroupType: 0100
+  obstaclesIndex: 0b
+  obstacleGroupType: 00
   disX:
   - 0
-  - 2.5
   disY: []
-  spawnNextAfter: 2
+  spawnNextAfter: 1.5

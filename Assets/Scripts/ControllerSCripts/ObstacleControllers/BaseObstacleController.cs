@@ -49,6 +49,7 @@ namespace Untitled_Endless_Runner
         private void EnableActionFunctions()
         {
             localGameLogic.OnPlayerHealthOver += SwitchEffectsOff;
+            localGameLogic.OnRestartClicked += DisableObstacle;
             //Debug.Log($"Enabling");
         }
 
@@ -56,19 +57,20 @@ namespace Untitled_Endless_Runner
         private void DisableActionFunctions()
         {
             localGameLogic.OnPlayerHealthOver -= SwitchEffectsOff;
+            localGameLogic.OnRestartClicked += DisableObstacle;
             //Debug.Log($"Disabling");
         }
 
         // Update is called once per frame
         protected virtual void FixedUpdate()
         {
-            if (transform.position.x < (cameraTransform.position.x - 12f))
-                gameObject.SetActive(false);
+            //if (transform.position.x < (cameraTransform.position.x - 12f))
+            //    gameObject.SetActive(false);
         }
 
         private void CheckIfWithinPerimeter()
         {
-            if (transform.position.x < (cameraTransform.position.x - 12f) || transform.position.x > (cameraTransform.position.x + 15f))
+            if (transform.position.x < (cameraTransform.position.x - 12f) || transform.position.x > (cameraTransform.position.x + 18f))
                 gameObject.SetActive(false);
 
             Invoke(nameof(CheckIfWithinPerimeter), 1f);
@@ -79,8 +81,15 @@ namespace Untitled_Endless_Runner
             enableEffects = false;
         }
 
+        private void DisableObstacle(int dummyData)
+        {
+            gameObject.SetActive(false);
+        }
+
         protected virtual void OnTriggerStay2D(Collider2D collision)
         {
+            Debug.Log($"Found Player");
+
             if (enableEffects && collision.transform.CompareTag("Player"))
             {
                 //collision.transform.GetComponent<PlayerController>().ObstacleDetected(obstacleStat);

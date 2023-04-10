@@ -86,14 +86,14 @@ public class BackGroundController : MonoBehaviour
     private void ResetEnvironmentProps(int dummyData)
     {
         int totalGroups = BackGround.transform.childCount;
-        Debug.Log($"Total Groups : {totalGroups}");
+        //Debug.Log($"Total Groups : {totalGroups}");
 
         for (int i = 6; i < totalGroups; i++)
         {
             int groupChildren = BackGround.transform.GetChild(i).childCount;
             float spaceMultiplier = BackGround.transform.GetChild(i).GetChild(0).GetComponent<SpriteRenderer>().bounds.size.x;
 
-            Debug.Log($"groupChildren : {groupChildren}, spaceMultiplier : {spaceMultiplier}");
+            //Debug.Log($"groupChildren : {groupChildren}, spaceMultiplier : {spaceMultiplier}");
 
             for  (int j = 0; j < groupChildren; j++)
             {
@@ -102,8 +102,8 @@ public class BackGroundController : MonoBehaviour
                     BackGround.transform.GetChild(i).GetChild(j).localPosition.y, 
                     BackGround.transform.GetChild(i).GetChild(j).localPosition.z);
 
-                Debug.Log($"Props Name : {BackGround.transform.GetChild(i).GetChild(j).name}, " +
-                    $"Local Position : {BackGround.transform.GetChild(i).GetChild(j).localPosition}");
+                //Debug.Log($"Props Name : {BackGround.transform.GetChild(i).GetChild(j).name}, " +
+                //    $"Local Position : {BackGround.transform.GetChild(i).GetChild(j).localPosition}");
             }
         }
     }

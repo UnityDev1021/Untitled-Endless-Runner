@@ -20,6 +20,10 @@ namespace Untitled_Endless_Runner
 
             switch (groupType)
             {
+                //Do Nothing
+                case 0:
+                    break;
+
                 case 1:
                     {
                         tempPosY = -2.3f;

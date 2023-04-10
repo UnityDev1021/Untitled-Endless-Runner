@@ -15,7 +15,7 @@ namespace Untitled_Endless_Runner
         [Header("UI")]
         [SerializeField] private Sprite[] heartSprites;
         [SerializeField] private GameObject heartContainer, gameOverPanel;
-        [SerializeField] private TMP_Text finalScoreTxt;
+        [SerializeField] private TMP_Text finalScoreTxt, totalCoinsTxt;
 
         [Header ("Prefabs List")]
         [SerializeField] private GameObject heartPrefab;
@@ -37,6 +37,7 @@ namespace Untitled_Endless_Runner
             localGameLogic.OnRestartFinished += CallFadeOut;
             localGameLogic.OnRestartFinished += FillHearts;
             localGameLogic.OnGameOver += UpdateFinalScore;
+            localGameLogic.OnCoinCollected += UpdateTotalCoins;
         }
         private void OnDisable()
         {
@@ -46,6 +47,7 @@ namespace Untitled_Endless_Runner
             localGameLogic.OnRestartFinished -= CallFadeOut;
             localGameLogic.OnRestartFinished -= FillHearts;
             localGameLogic.OnGameOver -= UpdateFinalScore;
+            localGameLogic.OnCoinCollected -= UpdateTotalCoins;
         }
 
         private void Start()
@@ -98,6 +100,12 @@ namespace Untitled_Endless_Runner
         private void UpdateFinalScore(int finalScore)
         {
             finalScoreTxt.text = finalScore.ToString();
+        }
+
+        private void UpdateTotalCoins(int totalCoins)
+        {
+            Debug.Log("Updating Coins");
+            totalCoinsTxt.text = totalCoins.ToString();
         }
 
         //On Gameplay UI, under the pause/resume button

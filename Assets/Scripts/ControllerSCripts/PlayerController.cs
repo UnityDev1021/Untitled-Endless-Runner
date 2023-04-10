@@ -1,4 +1,5 @@
-using UnityEditor.Timeline.Actions;
+#define MOBILE_CONTROLS                     //For Mobile Controls
+
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -19,10 +20,19 @@ namespace Untitled_Endless_Runner
         [Header("Local Refernce Script")]
         [SerializeField] private GameLogic localGameLogic;
 
+        [Header("Player PowerUps")]
+        private int totalCoins;
+
         [Space]
         private byte jumpCount;
-        private bool hasJumped, unAlive, isSliding, firstJump, mobile_Jump, mobile_Slide, disableSlide, disableJump;
+        private bool hasJumped, unAlive, isSliding, firstJump, disableSlide, disableJump;
         public bool gameStarted;
+
+#if MOBILE_CONTROLS
+        [Header("Mobile Controls")]
+        private bool mobile_Jump, mobile_Slide;
+#endif
+
 
         private void OnEnable()
         {
@@ -45,13 +55,13 @@ namespace Untitled_Endless_Runner
             heart = localGameLogic.totalHearts;
         }
 
+#if !MOBILE_CONTROLS
         private void Update()
         {
             //Player can only jump or slide
-            if ((mobile_Jump || Keyboard.current[Key.Space].wasPressedThisFrame) && !hasJumped && !disableJump)
+            if (Keyboard.current[Key.Space].wasPressedThisFrame && !hasJumped && !disableJump)
             {
                 Debug.Log($"Jumping");
-                mobile_Jump = false;
 
                 disableSlide = true;
                 playerRB.velocity = transform.up * jumpForce;
@@ -63,10 +73,9 @@ namespace Untitled_Endless_Runner
                 if (jumpCount == 1)
                     hasJumped = true;
             }
-            else if ((mobile_Slide || Keyboard.current[Key.S].wasPressedThisFrame) && !isSliding && !disableSlide)             //Default was left Shift
+            else if (Keyboard.current[Key.S].wasPressedThisFrame && !isSliding && !disableSlide)             //Default was left Shift
             {
                 Debug.Log($"Sliding");
-                mobile_Slide = false;
 
                 disableJump = true;
                 isSliding = true;
@@ -94,19 +103,49 @@ namespace Untitled_Endless_Runner
                 }
             }*/
         }
+#endif
+
+        public void SetStartPlayer()
+        {
+            gameStarted = true;
+        }
 
         //On Jump button under the Main Gameplay Panel
         public void Mobile_Jump()
         {
-            if (!hasJumped)
-                mobile_Jump = true;
+            if (!hasJumped && !disableJump)
+            {
+                //Debug.Log($"Jumping");
+
+                disableSlide = true;
+                playerRB.velocity = transform.up * jumpForce;
+                jumpCount++;
+                playerAnimator.Play("Jump", 0, 0f);
+                //playerAnimator.SetBool("Rotate", true);
+                //Invoke(nameof(PlayAnimation), 1.01f);
+
+                if (jumpCount == 1)
+                    hasJumped = true;
+            }
         }
 
         //On Slide button under the Main Gameplay Panel
         public void Mobile_Silde()
         {
-            if (!isSliding)
-                mobile_Slide = true;
+            if (!isSliding && !disableSlide)
+            {
+                //Debug.Log($"Sliding");
+
+                disableJump = true;
+                isSliding = true;
+                localGameLogic.OnPlayerSlide?.Invoke();
+                playerAnimator.Play("Slide", 0, 0f);
+
+                //tempPosX = transform.localPosition.x;               //Store current X Co-Ordinate
+                //playerRB.velocity = transform.right * slideForce;                 //Manipulating BG
+
+                Invoke(nameof(SetSlideOn), 1.25f);                  //Invoke after some time, as it takes time to slow down the moveSpeed of the BG_Controller
+            }
         }
 
         private void ResetPlayerStats()
@@ -270,6 +309,22 @@ namespace Untitled_Endless_Runner
                                 }
                         }
                         //Debug.Log($"Boost Obstacle : {obstacleStat.tag}");
+
+                        break;
+                    }
+
+                case ObstacleType.Power_Up:
+                    {
+                        switch (obstacleStat.tag)
+                        {
+                            case ObstacleTag.Coin:
+                                {
+                                    totalCoins++;
+                                    localGameLogic.OnCoinCollected?.Invoke(totalCoins);
+
+                                    break;
+                                }
+                        }
 
                         break;
                     }

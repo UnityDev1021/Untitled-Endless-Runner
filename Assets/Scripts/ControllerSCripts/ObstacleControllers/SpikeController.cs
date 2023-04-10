@@ -12,7 +12,7 @@ namespace Untitled_Endless_Runner
         {
             effectStatus = 1;
 
-            Debug.Log($"Applying Spike Effect");
+            //Debug.Log($"Applying Spike Effect");
             //player.GetComponent<PlayerController>().TakeDamage(damage);
             localGameLogic.OnObstacleDetected?.Invoke(obstacleStat);
             Invoke(nameof(EnableEffectAgain), 1f);

@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: Group_8 2
   m_EditorClassIdentifier: 
   obstaclesIndex: 0802
-  obstacleGroupType: 0000
+  obstacleGroupType: 0100
   disX:
   - 0
   - 2.5
+  disY: []
   spawnNextAfter: 2

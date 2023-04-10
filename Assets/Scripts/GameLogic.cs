@@ -1,6 +1,7 @@
 using System;
-using UnityEditor.Animations;
+//using UnityEditor.Animations;
 using UnityEngine;
+using UnityEngine.Audio;
 
 namespace Untitled_Endless_Runner
 {
@@ -15,17 +16,22 @@ namespace Untitled_Endless_Runner
         public Action OnPlayerHealthOver, OnPlayerCaptured, OnGamePlayStarted, OnMainGameplayStarted, 
             OnResumeClicked, OnHomeClicked, OnPlayerSlide, OnRestartFinished;
         public Action<bool> OnPause_ResumeClicked;
-        public Action<int> OnRestartClicked, OnGameOver;
+        public Action<int> OnRestartClicked, OnGameOver, OnCoinCollected;
 
         [SerializeField] private GameObject[] disabledObjects;
 
-        [Header("Local Refernece Scripts")]
-        [SerializeField] private BackGroundController localBG_Controller;
-        [SerializeField] private ObstacleSpawnerTest localObstacleSpawner;
+        //[Header("Local Refernece Scripts")]
+        //[SerializeField] private BackGroundController localBG_Controller;
+        //[SerializeField] private ObstacleSpawnerTest localObstacleSpawner;
 
         [Header("Animator Refernece")]
         [SerializeField] private Animator backgroundAnimator;
-        [SerializeField] private Animator playerAnimator, canvasAnimator;
+        [SerializeField] private Animator playerAnimator;
+
+        [Space]
+        public AudioMixerGroup[] audioMixers;
+        private bool toggleMusic = true, toggleSE = true, toggleVibrate = true;
+        public bool gameplayBegan;
 
         private void OnEnable()
         {
@@ -54,11 +60,14 @@ namespace Untitled_Endless_Runner
         public void StartGame()
         {
             disabledObjects[0].SetActive(true);
+            gameplayBegan = true;
 
-            localBG_Controller.enabled = true;
-            localObstacleSpawner.enabled = true;
+            //localBG_Controller.enabled = true;           //Replaced with buttons
+            //localObstacleSpawner.enabled = true;           //Replaced with buttons
+
             //backgroundAnimator.keepAnimatorStateOnDisable = true;
-            backgroundAnimator.Play("Day_Night_Cycle", 0, 0f);
+            backgroundAnimator.enabled = true;
+            backgroundAnimator.Play("Day_Night_Cycle2", 0, 0f);
 
             //playerAnimator.SetBool("RUN", true);
             playerAnimator.Play("Idle_Run", 0, 0f);
@@ -78,8 +87,7 @@ namespace Untitled_Endless_Runner
         {
             ToggleGameStatus(false);
 
-            localBG_Controller.enabled = false;
-            localObstacleSpawner.enabled = false;
+            //localBG_Controller.enabled = false;           //Replaced with buttons
 
             //backgroundAnimator.runtimeAnimatorController = backgroundAnimatorControllers[0];                  //Turn off Animator all together
             backgroundAnimator.Play("Nothing", 0, 1f);
@@ -89,6 +97,29 @@ namespace Untitled_Endless_Runner
 
             mainCamera.transform.position = new Vector3(0f, mainCamera.transform.position.y, mainCamera.transform.position.z);
             OnRestartFinished?.Invoke();
+
+            gameplayBegan = false;
+            //localObstacleSpawner.enabled = false;           //Replaced with buttons
+        }
+
+        //On the Sound Effect button, under the Pause Panel
+        public void ToggleSE()
+        {
+            toggleSE = !toggleSE;
+            audioMixers[0].audioMixer.SetFloat("VolumeSE", !toggleSE ? -80f : 0f);
+        }
+
+        //On the Music button, under the Pause Panel
+        public void ToggleBGM()
+        {
+            toggleMusic = !toggleMusic;
+            audioMixers[1].audioMixer.SetFloat("VolumeBGM", !toggleMusic ? -80f : 0f);
+        }
+
+        public void ToggleVibrate()
+        {
+            toggleVibrate = !toggleVibrate;
+            PlayerPrefs.SetInt("toggleVibrate", !toggleVibrate ? 0 : 1);
         }
 
         private void GoHome()

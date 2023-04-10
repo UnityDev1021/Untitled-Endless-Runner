@@ -27,7 +27,7 @@ namespace Untitled_Endless_Runner
         private void OnEnable()
         {
             localGameLogic.OnPause_ResumeClicked += ToggleSpawn;
-            localGameLogic.OnRestartFinished += ResetStats;
+            localGameLogic.OnPlayerHealthOver += ResetStats;
 
             spawnEnabled = true;
             Invoke(nameof(SpawnObstacle), initialSpawnTime);
@@ -37,7 +37,7 @@ namespace Untitled_Endless_Runner
         private void OnDisable()
         {
             localGameLogic.OnPause_ResumeClicked -= ToggleSpawn;
-            localGameLogic.OnRestartFinished -= ResetStats;
+            localGameLogic.OnPlayerHealthOver -= ResetStats;
         }
 
         // Start is called before the first frame update
@@ -51,6 +51,7 @@ namespace Untitled_Endless_Runner
         {
             transform.localPosition = Vector3.zero;
             ToggleSpawn(false);
+            //Debug.Log($"Calling For Reset : {spawnEnabled}");
         }
 
         public void SpawnObstacle()
@@ -58,7 +59,7 @@ namespace Untitled_Endless_Runner
             //enableSpawn = false;
             timeAtSpawn = Time.unscaledTime;
 
-            //obstacleGroupIndex = ChooseObstacleGroup();
+            obstacleGroupIndex = ChooseObstacleGroup();                   //Uncomment for Real Gameplay
             for (int i = 0; i < obstacleGroups[obstacleGroupIndex].obstaclesIndex.Length; i++)
             {
                 SetObstaclePosition(ref obstacleGroups[obstacleGroupIndex].obstaclesIndex[i], ref obstacleGroups[obstacleGroupIndex].disX[i]);
@@ -71,6 +72,7 @@ namespace Untitled_Endless_Runner
                 //    tempObstacle.GetComponent<BlockController>().AssignIndex((byte)i);
 
                 tempObstacle.SetActive(true);
+                //Debug.Log($"Object : {tempObstacle.name}, status : {tempObstacle.activeSelf}");
             }
 
             //SetObstaclePosition(ref obstacleGroups[obstacleGroupIndex].firstObstacleIndex);
@@ -83,19 +85,27 @@ namespace Untitled_Endless_Runner
 
         private void ToggleSpawn(bool toggleValue)
         {
-            spawnEnabled = toggleValue;
-            //Debug.Log($"Time Now : {Time.unscaledTime}");
-
-            //In case the next obstacle is in the process of spawning and gets stopped as the spawn variable is not enabled
-            //Invoke the spawn func with the time left before the pause button was clicked
-            if (spawnEnabled)
-                Invoke(nameof(SpawnObstacle), obstacleGroups[obstacleGroupIndex].spawnNextAfter - timeAtSpawn);
-            else
+            //As this is called multiple times. i.e. at restart is twice called
+            if (localGameLogic.gameplayBegan)
             {
-                //Get the time difference between the invoke time and the time went when the pause button was clicked
-                timeAtSpawn = Time.unscaledTime - timeAtSpawn;
-                CancelInvoke(nameof(SpawnObstacle));
+                spawnEnabled = toggleValue;
+                //Debug.Log($"Time Now : {Time.unscaledTime}");
+
+                //In case the next obstacle is in the process of spawning and gets stopped as the spawn variable is not enabled
+                //Invoke the spawn func with the time left before the pause button was clicked
+                if (spawnEnabled)
+                    Invoke(nameof(SpawnObstacle), obstacleGroups[obstacleGroupIndex].spawnNextAfter - timeAtSpawn);
+                else
+                {
+                    //Get the time difference between the invoke time and the time went when the pause button was clicked
+                    timeAtSpawn = Time.unscaledTime - timeAtSpawn;
+                    CancelInvoke(nameof(SpawnObstacle));
+                }
             }
+            else
+                this.enabled = false;               //If Called again during Restart
+
+            //Debug.Log($"Toggle Spawn status : {spawnEnabled}");
         }
 
         private void FixedUpdate()
@@ -108,7 +118,7 @@ namespace Untitled_Endless_Runner
         {
             byte obstacleUnitIndex;
 
-            obstacleUnitIndex = (byte)Random.Range(0, obstacleGroups.Length);
+            obstacleUnitIndex = (byte)Random.Range(1, obstacleGroups.Length);           //0 would be for Test
 
             return obstacleUnitIndex;
         }
@@ -116,7 +126,7 @@ namespace Untitled_Endless_Runner
         private void SetObstaclePosition(ref byte obstacleUnitIndex, ref float addDisX, float addDisY = 0f)
         {
             //Check where to spawn for different objects
-            if (obstacleUnitIndex < 2)
+            if (obstacleUnitIndex < 2 || obstacleUnitIndex == 11)
             {
                 byte randomSpawnIndex = (byte)Random.Range(0, spawnPointsAbove.Length);              //Last point is for those obstacles that spawn on the ground
                 //byte randomSpawnIndex = 0;                            //Uncomment for test
@@ -160,7 +170,7 @@ namespace Untitled_Endless_Runner
                 tempSpawnPos = new Vector3(mainCamera.transform.position.x + 12f + addDisX, 
                     comboSpawnPoints[0] + addDisY, 0f);
 
-            Debug.Log($"obstacleUnitIndex : {obstacleUnitIndex} ,tempSpawnPos : {tempSpawnPos}, addDisX : {addDisX}, addDisY : {addDisY}");
+            //Debug.Log($"obstacleUnitIndex : {obstacleUnitIndex} ,tempSpawnPos : {tempSpawnPos}, addDisX : {addDisX}, addDisY : {addDisY}");
         }
     }
 }

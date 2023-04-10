@@ -159,6 +159,24 @@ ________________________________________________________________________________
 => [Done For Now] Made mobile controls.
 	(-) Made some helper functions to detect that the button has been pressed and a temporary variable for the toggle.
 
+-------------------------------------------------------------------
+							10 April
+-------------------------------------------------------------------
+=> [Done For Now] Made Coin Collection mechanism for now.
+=> Made a macro to define if working on Mobile Controls or Testing on PC
+=> [Working] Making Entry Animation
+	(-) 20 sec difference
+	(-) Made a different Camera as the Main Camera has all the background as its children, so the Entry Camera will handle all the entry animations.
+	(-) Modified the Entry Script so that the EnablePortal, EnablePlayer does not gets called. Make different function to enable other objects.
+=> Made a UI and a callback to show that the coin has been collected by the player.
+=> Made the Internal Testing/ Closed Testing.
+=> [Do] Check RockHead collision as the player dies as soon as they touch the base of the obstacle.
+=> [Done For Now] Correct Fire Obstacle.
+=> Fixed the ObstacleSpawner not working properly after Reset
+	(-) The spawnEnabled was being called twice for restart so made a bool to check if gameplay has ended.
+=> [Do] The player unalives if the player stays in the fire for too long for the 2nd time of the same obstacle.
+=> [Do] Make Other Obstacle Combinations
+
 _______________________________________________________________________________________________________________
 _______________________________________________________________________________________________________________
 
@@ -220,3 +238,5 @@ ________________________________________________________________________________
 
 => Can Spawn spike with rockhead at a smaller distance such as 2 for harder difficulties.
 	[-] Spawning at more than 2 (i.e. 3) for now. The player will land directly on the spike if they dont jump at the correct distance.
+	
+	=> There is a Ninja, whose name shall remain Untitled, who is running endlessly from the world trying to undo the fate cursed upon him. Will the Ninja be able to turn destiny around and face the hardships that lie ahead on this path, or will he succumb to the endless void of nothingness reduced to figments of his forgotten past? Stay tuned and Play the game to find out about the path our Ninja friend takes.

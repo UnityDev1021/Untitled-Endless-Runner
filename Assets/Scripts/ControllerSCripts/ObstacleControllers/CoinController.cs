@@ -16,6 +16,7 @@ namespace Untitled_Endless_Runner
             Debug.Log($"Coin Collected");
             effectStatus = 1;
             obstacleStat.activated = true;
+            localGameLogic.OnObstacleDetected?.Invoke(obstacleStat);
             Invoke(nameof(EnableEffectAgain), 0.5f);
             gameObject.SetActive(false);
         }

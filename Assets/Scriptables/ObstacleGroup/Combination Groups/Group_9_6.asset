@@ -24,4 +24,5 @@ MonoBehaviour:
   - 2.4
   - 2.88
   - 3.36
-  spawnNextAfter: 2
+  disY: []
+  spawnNextAfter: 5
