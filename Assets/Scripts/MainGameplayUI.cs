@@ -1,3 +1,5 @@
+#define TEST_MODE
+
 using System;
 using System.Collections;
 using TMPro;
@@ -16,6 +18,7 @@ namespace Untitled_Endless_Runner
         [SerializeField] private Sprite[] heartSprites;
         [SerializeField] private GameObject heartContainer, gameOverPanel;
         [SerializeField] private TMP_Text finalScoreTxt, totalCoinsTxt;
+        [SerializeField] private Image armorTimer;
 
         [Header ("Prefabs List")]
         [SerializeField] private GameObject heartPrefab;
@@ -28,6 +31,7 @@ namespace Untitled_Endless_Runner
 
         [Space]
         [SerializeField] private GameObject FadeScreen;
+        private float armorDurationMultiplier = 0.2f;
 
         private void OnEnable()
         {
@@ -37,7 +41,11 @@ namespace Untitled_Endless_Runner
             localGameLogic.OnRestartFinished += CallFadeOut;
             localGameLogic.OnRestartFinished += FillHearts;
             localGameLogic.OnGameOver += UpdateFinalScore;
-            localGameLogic.OnCoinCollected += UpdateTotalCoins;
+            localGameLogic.OnPowerUpCollected += UpdatePowerUpUI;
+
+#if TEST_MODE
+            //localGameLogic.FillUpPlayerHealth += RestorePlayerHealth;
+#endif
         }
         private void OnDisable()
         {
@@ -47,8 +55,23 @@ namespace Untitled_Endless_Runner
             localGameLogic.OnRestartFinished -= CallFadeOut;
             localGameLogic.OnRestartFinished -= FillHearts;
             localGameLogic.OnGameOver -= UpdateFinalScore;
-            localGameLogic.OnCoinCollected -= UpdateTotalCoins;
+            localGameLogic.OnPowerUpCollected -= UpdatePowerUpUI;
+
+#if TEST_MODE
+            //localGameLogic.FillUpPlayerHealth -= RestorePlayerHealth;
+#endif
         }
+
+#if TEST_MODE
+        //On the Restore button, under the Test Canvas
+        public void RestorePlayerHealth()
+        {
+            Debug.Log($"Restoring HEalth");
+            localGameLogic.FillUpPlayerHealth?.Invoke();
+            Start();
+            FillHearts();
+        }
+#endif
 
         private void Start()
         {
@@ -94,7 +117,7 @@ namespace Untitled_Endless_Runner
         private void DisplayEndGameScreen()
         {
             gameOverPanel.SetActive(true);
-            Debug.Log($"Game Over Panel Active : {gameOverPanel.activeSelf}");
+            //Debug.Log($"Game Over Panel Active : {gameOverPanel.activeSelf}");
         }
 
         private void UpdateFinalScore(int finalScore)
@@ -102,7 +125,54 @@ namespace Untitled_Endless_Runner
             finalScoreTxt.text = finalScore.ToString();
         }
 
-        private void UpdateTotalCoins(int totalCoins)
+        private void UpdatePowerUpUI(ObstacleTag detectedTag, int amount)
+        {
+            switch (detectedTag)
+            {
+                case ObstacleTag.Coin:
+                    {
+                        UpdateTotalCoins(ref amount);
+                        break;
+                    }
+
+                case ObstacleTag.Shield:
+                    {
+                        ShowArmorTimer();
+                        break;
+                    }
+
+                default:
+                    {
+                        Debug.LogError($"Wrong Tag Detected under UpdatePowerUI : {detectedTag.ToString()}");
+                        break;
+                    }
+            }
+        }
+
+        private void ShowArmorTimer()
+        {
+            armorTimer.gameObject.SetActive(true);
+            _ = StartCoroutine(StartTimer());
+        }
+
+        private IEnumerator StartTimer()
+        {
+            float tempTime = 0f;
+            while (true)
+            {
+                tempTime += armorDurationMultiplier * Time.deltaTime;                              //0.2f is too fast
+
+                if (tempTime >= 1)                
+                    break;
+
+                armorTimer.fillAmount = Mathf.Lerp(1, 0, tempTime);
+                Debug.Log($"Temp Time : {tempTime}, armor FIll Amount : {armorTimer.fillAmount}");
+
+                yield return null;
+            }
+        }
+
+        private void UpdateTotalCoins(ref int totalCoins)
         {
             Debug.Log("Updating Coins");
             totalCoinsTxt.text = totalCoins.ToString();

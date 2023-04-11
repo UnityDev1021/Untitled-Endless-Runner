@@ -1,3 +1,5 @@
+#define TEST_MODE
+
 using UnityEngine;
 
 namespace Untitled_Endless_Runner
@@ -19,7 +21,7 @@ namespace Untitled_Endless_Runner
 
         //Obstacle Spawn Groups
         [SerializeField] private ObstacleGroup[] obstacleGroups;
-        private bool spawnEnabled = true;
+        [SerializeField] private bool spawnEnabled = true;                  //Serialize for test
 
         [Header("Local Refernce Script")]
         [SerializeField] private GameLogic localGameLogic;
@@ -59,7 +61,11 @@ namespace Untitled_Endless_Runner
             //enableSpawn = false;
             timeAtSpawn = Time.unscaledTime;
 
+#if TEST_MODE
+            obstacleGroupIndex = 0;
+#else
             obstacleGroupIndex = ChooseObstacleGroup();                   //Uncomment for Real Gameplay
+#endif
             for (int i = 0; i < obstacleGroups[obstacleGroupIndex].obstaclesIndex.Length; i++)
             {
                 SetObstaclePosition(ref obstacleGroups[obstacleGroupIndex].obstaclesIndex[i], ref obstacleGroups[obstacleGroupIndex].disX[i]);
@@ -126,7 +132,7 @@ namespace Untitled_Endless_Runner
         private void SetObstaclePosition(ref byte obstacleUnitIndex, ref float addDisX, float addDisY = 0f)
         {
             //Check where to spawn for different objects
-            if (obstacleUnitIndex < 2 || obstacleUnitIndex == 11)
+            if (obstacleUnitIndex < 2 || obstacleUnitIndex >= 11)
             {
                 byte randomSpawnIndex = (byte)Random.Range(0, spawnPointsAbove.Length);              //Last point is for those obstacles that spawn on the ground
                 //byte randomSpawnIndex = 0;                            //Uncomment for test

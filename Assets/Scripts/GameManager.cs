@@ -13,6 +13,9 @@ namespace Untitled_Endless_Runner
         [Header("Local Reference Objects")]
         public Transform cameraTransform;
 
+        [Header("Power Ups Section")]
+        public bool invincibility;
+
         private static GameManager _instance;
         public static GameManager instance
         {

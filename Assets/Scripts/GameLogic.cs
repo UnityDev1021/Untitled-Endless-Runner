@@ -1,3 +1,5 @@
+#define TEST_MODE
+
 using System;
 //using UnityEditor.Animations;
 using UnityEngine;
@@ -16,7 +18,13 @@ namespace Untitled_Endless_Runner
         public Action OnPlayerHealthOver, OnPlayerCaptured, OnGamePlayStarted, OnMainGameplayStarted, 
             OnResumeClicked, OnHomeClicked, OnPlayerSlide, OnRestartFinished;
         public Action<bool> OnPause_ResumeClicked;
-        public Action<int> OnRestartClicked, OnGameOver, OnCoinCollected;
+        public Action<int> OnRestartClicked, OnGameOver;
+        public Action<ObstacleTag, int> OnPowerUpCollected;
+
+#if TEST_MODE
+        [Header("Test Actions")]
+        public Action FillUpPlayerHealth;
+#endif
 
         [SerializeField] private GameObject[] disabledObjects;
 
@@ -40,6 +48,10 @@ namespace Untitled_Endless_Runner
             OnPause_ResumeClicked += ToggleGameStatus;
             OnRestartClicked += RestartGame;
             OnHomeClicked += GoHome;
+
+#if TEST_MODE
+            FillUpPlayerHealth += RestorePlayerHealth;
+#endif
         }
 
         private void OnDisable()
@@ -49,7 +61,19 @@ namespace Untitled_Endless_Runner
             OnPause_ResumeClicked -= ToggleGameStatus;
             OnRestartClicked -= RestartGame;
             OnHomeClicked -= GoHome;
+
+#if TEST_MODE
+            FillUpPlayerHealth -= RestorePlayerHealth;
+#endif
         }
+
+
+#if TEST_MODE
+        private void RestorePlayerHealth()
+        {
+
+        }
+#endif
 
         private void EnableObjects()
         {
@@ -92,7 +116,7 @@ namespace Untitled_Endless_Runner
             //backgroundAnimator.runtimeAnimatorController = backgroundAnimatorControllers[0];                  //Turn off Animator all together
             backgroundAnimator.Play("Nothing", 0, 1f);
 
-            player.GetComponent<PlayerController>().enabled = false;
+            //player.GetComponent<PlayerController>().enabled = false;
             player.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
 
             mainCamera.transform.position = new Vector3(0f, mainCamera.transform.position.y, mainCamera.transform.position.z);

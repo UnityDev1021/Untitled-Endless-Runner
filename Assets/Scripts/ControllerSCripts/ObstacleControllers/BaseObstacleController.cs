@@ -19,6 +19,9 @@ namespace Untitled_Endless_Runner
         public Transform cameraTransform;
         [SerializeField] protected byte effectStatus;
 
+        [Header("PowerUps Section")]
+        protected bool invincibility;
+
         [SerializeField] private ObstacleStat _obstacleStat;
         public ObstacleStat obstacleStat { get { return _obstacleStat; } }
 
@@ -34,11 +37,11 @@ namespace Untitled_Endless_Runner
 
         protected virtual void Start() 
         {
-            CheckIfWithinPerimeter();
+            CheckIfWithinViewport();
             //Debug.Log($"Name : {transform.name},Dimension : {GetComponent<SpriteRenderer>().bounds.size}");                  //Will Cause error for some Prefabs such as SpikedBall
         }
 
-        public void SetRefernces()
+        public void SetReferences()
         {
             //Debug.Log($"Setting References");
             cameraTransform = GameManager.instance.cameraTransform;
@@ -48,16 +51,22 @@ namespace Untitled_Endless_Runner
         //helper function as the gamemanager isnt initialised as soon as the game starts
         private void EnableActionFunctions()
         {
-            localGameLogic.OnPlayerHealthOver += SwitchEffectsOff;
             localGameLogic.OnRestartClicked += DisableObstacle;
+            localGameLogic.OnPlayerHealthOver += ToggleEffects;
+            localGameLogic.OnRestartFinished += ToggleEffects;
+            localGameLogic.OnPowerUpCollected += CheckPowerUp;
+
+            invincibility = GameManager.instance.invincibility;
             //Debug.Log($"Enabling");
         }
 
         //helper function as the gamemanager isnt initialised as soon as the game starts
         private void DisableActionFunctions()
         {
-            localGameLogic.OnPlayerHealthOver -= SwitchEffectsOff;
-            localGameLogic.OnRestartClicked += DisableObstacle;
+            localGameLogic.OnRestartClicked -= DisableObstacle;
+            localGameLogic.OnPlayerHealthOver -= ToggleEffects;
+            localGameLogic.OnRestartFinished -= ToggleEffects;
+            localGameLogic.OnPowerUpCollected -= CheckPowerUp;
             //Debug.Log($"Disabling");
         }
 
@@ -68,27 +77,50 @@ namespace Untitled_Endless_Runner
             //    gameObject.SetActive(false);
         }
 
-        private void CheckIfWithinPerimeter()
+        private void CheckPowerUp(ObstacleTag detectedTag, int amount)
+        {
+            switch(detectedTag)
+            {
+                case ObstacleTag.Shield:
+                    {
+                        if (amount == 1)
+                            invincibility = true;
+                        else
+                            invincibility = false;
+
+                        break;
+                    }
+
+                default:
+                    {
+                        Debug.LogError($"Wrong Tag Detected under CheckPowerUp : {detectedTag.ToString()}");
+                        break;
+                    }
+            }
+        }
+
+        private void CheckIfWithinViewport()
         {
             if (transform.position.x < (cameraTransform.position.x - 12f) || transform.position.x > (cameraTransform.position.x + 18f))
                 gameObject.SetActive(false);
 
-            Invoke(nameof(CheckIfWithinPerimeter), 1f);
+            Invoke(nameof(CheckIfWithinViewport), 1f);
         }
 
-        private void SwitchEffectsOff()
+        protected virtual void ToggleEffects()
         {
-            enableEffects = false;
+            enableEffects = !enableEffects;
         }
 
         private void DisableObstacle(int dummyData)
         {
+            //Debug.Log($"Restart activated, Disabling Obstacle");
             gameObject.SetActive(false);
         }
 
         protected virtual void OnTriggerStay2D(Collider2D collision)
         {
-            Debug.Log($"Found Player");
+            //Debug.Log($"Found Player");
 
             if (enableEffects && collision.transform.CompareTag("Player"))
             {
@@ -111,7 +143,7 @@ namespace Untitled_Endless_Runner
         }
 
         //Restart the effect for reusing the obstacle
-        protected void EnableEffectAgain()
+        protected virtual void EnableEffectAgain()
         {
             effectStatus = 0;
         }

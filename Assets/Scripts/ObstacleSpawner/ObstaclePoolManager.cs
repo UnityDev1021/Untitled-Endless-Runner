@@ -52,15 +52,15 @@ namespace Untitled_Endless_Runner
                 {
                     GameObject tempObstacle = Instantiate(obstaclePool.prefab, poolHolder.transform);
                     tempObstacle.SetActive(false);
-                    tempObstacle.GetComponent<BaseObstacleController>().SetRefernces();
+                    tempObstacle.GetComponent<BaseObstacleController>().SetReferences();
 
                     if (obstaclePool.stat.combo.CompareTo(ObstacleCombo.Multiple).Equals(0))
-                        tempObstacle.transform.GetChild(0).GetComponent<BaseObstacleController>().SetRefernces();
+                        tempObstacle.transform.GetChild(0).GetComponent<BaseObstacleController>().SetReferences();
 
                     if (obstaclePool.stat.combo.CompareTo(ObstacleCombo.Multiple_Child).Equals(0))
                     {
                         for (int j = 0; j < obstaclePool.prefab.transform.GetChild(0).childCount; j++)
-                            tempObstacle.transform.GetChild(0).GetChild(j).GetComponent<BaseObstacleController>().SetRefernces();
+                            tempObstacle.transform.GetChild(0).GetChild(j).GetComponent<BaseObstacleController>().SetReferences();
                     }
 
                     pool.Enqueue(tempObstacle);

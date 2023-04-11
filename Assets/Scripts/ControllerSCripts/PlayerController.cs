@@ -1,4 +1,5 @@
 #define MOBILE_CONTROLS                     //For Mobile Controls
+#define TEST_MODE
 
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -38,15 +39,33 @@ namespace Untitled_Endless_Runner
         {
             localGameLogic.OnObstacleDetected += ObstacleDetected;
             localGameLogic.OnRestartClicked += PlayAnimation;
-            localGameLogic.OnRestartFinished += ResetPlayerStats;
+            localGameLogic.OnRestartClicked += ResetPlayerStats;
+            //localGameLogic.OnRestartFinished += ResetPlayerStats;
+
+#if TEST_MODE
+            localGameLogic.FillUpPlayerHealth += RestorePlayerHearts;
+#endif
         }
 
         private void OnDisable()
         {
             localGameLogic.OnObstacleDetected -= ObstacleDetected;
             localGameLogic.OnRestartClicked -= PlayAnimation;
-            localGameLogic.OnRestartFinished -= ResetPlayerStats;
+            localGameLogic.OnRestartClicked -= ResetPlayerStats;
+            //localGameLogic.OnRestartFinished -= ResetPlayerStats;
+
+#if TEST_MODE
+            localGameLogic.FillUpPlayerHealth -= RestorePlayerHearts;
+#endif
         }
+
+#if TEST_MODE
+        private void RestorePlayerHearts()
+        {
+            heart = localGameLogic.totalHearts;
+        }
+#endif
+
 
         // Start is called before the first frame update
         void Start()
@@ -144,13 +163,17 @@ namespace Untitled_Endless_Runner
                 //tempPosX = transform.localPosition.x;               //Store current X Co-Ordinate
                 //playerRB.velocity = transform.right * slideForce;                 //Manipulating BG
 
-                Invoke(nameof(SetSlideOn), 1.25f);                  //Invoke after some time, as it takes time to slow down the moveSpeed of the BG_Controller
+                Invoke(nameof(SetSlideOn), 1.25f);                   //Invoke after some time, as it takes time to slow down the moveSpeed of the BG_Controller
             }
         }
 
-        private void ResetPlayerStats()
+        //This never gets executed
+        private void ResetPlayerStats(int dummyData)
         {
             unAlive = false;
+            gameStarted = false;
+            Debug.Log($"Un Alive set to false : {unAlive}");
+            this.enabled = false;
         }
 
         private void SetSlideOn()
@@ -320,7 +343,7 @@ namespace Untitled_Endless_Runner
                             case ObstacleTag.Coin:
                                 {
                                     totalCoins++;
-                                    localGameLogic.OnCoinCollected?.Invoke(totalCoins);
+                                    localGameLogic.OnPowerUpCollected?.Invoke(ObstacleTag.Coin, totalCoins);
 
                                     break;
                                 }
@@ -341,7 +364,7 @@ namespace Untitled_Endless_Runner
         public void UnAlive()
         {
             unAlive = true;
-            Debug.Log($"Player is unalived : {unAlive}");
+            //Debug.Log($"Player is unalived : {unAlive}");
             localGameLogic.OnPlayerHealthOver?.Invoke();
             playerAnimator.Play("Hit", 0);
             playerRB.AddForce(transform.right * 12f, ForceMode2D.Impulse);

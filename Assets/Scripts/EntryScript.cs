@@ -1,4 +1,4 @@
-//#define SKIP_ENTRY                          //For Testing
+#define SKIP_ENTRY                          //For Testing
 
 using System.Collections;
 //using UnityEditor.Animations;
@@ -35,7 +35,7 @@ namespace Untitled_Endless_Runner
 
         private void Start()
         {
-            Debug.Log($"Starting Entry Script");
+            //Debug.Log($"Starting Entry Script");
             //Debug.Log($"Clip Length : {testClip.length}");
 
 #if !SKIP_ENTRY

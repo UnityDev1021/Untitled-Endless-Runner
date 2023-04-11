@@ -174,8 +174,36 @@ ________________________________________________________________________________
 => [Done For Now] Correct Fire Obstacle.
 => Fixed the ObstacleSpawner not working properly after Reset
 	(-) The spawnEnabled was being called twice for restart so made a bool to check if gameplay has ended.
-=> [Do] The player unalives if the player stays in the fire for too long for the 2nd time of the same obstacle.
+=> [Do] [Not needed] The player unalives if the player stays in the fire for too long for the 2nd time of the same obstacle.
+	(-) Bruh, there's the capture collider due to which the player unalives and not the fire. 			//Really?
 => [Do] Make Other Obstacle Combinations
+
+-------------------------------------------------------------------
+							11 April
+-------------------------------------------------------------------
+=> [Done For Now] Fixing Fire Obstacle where player dies if entering 2nd time for long.
+=> Made a Test macro for testing as fast as possible??
+=> [Fixed] Effects are not enabled again once the player unalives.
+=> PlayerController is disabled previously, so unAlive was not being set false. Now, moved it to PlayAnimation.
+=> [Fixed] RockHead unalives player when it goes down only, as the previous mechanism was reversed.
+=> [Working] Making Power-Ups
+	(-) [Done For Now] RockHead gets crushed into pieces when it touches the player/falls apart
+		[=] RockHead does not crushes the player.
+	(-) The same goes for SpikedHead
+=> [Do] Make a single script for powerups.
+=> [Working] Making Shield Animation
+	(-) Added Sprite for Shield.
+	(-) Added Controller Script.
+	(-) Added Edge Collider with trigger to detect which collider is touching player when gained power-up.
+	(-) [Do] Make a Visual Power-Up for player.
+	(-) [Done For Now] Shield Collection.
+	(-) [Working] Make a timer for this.
+=> Added another callback for Power-Ups.
+=> [Done For Now] Make destruction for SpikedHead, the same as RockHead.
+	(-) Can add a small patform for the player to stand on, at the edges of the spike.
+	(-) [Done For Now] [Works] Might turn Box Collider to edge collider for player detection
+=> [Question] If a obstacle breaks such as RockHead, is the player able to do double jump or single jump?
+=> [Question] If spikes cause half a heart, then why does the SpikeHead immediately unalives the player on touch. Shouldn't the player unalive only when the player is beneath the SpikeHead?
 
 _______________________________________________________________________________________________________________
 _______________________________________________________________________________________________________________

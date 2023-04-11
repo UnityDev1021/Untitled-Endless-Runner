@@ -11,7 +11,9 @@ GameObject:
   - component: {fileID: 6958880394189308189}
   - component: {fileID: 6958880394189308190}
   - component: {fileID: -2790952308399562974}
+  - component: {fileID: 1209501204525917223}
   - component: {fileID: 5628184224856496813}
+  - component: {fileID: 7991694664528073476}
   m_Layer: 0
   m_Name: RockHead
   m_TagString: Steppable
@@ -105,7 +107,36 @@ MonoBehaviour:
   _obstacleStat: {fileID: 11400000, guid: 792c5a1238427e346b846e0df18c0198, type: 2}
   upSpeed: 0.7
   downSpeed: 4
+  playerLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
+  powerUpCol: {fileID: 1209501204525917223}
+  baseCol: {fileID: 5628184224856496813}
   speedMultiplier: 0.7
+--- !u!68 &1209501204525917223
+EdgeCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6958880394189308191}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_EdgeRadius: 0
+  m_Points:
+  - {x: -0.157, y: -0.155}
+  - {x: -0.157, y: 0.157}
+  - {x: 0.157, y: 0.157}
+  - {x: 0.157, y: -0.155}
+  m_AdjacentStartPoint: {x: 0, y: 0}
+  m_AdjacentEndPoint: {x: 0, y: 0}
+  m_UseAdjacentStartPoint: 0
+  m_UseAdjacentEndPoint: 0
 --- !u!61 &5628184224856496813
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -132,6 +163,27 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.176, y: 0.032}
   m_EdgeRadius: 0
+--- !u!95 &7991694664528073476
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6958880394189308191}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: a26912c5c1c2cd647bb9ed633fcb0c74, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &8204751541953613154
 GameObject:
   m_ObjectHideFlags: 0
