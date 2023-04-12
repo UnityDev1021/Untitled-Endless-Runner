@@ -8,7 +8,7 @@ public class BackGroundController : MonoBehaviour
 {
     [Range(0.05f, 0.5f)]
     [SerializeField] private float moveSpeed = 0.05f;           //, manipulateSpeed;
-    private bool scrollBackground = true;                      //Default is true
+    private bool scrollBackground = true, enableScore2x = false;                      //Default is true
     private float time;
     [SerializeField] private TMP_Text scoreTxt;
     private int score;
@@ -23,15 +23,17 @@ public class BackGroundController : MonoBehaviour
     private void OnEnable()
     {
         localGameLogic.OnPlayerHealthOver += StopBackGroundScroll;
-        localGameLogic.OnPlayerSlide += InvokeToggleSpeed;
         localGameLogic.OnRestartClicked += ResetEnvironmentProps;
+        localGameLogic.OnPowerUpCollected += CheckPowerUp;
+        localGameLogic.OnPlayerAction += InvokeToggleSpeed;
     }
 
     private void OnDisable()
     {
         localGameLogic.OnPlayerHealthOver -= StopBackGroundScroll;
-        localGameLogic.OnPlayerSlide -= InvokeToggleSpeed;
         localGameLogic.OnRestartClicked -= ResetEnvironmentProps;
+        localGameLogic.OnPowerUpCollected -= CheckPowerUp;
+        localGameLogic.OnPlayerAction -= InvokeToggleSpeed;
     }
 
     // Update is called once per frame
@@ -41,32 +43,106 @@ public class BackGroundController : MonoBehaviour
         {
             transform.Translate(new Vector3(moveSpeed , 0f, 0f));
             score = (int)MathF.Round(transform.position.x);
+
+            if (enableScore2x)                  //As for each forward x position, we get 1 point, so x+1 point for multiplier. Can make scoreMultiplier if needs be.            
+                score++;            
+
             scoreTxt.text = score.ToString();
         }
     }
 
-    private void InvokeToggleSpeed()
+    private void CheckPowerUp(ObstacleTag detectedTag, int amount)
     {
-        moveSpeed = 0.2f;
+        switch(detectedTag)
+        {
+            case ObstacleTag.Coin:
+            case ObstacleTag.Shield:
+                break;
 
-        _ = StartCoroutine(ToggleSpeed(0.1f));                       //Default Speed        
+            case ObstacleTag.Score2x:
+                {
+                    if (amount == 1)
+                        enableScore2x = true;
+                    else
+                        enableScore2x = false;
+
+                    break;
+                }
+        }
     }
 
-    private IEnumerator ToggleSpeed(float manipulateSpeed)
+    private void InvokeToggleSpeed(PlayerAction actionTaken, byte status)
     {
-        yield return new WaitForSeconds(0.5f);
+        if (status == 0)
+        {
+            switch (actionTaken)
+            {
+                case PlayerAction.Slide:
+                    {
+                        moveSpeed = 0.2f;
+                        _ = StartCoroutine(ToggleSpeed(0.5f, actionTaken));                       //Default Speed
+
+                        break;
+                    }
+
+                case PlayerAction.Dash:
+                    {
+                        moveSpeed = 0.4f;
+                        _ = StartCoroutine(ToggleSpeed(0.2f, actionTaken));                       //Default Speed
+
+                        break;
+                    }
+
+                default:
+                    {
+                        Debug.LogError($"Power Up not found : {actionTaken}");
+                        break;
+                    }
+            }
+        }
+
+        Debug.Log($"Start Move Speed : {moveSpeed}");    
+    }
+
+    private IEnumerator ToggleSpeed(float waitTime,PlayerAction actionTaken)
+    {
+        yield return new WaitForSeconds(waitTime);
 
         while (true)
         {
             time += 1.2f * Time.deltaTime;
 
-            if (time >= 1)
+            if (time >= 0.8)
             {
                 time = 0;
+                localGameLogic.OnPlayerAction?.Invoke(actionTaken, 1);
+
+                /*switch (actionTaken)
+                {
+                    case PlayerAction.Slide:
+                        {
+                            break;
+                        }
+
+                    case PlayerAction.Dash:
+                        {
+                            yield return new WaitForSeconds(0.2f);
+                            break;
+                        }
+
+                    default:
+                        {
+                            Debug.LogError($"Wait Index not found : {actionTaken.ToString()}");
+                            break;
+                        }
+                }*/
+
                 break;
             }
 
-            moveSpeed = Mathf.Lerp(moveSpeed, manipulateSpeed, time);
+            moveSpeed = Mathf.Lerp(moveSpeed, 0.1f, time);
+            //Debug.Log($"Move Speed : {moveSpeed}");
+
             yield return null;
         }
     }

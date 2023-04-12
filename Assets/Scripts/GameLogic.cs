@@ -16,10 +16,13 @@ namespace Untitled_Endless_Runner
 
         public Action<ObstacleStat> OnObstacleDetected;
         public Action OnPlayerHealthOver, OnPlayerCaptured, OnGamePlayStarted, OnMainGameplayStarted, 
-            OnResumeClicked, OnHomeClicked, OnPlayerSlide, OnRestartFinished;
+            OnResumeClicked, OnHomeClicked, OnRestartFinished;
         public Action<bool> OnPause_ResumeClicked;
         public Action<int> OnRestartClicked, OnGameOver;
         public Action<ObstacleTag, int> OnPowerUpCollected;
+
+        [Header("Player Actions")]
+        public Action<PlayerAction, byte> OnPlayerAction;
 
 #if TEST_MODE
         [Header("Test Actions")]

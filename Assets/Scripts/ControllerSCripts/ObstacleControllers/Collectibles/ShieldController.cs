@@ -15,7 +15,6 @@ namespace Untitled_Endless_Runner
             Debug.Log($"Shield Collected");
             effectStatus = 1;
             obstacleStat.activated = true;
-            GameManager.instance.invincibility = true;
             //localGameLogic.OnObstacleDetected?.Invoke(obstacleStat);                  //Not Doing Anything
             localGameLogic.OnPowerUpCollected?.Invoke(ObstacleTag.Shield, 1);
             Invoke(nameof(EnableEffectAgain), 0.5f);

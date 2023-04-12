@@ -28,6 +28,8 @@ namespace Untitled_Endless_Runner
         protected virtual void OnEnable()
         {
             Invoke(nameof(EnableActionFunctions), 0.1f);              //Apparently this works somehow.        //Might cause Race Condition
+
+            invincibility = false;
         }
 
         protected virtual void OnDisable()
@@ -55,8 +57,6 @@ namespace Untitled_Endless_Runner
             localGameLogic.OnPlayerHealthOver += ToggleEffects;
             localGameLogic.OnRestartFinished += ToggleEffects;
             localGameLogic.OnPowerUpCollected += CheckPowerUp;
-
-            invincibility = GameManager.instance.invincibility;
             //Debug.Log($"Enabling");
         }
 
@@ -81,6 +81,12 @@ namespace Untitled_Endless_Runner
         {
             switch(detectedTag)
             {
+                //Do NOthing
+                case ObstacleTag.Coin:
+                case ObstacleTag.Score2x:
+                case ObstacleTag.Dash:
+                    break;
+
                 case ObstacleTag.Shield:
                     {
                         if (amount == 1)

@@ -12,7 +12,7 @@ namespace Untitled_Endless_Runner
      * => Normal_Attack - For obstacles with both normal and attack.
      **************************************************************************************************************************/
     public enum ObstacleType { Attack, Boost, Normal, Normal_Attack, Power_Up }
-    public enum ObstacleTag { Block, RockHead, Saw, SpikedBall, SpikedHead, Spike, Fan, Trampoline, Fire, Block_Spike, MetalPlate_Spike, Coin, Shield }
+    public enum ObstacleTag { Block, RockHead, Saw, SpikedBall, SpikedHead, Spike, Fan, Trampoline, Fire, Block_Spike, MetalPlate_Spike, Coin, Shield, Score2x, Dash }
 
     public enum ObstacleCombo { Single, Multiple, Multiple_Child }
 

@@ -16,9 +16,9 @@ namespace Untitled_Endless_Runner
 
         [Header("UI")]
         [SerializeField] private Sprite[] heartSprites;
-        [SerializeField] private GameObject heartContainer, gameOverPanel;
-        [SerializeField] private TMP_Text finalScoreTxt, totalCoinsTxt;
-        [SerializeField] private Image armorTimer;
+        [SerializeField] private GameObject heartContainer, gameOverPanel, airDashBt;
+        [SerializeField] private TMP_Text finalScoreTxt, totalCoinsTxt, highScoreTxt;
+        [SerializeField] private Image armorTimer, score2xTimer;
 
         [Header ("Prefabs List")]
         [SerializeField] private GameObject heartPrefab;
@@ -31,7 +31,8 @@ namespace Untitled_Endless_Runner
 
         [Space]
         [SerializeField] private GameObject FadeScreen;
-        private float armorDurationMultiplier = 0.2f;
+        [SerializeField] private float armorDurationMultiplier = 0.2f, scoreDurationMultiplier = 0.2f;
+        private Coroutine armourCoroutine, scoreCoroutine, airDashCoroutine;
 
         private void OnEnable()
         {
@@ -123,6 +124,28 @@ namespace Untitled_Endless_Runner
         private void UpdateFinalScore(int finalScore)
         {
             finalScoreTxt.text = finalScore.ToString();
+
+            //=======================> Check High Score <=======================
+            PlayerData playerData = SaveSystem.LoadHighScore();
+            if (playerData != null)
+            {
+                if (finalScore > playerData.score)
+                {
+                    highScoreTxt.text = finalScore.ToString();
+                    playerData.score = finalScore;
+                    SaveSystem.SaveHighScore(playerData);
+                }
+                else
+                {
+                    highScoreTxt.text = playerData.score.ToString();
+                }
+            }       
+            else                            //For first time saving the High Score
+            {
+                highScoreTxt.text = finalScore.ToString();
+                playerData = new PlayerData(finalScore);
+                SaveSystem.SaveHighScore(playerData);
+            }
         }
 
         private void UpdatePowerUpUI(ObstacleTag detectedTag, int amount)
@@ -137,7 +160,25 @@ namespace Untitled_Endless_Runner
 
                 case ObstacleTag.Shield:
                     {
-                        ShowArmorTimer();
+                        if (amount == 1)
+                            ShowArmorTimer();
+
+                        break;
+                    }
+
+                case ObstacleTag.Score2x:
+                    {
+                        if (amount == 1)
+                            ShowScore2xTimer();
+
+                        break;
+                    }
+
+                case ObstacleTag.Dash:
+                    {
+                        if (amount == 1)
+                            ShowAirDashTimer();
+
                         break;
                     }
 
@@ -152,23 +193,119 @@ namespace Untitled_Endless_Runner
         private void ShowArmorTimer()
         {
             armorTimer.gameObject.SetActive(true);
-            _ = StartCoroutine(StartTimer());
+
+            if (armourCoroutine != null)
+            {
+                StopCoroutine(armourCoroutine);
+            }
+            armourCoroutine = StartCoroutine(StartTimer(1));
         }
 
-        private IEnumerator StartTimer()
+        private void ShowScore2xTimer()
         {
-            float tempTime = 0f;
-            while (true)
-            {
-                tempTime += armorDurationMultiplier * Time.deltaTime;                              //0.2f is too fast
+            score2xTimer.gameObject.SetActive(true);
 
-                if (tempTime >= 1)                
+            if (scoreCoroutine != null)
+            {
+                StopCoroutine(scoreCoroutine);
+            }
+            scoreCoroutine = StartCoroutine(StartTimer(2));
+        }
+
+        private void ShowAirDashTimer()
+        {
+            airDashBt.SetActive(true);
+
+            if (airDashCoroutine != null)
+            {
+                StopCoroutine(airDashCoroutine);
+            }
+            airDashCoroutine = StartCoroutine(StartTimer(3));
+        }
+
+        private IEnumerator StartTimer(byte powerUpIndex)           //0 is for coin
+        {
+            Debug.Log($"Starting TImer");
+
+            float tempTime = 0f;
+
+            switch (powerUpIndex)
+            {
+                //Do Nothing
+                case 0:
                     break;
 
-                armorTimer.fillAmount = Mathf.Lerp(1, 0, tempTime);
-                Debug.Log($"Temp Time : {tempTime}, armor FIll Amount : {armorTimer.fillAmount}");
+                case 1:
+                    {
+                        while (true)
+                        {
+                            tempTime += armorDurationMultiplier * Time.deltaTime;                              //0.2f is too fast
 
-                yield return null;
+                            if (tempTime >= 1)
+                            {
+                                localGameLogic.OnPowerUpCollected?.Invoke(ObstacleTag.Shield, 0);
+                                armorTimer.gameObject.SetActive(false);
+                                break;
+                            }
+
+                            armorTimer.fillAmount = Mathf.Lerp(1, 0, tempTime);
+                            //Debug.Log($"Temp Time : {tempTime}, armor FIll Amount : {armorTimer.fillAmount}");
+
+                            yield return null;
+                        }
+
+                        break;
+                    }
+
+                case 2:
+                    {
+                        while (true)
+                        {
+                            tempTime += scoreDurationMultiplier * Time.deltaTime;                              //0.2f is too fast
+
+                            if (tempTime >= 1)
+                            {
+                                localGameLogic.OnPowerUpCollected?.Invoke(ObstacleTag.Score2x, 0);
+                                score2xTimer.gameObject.SetActive(false);
+                                break;
+                            }
+
+                            score2xTimer.fillAmount = Mathf.Lerp(1, 0, tempTime);
+                            //Debug.Log($"Temp Time : {tempTime}, armor FIll Amount : {armorTimer.fillAmount}");
+
+                            yield return null;
+                        }
+
+                        break;
+                    }
+
+                case 3:
+                    {
+                        while (true)
+                        {
+                            tempTime += scoreDurationMultiplier * Time.deltaTime;                              //0.2f is too fast
+
+                            if (tempTime >= 1)
+                            {
+                                localGameLogic.OnPowerUpCollected?.Invoke(ObstacleTag.Dash, 0);
+                                airDashBt.SetActive(false);
+                                break;
+                            }
+
+                            airDashBt.transform.GetChild(0).GetComponent<Image>().fillAmount = Mathf.Lerp(1, 0, tempTime);
+                            //Debug.Log($"Temp Time : {tempTime}, Dash FIll Amount : {airDashBt.transform.GetChild(0).gameObject.GetComponent<Image>().fillAmount}");
+
+                            yield return null;
+                        }
+
+                        break;
+                    }
+
+                default:
+                    {
+                        Debug.LogError($"PowerUP Index not fuond : {powerUpIndex}");
+                        break;
+                    }
             }
         }
 

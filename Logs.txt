@@ -191,7 +191,7 @@ ________________________________________________________________________________
 		[=] RockHead does not crushes the player.
 	(-) The same goes for SpikedHead
 => [Do] Make a single script for powerups.
-=> [Working] Making Shield Animation
+=> [Working] [Power-Up] Making Shield Animation
 	(-) Added Sprite for Shield.
 	(-) Added Controller Script.
 	(-) Added Edge Collider with trigger to detect which collider is touching player when gained power-up.
@@ -204,6 +204,46 @@ ________________________________________________________________________________
 	(-) [Done For Now] [Works] Might turn Box Collider to edge collider for player detection
 => [Question] If a obstacle breaks such as RockHead, is the player able to do double jump or single jump?
 => [Question] If spikes cause half a heart, then why does the SpikeHead immediately unalives the player on touch. Shouldn't the player unalive only when the player is beneath the SpikeHead?
+
+-------------------------------------------------------------------
+							12 April
+-------------------------------------------------------------------
+=> [Fixed] Sliding still has problems
+	(-) When the Slide happens once, the time of BAckground Controller hasn't gone up to full 1, and when someone presses the slide button again, the move Speed gets adjusted according to the time variable which in case gives a value like 0.1089896, this continues for the set period for which the player has to slide and so the player slide speed is not set to the default of 0.2.
+	(-) [Done] Set the invoke time of SlideOn to 1.5f instead of 1.25, as it needs to include the full animation of (Slide + the offset of slowing down).
+	(-) Remade the logic so that there is a callback to indicate that the slide is to be finished and so the slide button should be enabled back again.
+=> Changed Action Timer from 1.0f to 0.8f in the BackGroundController script.
+=> [Suggestion] Can make a radial coutdown like timer to show the refill of jump or slide.
+=> [Done For Now] Making Shield de-activate after timer is up.
+	(-) [Fixed] Shield timer is not working properly after collecting once again.
+		[=] [Done] Assigned a Coroutine reference to stop, if it is called once again.
+	(-) [Fixed] Reset Invincibility, Reset Mechanism does not works properly.
+	(-) [Improve] Nothing animation for both RockHead, SpikedHead contains Nothing animation which defaults to Idle animation. Can make it nothing and change the sprite/opacity via code.
+=> [Do] [Power-Up] Power-Up to dash on the air.
+=> [Done For Now] Make High Score System locally.
+	(-) Saving High Score locally for now.
+=> [Done For Now] [Power-Up] Making Double Score Power-Up
+	(-) Making a single IEnumerator to call when the power-up is activated in MainGameplayUI.
+	(-) Made Controller for the Score2x.
+	(-) Assigning Basic Animation/colliders
+	(-) score gets +1 in case the multiplier is collected, for now, as the default score raises by 1 for the movement of the camera.
+=> [Done For Now] [Power-Up] Air Dash / Dash
+	(-) The Scarf color changes and gradually goes away from left to right.
+	(-) Make Dash Animation.
+	(-) Dash Icon with circle Outside, the dash icon gradually fades away from right to left.
+	(-) making Dash Logic.
+	(-) Made a different action to identify that the player has taken an action
+	(-) Made an enum for player actions.
+	(-) [Done] Better to make different function to call when the action is to be enabled again.
+		[=] Added a status variable to check which status the action is to be done to. i.e. it is to be active or disabled.
+=> [Working] [Power-Up] Higher Jump
+	(-) Icon Changes to higher jump.
+	(-) Icon gradually drains away from top to bottom
+=> [Working] [Power-Up] Faster Speed
+	(-) This will be Visual, so Might not need any icon or so.
+=> [Fixed] Jump Mechanics
+	(-) OnTriggerEnter2D of the player gets executed onc the player takes off from the ground as the player is still touching the ground, and as soon as the player takes off, the disableSlide is turned to false.				//Yeah thats expected/intended (more on the intended side)
+
 
 _______________________________________________________________________________________________________________
 _______________________________________________________________________________________________________________
@@ -268,3 +308,10 @@ ________________________________________________________________________________
 	[-] Spawning at more than 2 (i.e. 3) for now. The player will land directly on the spike if they dont jump at the correct distance.
 	
 	=> There is a Ninja, whose name shall remain Untitled, who is running endlessly from the world trying to undo the fate cursed upon him. Will the Ninja be able to turn destiny around and face the hardships that lie ahead on this path, or will he succumb to the endless void of nothingness reduced to figments of his forgotten past? Stay tuned and Play the game to find out about the path our Ninja friend takes.
+	
+_______________________________________________________________________________________________________________
+
+													Notes
+_______________________________________________________________________________________________________________
+
+=> Celeste Mid-Air Jumps / Ultra jumps / Slide-Jumps /Instantaneous jumps

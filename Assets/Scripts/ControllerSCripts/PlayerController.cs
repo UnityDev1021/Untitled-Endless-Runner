@@ -6,6 +6,8 @@ using UnityEngine.InputSystem;
 
 namespace Untitled_Endless_Runner
 {
+    public enum PlayerAction { Slide, Dash }
+
     public class PlayerController : MonoBehaviour
     {
         private Rigidbody2D playerRB;
@@ -26,7 +28,7 @@ namespace Untitled_Endless_Runner
 
         [Space]
         private byte jumpCount;
-        private bool hasJumped, unAlive, isSliding, firstJump, disableSlide, disableJump;
+        private bool hasJumped, unAlive, isSliding, isDashing, firstJump, disableSlide, disableJump, disableDash;
         public bool gameStarted;
 
 #if MOBILE_CONTROLS
@@ -40,6 +42,8 @@ namespace Untitled_Endless_Runner
             localGameLogic.OnObstacleDetected += ObstacleDetected;
             localGameLogic.OnRestartClicked += PlayAnimation;
             localGameLogic.OnRestartClicked += ResetPlayerStats;
+            localGameLogic.OnPowerUpCollected += TogglePowerUp;
+            localGameLogic.OnPlayerAction += ToggleAction;
             //localGameLogic.OnRestartFinished += ResetPlayerStats;
 
 #if TEST_MODE
@@ -52,6 +56,8 @@ namespace Untitled_Endless_Runner
             localGameLogic.OnObstacleDetected -= ObstacleDetected;
             localGameLogic.OnRestartClicked -= PlayAnimation;
             localGameLogic.OnRestartClicked -= ResetPlayerStats;
+            localGameLogic.OnPowerUpCollected -= TogglePowerUp;
+            localGameLogic.OnPlayerAction -= ToggleAction;
             //localGameLogic.OnRestartFinished -= ResetPlayerStats;
 
 #if TEST_MODE
@@ -145,11 +151,13 @@ namespace Untitled_Endless_Runner
 
                 if (jumpCount == 1)
                     hasJumped = true;
+
+                Debug.Log($"Disable Sliding : {disableSlide}");
             }
         }
 
         //On Slide button under the Main Gameplay Panel
-        public void Mobile_Silde()
+        public void Mobile_Slide()
         {
             if (!isSliding && !disableSlide)
             {
@@ -157,13 +165,59 @@ namespace Untitled_Endless_Runner
 
                 disableJump = true;
                 isSliding = true;
-                localGameLogic.OnPlayerSlide?.Invoke();
+                localGameLogic.OnPlayerAction?.Invoke(PlayerAction.Slide, 0);
                 playerAnimator.Play("Slide", 0, 0f);
 
                 //tempPosX = transform.localPosition.x;               //Store current X Co-Ordinate
                 //playerRB.velocity = transform.right * slideForce;                 //Manipulating BG
 
-                Invoke(nameof(SetSlideOn), 1.25f);                   //Invoke after some time, as it takes time to slow down the moveSpeed of the BG_Controller
+                //This has to be set manually accordingly               //Not Needed Now
+                //Invoke(nameof(SetSlideOn), 1.5f);                   //Invoke after some time, as it takes time to slow down the moveSpeed of the BG_Controller
+            }
+        }
+
+        //On Dash button under the Main Gameplay Panel
+        public void Mobile_Dash()
+        {
+            if (!isDashing && !isSliding)
+            {
+                //Debug.Log($"Sliding");
+                disableSlide = true;
+                isDashing = true;
+                localGameLogic.OnPlayerAction?.Invoke(PlayerAction.Dash, 0);
+                playerAnimator.Play("Dash", 0, 0f);
+            }
+        }
+
+        private void ToggleAction(PlayerAction actionTaken, byte status)
+        {
+            switch (actionTaken)
+            {
+                case PlayerAction.Slide:
+                    {
+                        if (status == 1)
+                        {
+                            isSliding = false;
+                            disableJump = false;
+                        }
+                        break;
+                    }
+
+                case PlayerAction.Dash:
+                    {
+                        if (status == 1)
+                        {
+                            disableSlide = false;
+                            isDashing = false;
+                        }
+                        break;
+                    }
+
+                default:
+                    {
+                        Debug.LogError($"Wait Index not found : {actionTaken.ToString()}");
+                        break;
+                    }
             }
         }
 
@@ -211,6 +265,7 @@ namespace Untitled_Endless_Runner
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
+            //This gets executed onc the player takes off from the ground as the player is still touching the ground.
             if (collision.CompareTag("Steppable") || collision.CompareTag("Ground"))
             {
                 //Debug.Log($"Resetting under Trigger");
@@ -231,6 +286,7 @@ namespace Untitled_Endless_Runner
 
         public void ObstacleDetected(ObstacleStat obstacleStat)
         {
+            //Debug.Log($"Obstacle Detected : {obstacleStat.tag}");
             switch (obstacleStat.type)
             {
                 case ObstacleType.Attack:
@@ -347,6 +403,24 @@ namespace Untitled_Endless_Runner
 
                                     break;
                                 }
+
+                            case ObstacleTag.Shield:
+                                {
+                                    transform.GetChild(1).gameObject.SetActive(true);
+
+                                    break;
+                                }
+
+                            //Do Nothing
+                            case ObstacleTag.Score2x:
+                                break;
+
+                            default:
+                                {
+                                    Debug.LogError($"Power-Up Not Found");
+
+                                    break;
+                                }
                         }
 
                         break;
@@ -361,6 +435,33 @@ namespace Untitled_Endless_Runner
             }
         }
 
+        private void TogglePowerUp(ObstacleTag detectedTag, int amount)
+        {
+            switch (detectedTag)
+            {
+                //Do Nothing
+                case ObstacleTag.Coin:
+                case ObstacleTag.Score2x:
+                case ObstacleTag.Dash:
+                    break;
+
+                case ObstacleTag.Shield:
+                    {
+                        if (amount == 1)
+                            transform.GetChild(1).gameObject.SetActive(true);
+                        else
+                            transform.GetChild(1).gameObject.SetActive(false);
+                        break;
+                    }
+
+                default:
+                    {
+                        Debug.LogError($"Wrong Tag Detected for tag : {detectedTag}");
+                        break;
+                    }
+            }
+        }
+
         public void UnAlive()
         {
             unAlive = true;
@@ -368,6 +469,8 @@ namespace Untitled_Endless_Runner
             localGameLogic.OnPlayerHealthOver?.Invoke();
             playerAnimator.Play("Hit", 0);
             playerRB.AddForce(transform.right * 12f, ForceMode2D.Impulse);
+
+
         }
 
         public void TakeDamage()
