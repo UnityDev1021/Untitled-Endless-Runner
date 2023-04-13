@@ -55,8 +55,11 @@ public class BackGroundController : MonoBehaviour
     {
         switch(detectedTag)
         {
+            //Do Nothing
             case ObstacleTag.Coin:
             case ObstacleTag.Shield:
+            case ObstacleTag.Dash:
+            case ObstacleTag.HigherJump:
                 break;
 
             case ObstacleTag.Score2x:
@@ -65,6 +68,17 @@ public class BackGroundController : MonoBehaviour
                         enableScore2x = true;
                     else
                         enableScore2x = false;
+
+                    break;
+                }
+
+            case ObstacleTag.SpeedBoost:
+                {
+                    if (amount == 1)
+                    {
+                        moveSpeed *= 1.5f;
+                        _ = StartCoroutine(ToggleSpeed(8f, PlayerAction.SpeedBoost, 1f));                      //Default Speed
+                    }
 
                     break;
                 }
@@ -80,7 +94,7 @@ public class BackGroundController : MonoBehaviour
                 case PlayerAction.Slide:
                     {
                         moveSpeed = 0.2f;
-                        _ = StartCoroutine(ToggleSpeed(0.5f, actionTaken));                       //Default Speed
+                        _ = StartCoroutine(ToggleSpeed(0.5f, actionTaken, 0.8f));                       //Default Speed
 
                         break;
                     }
@@ -88,7 +102,7 @@ public class BackGroundController : MonoBehaviour
                 case PlayerAction.Dash:
                     {
                         moveSpeed = 0.4f;
-                        _ = StartCoroutine(ToggleSpeed(0.2f, actionTaken));                       //Default Speed
+                        _ = StartCoroutine(ToggleSpeed(0.2f, actionTaken, 0.8f));                       //Default Speed
 
                         break;
                     }
@@ -101,10 +115,10 @@ public class BackGroundController : MonoBehaviour
             }
         }
 
-        Debug.Log($"Start Move Speed : {moveSpeed}");    
+        //Debug.Log($"Start Move Speed : {moveSpeed}");    
     }
 
-    private IEnumerator ToggleSpeed(float waitTime,PlayerAction actionTaken)
+    private IEnumerator ToggleSpeed(float waitTime,PlayerAction actionTaken, float totalTime)
     {
         yield return new WaitForSeconds(waitTime);
 
@@ -112,7 +126,7 @@ public class BackGroundController : MonoBehaviour
         {
             time += 1.2f * Time.deltaTime;
 
-            if (time >= 0.8)
+            if (time >= totalTime)
             {
                 time = 0;
                 localGameLogic.OnPlayerAction?.Invoke(actionTaken, 1);

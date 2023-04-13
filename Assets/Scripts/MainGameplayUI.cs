@@ -15,8 +15,8 @@ namespace Untitled_Endless_Runner
         private bool halfHeart;
 
         [Header("UI")]
-        [SerializeField] private Sprite[] heartSprites;
-        [SerializeField] private GameObject heartContainer, gameOverPanel, airDashBt;
+        [SerializeField] private Sprite[] heartSprites, jumpBtModes;
+        [SerializeField] private GameObject heartContainer, gameOverPanel, airDashBt, jumpBt;
         [SerializeField] private TMP_Text finalScoreTxt, totalCoinsTxt, highScoreTxt;
         [SerializeField] private Image armorTimer, score2xTimer;
 
@@ -31,8 +31,10 @@ namespace Untitled_Endless_Runner
 
         [Space]
         [SerializeField] private GameObject FadeScreen;
-        [SerializeField] private float armorDurationMultiplier = 0.2f, scoreDurationMultiplier = 0.2f;
-        private Coroutine armourCoroutine, scoreCoroutine, airDashCoroutine;
+
+        [Header("Power-Up Durations")]
+        [SerializeField] private float armorDurationMultiplier = 0.2f, scoreDurationMultiplier = 0.2f, dashDurationMultiplier = 0.2f, hjDurationMultiplier = 0.2f;
+        private Coroutine armourCoroutine, scoreCoroutine, dashCoroutine, hjCoroutine;
 
         private void OnEnable()
         {
@@ -152,9 +154,15 @@ namespace Untitled_Endless_Runner
         {
             switch (detectedTag)
             {
+                //Do Nothing
+                case ObstacleTag.SpeedBoost:
+                    break;
+
                 case ObstacleTag.Coin:
                     {
-                        UpdateTotalCoins(ref amount);
+                        if (amount > 1)
+                            UpdateTotalCoins(ref amount);
+
                         break;
                     }
 
@@ -182,6 +190,14 @@ namespace Untitled_Endless_Runner
                         break;
                     }
 
+                case ObstacleTag.HigherJump:
+                    {
+                        if (amount == 1)
+                            ShowHigherJumpTimer();
+
+                        break;
+                    }
+
                 default:
                     {
                         Debug.LogError($"Wrong Tag Detected under UpdatePowerUI : {detectedTag.ToString()}");
@@ -198,7 +214,7 @@ namespace Untitled_Endless_Runner
             {
                 StopCoroutine(armourCoroutine);
             }
-            armourCoroutine = StartCoroutine(StartTimer(1));
+            armourCoroutine = StartCoroutine(StartTimer(ObstacleTag.Shield));
         }
 
         private void ShowScore2xTimer()
@@ -209,33 +225,45 @@ namespace Untitled_Endless_Runner
             {
                 StopCoroutine(scoreCoroutine);
             }
-            scoreCoroutine = StartCoroutine(StartTimer(2));
+            scoreCoroutine = StartCoroutine(StartTimer(ObstacleTag.Score2x));
         }
 
         private void ShowAirDashTimer()
         {
             airDashBt.SetActive(true);
 
-            if (airDashCoroutine != null)
+            if (dashCoroutine != null)
             {
-                StopCoroutine(airDashCoroutine);
+                StopCoroutine(dashCoroutine);
             }
-            airDashCoroutine = StartCoroutine(StartTimer(3));
+            dashCoroutine = StartCoroutine(StartTimer(ObstacleTag.Dash));
         }
 
-        private IEnumerator StartTimer(byte powerUpIndex)           //0 is for coin
+        private void ShowHigherJumpTimer()
+        {
+            jumpBt.transform.GetChild(0).gameObject.SetActive(false);
+            jumpBt.transform.GetChild(1).gameObject.SetActive(true);
+
+            if (hjCoroutine != null)
+            {
+                StopCoroutine(hjCoroutine);
+            }
+            hjCoroutine = StartCoroutine(StartTimer(ObstacleTag.HigherJump));
+        }
+
+        private IEnumerator StartTimer(ObstacleTag tagDetected)           //0 is for coin
         {
             Debug.Log($"Starting TImer");
 
             float tempTime = 0f;
 
-            switch (powerUpIndex)
+            switch (tagDetected)
             {
                 //Do Nothing
-                case 0:
+                case ObstacleTag.Coin:
                     break;
 
-                case 1:
+                case ObstacleTag.Shield:
                     {
                         while (true)
                         {
@@ -257,7 +285,7 @@ namespace Untitled_Endless_Runner
                         break;
                     }
 
-                case 2:
+                case ObstacleTag.Score2x:
                     {
                         while (true)
                         {
@@ -279,11 +307,11 @@ namespace Untitled_Endless_Runner
                         break;
                     }
 
-                case 3:
+                case ObstacleTag.Dash:
                     {
                         while (true)
                         {
-                            tempTime += scoreDurationMultiplier * Time.deltaTime;                              //0.2f is too fast
+                            tempTime += dashDurationMultiplier * Time.deltaTime;                              //0.2f is too fast
 
                             if (tempTime >= 1)
                             {
@@ -301,9 +329,34 @@ namespace Untitled_Endless_Runner
                         break;
                     }
 
+                case ObstacleTag.HigherJump:
+                    {
+                        Image higherJumpSprite = jumpBt.transform.GetChild(1).GetComponent<Image>();
+                        while (true)
+                        {
+                            tempTime += hjDurationMultiplier * Time.deltaTime;                              //0.2f is too fast
+
+                            if (tempTime >= 1)
+                            {
+                                localGameLogic.OnPowerUpCollected?.Invoke(ObstacleTag.HigherJump, 0);
+                                jumpBt.transform.GetChild(0).gameObject.SetActive(true);
+                                jumpBt.transform.GetChild(1).gameObject.SetActive(false);
+
+                                break;
+                            }
+
+                            higherJumpSprite.fillAmount = Mathf.Lerp(1, 0, tempTime);
+                            //Debug.Log($"Temp Time : {tempTime}, Dash FIll Amount : {airDashBt.transform.GetChild(0).gameObject.GetComponent<Image>().fillAmount}");
+
+                            yield return null;
+                        }
+
+                        break;
+                    }
+
                 default:
                     {
-                        Debug.LogError($"PowerUP Index not fuond : {powerUpIndex}");
+                        Debug.LogError($"PowerUP Index not fuond : {tagDetected}");
                         break;
                     }
             }

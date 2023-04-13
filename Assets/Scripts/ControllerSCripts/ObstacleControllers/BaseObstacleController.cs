@@ -85,6 +85,8 @@ namespace Untitled_Endless_Runner
                 case ObstacleTag.Coin:
                 case ObstacleTag.Score2x:
                 case ObstacleTag.Dash:
+                case ObstacleTag.HigherJump:
+                case ObstacleTag.SpeedBoost:
                     break;
 
                 case ObstacleTag.Shield:

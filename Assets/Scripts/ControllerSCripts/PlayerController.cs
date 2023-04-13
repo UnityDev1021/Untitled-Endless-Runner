@@ -6,7 +6,7 @@ using UnityEngine.InputSystem;
 
 namespace Untitled_Endless_Runner
 {
-    public enum PlayerAction { Slide, Dash }
+    public enum PlayerAction { Slide, Dash, SpeedBoost }
 
     public class PlayerController : MonoBehaviour
     {
@@ -152,7 +152,7 @@ namespace Untitled_Endless_Runner
                 if (jumpCount == 1)
                     hasJumped = true;
 
-                Debug.Log($"Disable Sliding : {disableSlide}");
+                //Debug.Log($"Disable Sliding : {disableSlide}");
             }
         }
 
@@ -193,6 +193,10 @@ namespace Untitled_Endless_Runner
         {
             switch (actionTaken)
             {
+                //Do Nothing
+                case PlayerAction.SpeedBoost:
+                    break;
+
                 case PlayerAction.Slide:
                     {
                         if (status == 1)
@@ -318,7 +322,7 @@ namespace Untitled_Endless_Runner
                                     break;
                                 }
                         }
-                        Debug.Log($"Attack Obstacle : {obstacleStat.tag.ToString()}");
+                        //Debug.Log($"Attack Obstacle : {obstacleStat.tag.ToString()}");
 
                         break;
                     }
@@ -398,8 +402,6 @@ namespace Untitled_Endless_Runner
                         {
                             case ObstacleTag.Coin:
                                 {
-                                    totalCoins++;
-                                    localGameLogic.OnPowerUpCollected?.Invoke(ObstacleTag.Coin, totalCoins);
 
                                     break;
                                 }
@@ -440,10 +442,21 @@ namespace Untitled_Endless_Runner
             switch (detectedTag)
             {
                 //Do Nothing
-                case ObstacleTag.Coin:
                 case ObstacleTag.Score2x:
                 case ObstacleTag.Dash:
+                case ObstacleTag.SpeedBoost:
                     break;
+
+                case ObstacleTag.Coin:
+                    {
+                        if (amount == 1)
+                        {
+                            totalCoins++;
+                            localGameLogic.OnPowerUpCollected?.Invoke(ObstacleTag.Coin, totalCoins);
+                        }
+
+                        break;
+                    }
 
                 case ObstacleTag.Shield:
                     {
@@ -451,6 +464,16 @@ namespace Untitled_Endless_Runner
                             transform.GetChild(1).gameObject.SetActive(true);
                         else
                             transform.GetChild(1).gameObject.SetActive(false);
+                        break;
+                    }
+
+                case ObstacleTag.HigherJump:
+                    {
+                        if (amount == 1)
+                            jumpForce = 15f;
+                        else
+                            jumpForce = 12f;
+
                         break;
                     }
 
@@ -480,7 +503,7 @@ namespace Untitled_Endless_Runner
             if (heart <= 0f)
                 UnAlive();
 
-            Debug.Log($"Taking Damage : {heart}, Damage : {damageFromObstacle}");
+            //Debug.Log($"Taking Damage : {heart}, Damage : {damageFromObstacle}");
         }
     }
 }

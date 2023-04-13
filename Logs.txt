@@ -244,6 +244,27 @@ ________________________________________________________________________________
 => [Fixed] Jump Mechanics
 	(-) OnTriggerEnter2D of the player gets executed onc the player takes off from the ground as the player is still touching the ground, and as soon as the player takes off, the disableSlide is turned to false.				//Yeah thats expected/intended (more on the intended side)
 
+-------------------------------------------------------------------
+							13 April
+-------------------------------------------------------------------
+=> [Done For Now] [Power-Up] Higher Jump
+	(-) Making Controller For Higher Jump.
+	(-) [Important] Declaring to inrease the jumpForce explicitly instead of using a variable.
+	(-) [Important] Don't forget to change the jumpForce manually under PlayerController, if the default value is changed at a later date.
+	(-) Changing the sprite of the button/ Could also deactivate and reactivate other button.
+		[=] Went with a separate sprite as child, activating alternates accordingly when the powerup is collected.
+=> [Done] Changing logic for coin callback.
+=> [Done For Now] [Power-Up] Faster Speed
+	(-) Making Controller Script for this.
+	(-) Made Basic Animation of going up and down.
+	(-) For current needs, the power-up is going to be enabled for 8 seconds.
+=> Changing Reporter / Updating Reporter to the new input system.
+	(-) Touch.activeTouches[0].phase == UnityEngine.InputSystem.TouchPhase.Moved
+	(-) Touch.activeTouches.Count / Input.touches.Length
+	(-) Mouse.current.position.ReadValue() / Input.mousePosition.x;
+	(-) Touch.activeTouches[0].screenPosition / Input.touches[0].position;
+=> Adding Play Games Services
+	(-) Adding LeaderBoard
 
 _______________________________________________________________________________________________________________
 _______________________________________________________________________________________________________________
