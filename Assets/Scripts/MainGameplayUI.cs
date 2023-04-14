@@ -1,8 +1,9 @@
-#define TEST_MODE
+//#define TEST_MODE
 
 using System;
 using System.Collections;
 using TMPro;
+using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,7 +18,7 @@ namespace Untitled_Endless_Runner
         [Header("UI")]
         [SerializeField] private Sprite[] heartSprites, jumpBtModes;
         [SerializeField] private GameObject heartContainer, gameOverPanel, airDashBt, jumpBt;
-        [SerializeField] private TMP_Text finalScoreTxt, totalCoinsTxt, highScoreTxt;
+        [SerializeField] private TMP_Text finalScoreTxt, totalCoinsTxt, highScoreTxt, coinsBalanceTxt;
         [SerializeField] private Image armorTimer, score2xTimer;
 
         [Header ("Prefabs List")]
@@ -45,9 +46,10 @@ namespace Untitled_Endless_Runner
             localGameLogic.OnRestartFinished += FillHearts;
             localGameLogic.OnGameOver += UpdateFinalScore;
             localGameLogic.OnPowerUpCollected += UpdatePowerUpUI;
+            localGameLogic.OnMainGameplayStarted += InvokeStartPowers;
 
 #if TEST_MODE
-            //localGameLogic.FillUpPlayerHealth += RestorePlayerHealth;
+            localGameLogic.FillUpPlayerHealth += RestorePlayerHealth;
 #endif
         }
         private void OnDisable()
@@ -59,9 +61,10 @@ namespace Untitled_Endless_Runner
             localGameLogic.OnRestartFinished -= FillHearts;
             localGameLogic.OnGameOver -= UpdateFinalScore;
             localGameLogic.OnPowerUpCollected -= UpdatePowerUpUI;
+            localGameLogic.OnMainGameplayStarted -= InvokeStartPowers;
 
 #if TEST_MODE
-            //localGameLogic.FillUpPlayerHealth -= RestorePlayerHealth;
+            localGameLogic.FillUpPlayerHealth -= RestorePlayerHealth;
 #endif
         }
 
@@ -83,19 +86,73 @@ namespace Untitled_Endless_Runner
 
         private void UpdateHeartUI(ObstacleStat obstacleStat)
         {
+            switch (obstacleStat.type)
+            {
+                case ObstacleType.Attack:
+                    {
+                        if (!halfHeart)
+                        {
+                            heartContainer.transform.GetChild(currentHeart).GetComponent<Image>().sprite = heartSprites[1];
+                            halfHeart = true;
+                        }
+                        else
+                        {
+                            heartContainer.transform.GetChild(currentHeart).GetComponent<Image>().sprite = heartSprites[2];
+                            currentHeart--;
+                            halfHeart = false;
+                        }
+
+                        break;
+                    }
+                case ObstacleType.Power_Up:
+                    {
+                        switch (obstacleStat.tag)
+                        {
+                            case ObstacleTag.Heart:
+                                {
+                                    if (currentHeart == (byte)(heartContainer.transform.childCount - 1))                  //if it is less than or equal to 3, as the total hearts is 4
+                                    {
+                                        var heartAdded = Instantiate(heartPrefab, heartContainer.transform);
+                                        heartAdded.transform.SetSiblingIndex(currentHeart);
+                                        heartAdded.name = "Hearts_" + (currentHeart+1);
+                                        currentHeart++;
+                                    }
+                                    else
+                                    {
+                                        //if half-heart, then fill the next heart with half heart, and fill the current heart with full heart
+                                        if (halfHeart)
+                                        {
+                                            heartContainer.transform.GetChild(currentHeart).GetComponent<Image>().sprite = heartSprites[0];
+                                            heartContainer.transform.GetChild(currentHeart + 1).GetComponent<Image>().sprite = heartSprites[1];
+                                        }
+                                        //if the next heart is empty, then fill the next heart with full heart
+                                        else
+                                            heartContainer.transform.GetChild(currentHeart + 1).GetComponent<Image>().sprite = heartSprites[0];
+
+                                        currentHeart++;
+                                    }
+
+                                    break;
+                                }
+
+                            default:
+                                {
+                                    Debug.LogError($"Osbtacle Tag Not Found : {obstacleStat.tag}");
+                                    break;
+                                }
+                        }
+
+                        break;
+                    }
+
+                default:
+                    {
+                        Debug.LogError($"Osbtacle Type Not Found : {obstacleStat.type}");
+                        break;
+                    }
+            }
             if (obstacleStat.type.Equals(ObstacleType.Attack))
             {
-                if (!halfHeart)
-                {
-                    heartContainer.transform.GetChild(currentHeart).GetComponent<Image>().sprite = heartSprites[1];
-                    halfHeart = true;
-                }
-                else
-                {
-                    heartContainer.transform.GetChild(currentHeart).GetComponent<Image>().sprite = heartSprites[2];
-                    currentHeart--;
-                    halfHeart = false;
-                }
             }
         }
 
@@ -147,6 +204,21 @@ namespace Untitled_Endless_Runner
                 highScoreTxt.text = finalScore.ToString();
                 playerData = new PlayerData(finalScore);
                 SaveSystem.SaveHighScore(playerData);
+            }
+
+            coinsBalanceTxt.text = PlayerPrefs.GetInt("COIN_AMOUNT", 0).ToString();
+            //Debug.Log("Coins Amount After : " + PlayerPrefs.GetInt("COIN_AMOUNT", -1));
+        }
+
+        private void InvokeStartPowers(int powerIndex)
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                if ((powerIndex & (1 << i)) != 0)               //The "i" contains the Power Index which needs to be activated.
+                {
+                    UpdatePowerUpUI(GameManager.instance.tagsToBeDetected[i].tag, 1);
+                }
+                //Debug.Log($"Power Index : {Convert.ToString(powerIndex, 2)}, i : {i} , condition : {(powerIndex & (1 << i))}");
             }
         }
 
@@ -364,7 +436,7 @@ namespace Untitled_Endless_Runner
 
         private void UpdateTotalCoins(ref int totalCoins)
         {
-            Debug.Log("Updating Coins");
+            //Debug.Log("Updating Coins");
             totalCoinsTxt.text = totalCoins.ToString();
         }
 
@@ -394,12 +466,6 @@ namespace Untitled_Endless_Runner
 
             yield return new WaitForSeconds(1.1f);
             FadeScreen.SetActive(false);
-        }
-
-        //On Pause Panel, under the restart button
-        public void HomeClicked()
-        {
-            localGameLogic.OnHomeClicked?.Invoke();
         }
     }
 }

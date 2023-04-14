@@ -92,7 +92,7 @@ namespace Untitled_Endless_Runner
         private void ToggleSpawn(bool toggleValue)
         {
             //As this is called multiple times. i.e. at restart is twice called
-            if (localGameLogic.gameplayBegan)
+            if (GameManager.instance.gameStarted)
             {
                 spawnEnabled = toggleValue;
                 //Debug.Log($"Time Now : {Time.unscaledTime}");

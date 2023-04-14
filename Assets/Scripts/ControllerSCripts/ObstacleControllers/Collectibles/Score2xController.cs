@@ -12,7 +12,7 @@ namespace Untitled_Endless_Runner
 
         protected override void ApplyEffect(GameObject player)
         {
-            Debug.Log($"Score2x Collected");
+            //Debug.Log($"Score2x Collected");
             effectStatus = 1;
             obstacleStat.activated = true;
             //localGameLogic.OnObstacleDetected?.Invoke(obstacleStat);                  //Not Doing Anything

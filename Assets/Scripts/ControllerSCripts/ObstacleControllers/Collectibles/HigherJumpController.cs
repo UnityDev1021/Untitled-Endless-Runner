@@ -12,7 +12,7 @@ namespace Untitled_Endless_Runner
 
         protected override void ApplyEffect(GameObject player)
         {
-            Debug.Log($"Higher Jump Collected");
+            //Debug.Log($"Higher Jump Collected");
             effectStatus = 1;
             obstacleStat.activated = true;
             localGameLogic.OnPowerUpCollected?.Invoke(ObstacleTag.HigherJump, 1);

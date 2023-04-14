@@ -13,7 +13,7 @@ namespace Untitled_Endless_Runner
 
         protected override void ApplyEffect(GameObject player)
         {
-            Debug.Log($"Coin Collected");
+            //Debug.Log($"Coin Collected");
             effectStatus = 1;
             obstacleStat.activated = true;
             //localGameLogic.OnObstacleDetected?.Invoke(obstacleStat);

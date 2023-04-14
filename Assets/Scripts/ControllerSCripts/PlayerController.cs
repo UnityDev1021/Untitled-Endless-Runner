@@ -1,6 +1,7 @@
 #define MOBILE_CONTROLS                     //For Mobile Controls
 #define TEST_MODE
 
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -44,6 +45,7 @@ namespace Untitled_Endless_Runner
             localGameLogic.OnRestartClicked += ResetPlayerStats;
             localGameLogic.OnPowerUpCollected += TogglePowerUp;
             localGameLogic.OnPlayerAction += ToggleAction;
+            localGameLogic.OnMainGameplayStarted += InvokeStartPowers;
             //localGameLogic.OnRestartFinished += ResetPlayerStats;
 
 #if TEST_MODE
@@ -58,6 +60,7 @@ namespace Untitled_Endless_Runner
             localGameLogic.OnRestartClicked -= ResetPlayerStats;
             localGameLogic.OnPowerUpCollected -= TogglePowerUp;
             localGameLogic.OnPlayerAction -= ToggleAction;
+            localGameLogic.OnMainGameplayStarted -= InvokeStartPowers;
             //localGameLogic.OnRestartFinished -= ResetPlayerStats;
 
 #if TEST_MODE
@@ -144,12 +147,12 @@ namespace Untitled_Endless_Runner
 
                 disableSlide = true;
                 playerRB.velocity = transform.up * jumpForce;
-                jumpCount++;
                 playerAnimator.Play("Jump", 0, 0f);
+                jumpCount++;
                 //playerAnimator.SetBool("Rotate", true);
                 //Invoke(nameof(PlayAnimation), 1.01f);
 
-                if (jumpCount == 1)
+                if (jumpCount == 3)
                     hasJumped = true;
 
                 //Debug.Log($"Disable Sliding : {disableSlide}");
@@ -270,14 +273,19 @@ namespace Untitled_Endless_Runner
         private void OnTriggerEnter2D(Collider2D collision)
         {
             //This gets executed onc the player takes off from the ground as the player is still touching the ground.
-            if (collision.CompareTag("Steppable") || collision.CompareTag("Ground"))
+            if (jumpCount > 0 &&(collision.CompareTag("Steppable") || collision.CompareTag("Ground")))
             {
-                //Debug.Log($"Resetting under Trigger");
-                jumpCount = 0;              //To ensure that the player can double jump from the obstacle
-                disableSlide = false;
+                if (jumpCount > 1)
+                {
+                    //Debug.Log($"Resetting under Trigger");
+                    jumpCount = 0;              //To ensure that the player can double jump from the obstacle
+                    disableSlide = false;
 
-                if (hasJumped)
-                    hasJumped = false;
+                    if (hasJumped)
+                        hasJumped = false;
+                }
+                else                            //Increase counter when the player leaves the ground for the first time
+                    jumpCount++;                
             }
 
             if (gameStarted && collision.CompareTag("Captured"))
@@ -334,8 +342,8 @@ namespace Untitled_Endless_Runner
                             case ObstacleTag.Fan:
                             case ObstacleTag.Trampoline:
                                 {
-                                    if (jumpCount != 1)
-                                        jumpCount++;
+                                    if (jumpCount != 2)
+                                        Mobile_Jump();
 
                                     break;
                                 }
@@ -400,22 +408,17 @@ namespace Untitled_Endless_Runner
                     {
                         switch (obstacleStat.tag)
                         {
-                            case ObstacleTag.Coin:
-                                {
-
-                                    break;
-                                }
-
-                            case ObstacleTag.Shield:
-                                {
-                                    transform.GetChild(1).gameObject.SetActive(true);
-
-                                    break;
-                                }
-
                             //Do Nothing
+                            case ObstacleTag.Coin:
+                            case ObstacleTag.Shield:
                             case ObstacleTag.Score2x:
                                 break;
+
+                            case ObstacleTag.Heart:
+                                {
+                                    heart++;
+                                    break;
+                                }
 
                             default:
                                 {
@@ -434,6 +437,18 @@ namespace Untitled_Endless_Runner
 
                         break;
                     }
+            }
+        }
+
+        private void InvokeStartPowers(int powerIndex)
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                if ((powerIndex & (1 << i)) != 0)               //The "i" contains the Power Index which needs to be activated.
+                {
+                    TogglePowerUp(GameManager.instance.tagsToBeDetected[i].tag, 1);
+                }
+                //Debug.Log($"Power Index : {Convert.ToString(powerIndex, 2)}, i : {i} , condition : {(powerIndex & (1 << i))}");
             }
         }
 
@@ -489,11 +504,14 @@ namespace Untitled_Endless_Runner
         {
             unAlive = true;
             //Debug.Log($"Player is unalived : {unAlive}");
-            localGameLogic.OnPlayerHealthOver?.Invoke();
             playerAnimator.Play("Hit", 0);
             playerRB.AddForce(transform.right * 12f, ForceMode2D.Impulse);
 
-
+            int coinsBalance = PlayerPrefs.GetInt("COIN_AMOUNT", 0);
+            PlayerPrefs.SetInt("COIN_AMOUNT", totalCoins + coinsBalance);
+            GameManager.instance.coinsBalance = totalCoins + coinsBalance;
+            //Debug.Log("Coins Amount : " + PlayerPrefs.GetInt("COIN_AMOUNT", -1));
+            localGameLogic.OnPlayerHealthOver?.Invoke();
         }
 
         public void TakeDamage()

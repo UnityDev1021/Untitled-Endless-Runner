@@ -60,6 +60,7 @@ public class BackGroundController : MonoBehaviour
             case ObstacleTag.Shield:
             case ObstacleTag.Dash:
             case ObstacleTag.HigherJump:
+            case ObstacleTag.Heart:
                 break;
 
             case ObstacleTag.Score2x:

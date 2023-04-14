@@ -12,7 +12,7 @@ namespace Untitled_Endless_Runner
 
         protected override void ApplyEffect(GameObject player)
         {
-            Debug.Log($"Speed Boost Collected");
+            //Debug.Log($"Speed Boost Collected");
             effectStatus = 1;
             obstacleStat.activated = true;
             localGameLogic.OnPowerUpCollected?.Invoke(ObstacleTag.SpeedBoost, 1);

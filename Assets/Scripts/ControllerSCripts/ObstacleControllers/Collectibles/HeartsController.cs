@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Untitled_Endless_Runner
 {
-    public class ShieldController : BaseObstacleController
+    public class HeartsController : BaseObstacleController
     {
         protected override void OnEnable()
         {
@@ -12,11 +12,11 @@ namespace Untitled_Endless_Runner
 
         protected override void ApplyEffect(GameObject player)
         {
-            //Debug.Log($"Shield Collected");
+            //Debug.Log($"Heart Collected");
             effectStatus = 1;
             obstacleStat.activated = true;
-            //localGameLogic.OnObstacleDetected?.Invoke(obstacleStat);                  //Not Doing Anything
-            localGameLogic.OnPowerUpCollected?.Invoke(ObstacleTag.Shield, 1);
+            localGameLogic.OnObstacleDetected?.Invoke(obstacleStat);
+            //localGameLogic.OnPowerUpCollected?.Invoke(ObstacleTag.Heart, 1);
             Invoke(nameof(EnableEffectAgain), 0.5f);
             gameObject.SetActive(false);
         }

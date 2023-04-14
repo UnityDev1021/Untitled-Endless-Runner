@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Untitled_Endless_Runner
@@ -13,8 +11,10 @@ namespace Untitled_Endless_Runner
         [Header("Local Reference Objects")]
         public Transform cameraTransform;
 
-        //[Header("Power Ups Section")]
-        //public bool invincibility;
+        [Header("Power Ups Section")]
+        public bool gameStarted;
+        public ObstacleStat[] tagsToBeDetected;
+        public int coinsBalance;
 
         private static GameManager _instance;
         public static GameManager instance

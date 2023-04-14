@@ -265,6 +265,41 @@ ________________________________________________________________________________
 	(-) Touch.activeTouches[0].screenPosition / Input.touches[0].position;
 => Adding Play Games Services
 	(-) Adding LeaderBoard
+	
+-------------------------------------------------------------------
+							14 April
+-------------------------------------------------------------------
+=> [Fixed For Now] Player can still slide after jumping. i.e. After first jump.
+	(-) player can also slide after fan or trampoline.
+	(-) As soon as the player jumps, the OnTriggerEnter2D is invoked as the player still touched the ground trigger.
+	(-) Increase counter when the player leaves the ground, check if the counter is 3, then reset the counter.
+=> [Do] Add a layermask to the physics collisions.
+	(-) [Do] Set a callback to deactivate the ground trigger, to avoid unnecessary detections.
+=> [Fixed] Authentication Service.
+	(-) Can add additional sign in button in the settings panel
+=> Restart will not save any progress. All progress will be lost.
+=> [Done For Now] Save coins mechanism.
+	(-) Saving Locally for now. The total coins is shown on the main menu.
+=> Made a button in the settings for Manual Sign-In.
+=> [Do] Make mechanism so that the power-ups don't spawn that often or appear in patterns.
+	(-) Can make a random logic to spawn the power-ups in a set time interval or so.
+=> [Done For Now] [Power-Up] Making Heart Power-Up
+	(-) If the total heart is equal to the heart container
+		[=] Add a heart at the end, move the heart 1 position forward and increase currentHeart counter.
+			{~} Check Half Heart 
+				(+) If true, then fill the next heart with half heart and current heart with full heart.
+				(+) If false, then fill the next heart with full heart.
+	(-) If the total heart is less than the heart container
+		[=] Same as above but not adding a new heart.
+	(-) [Suggestion] On getting PowerUp, the hearts gained will go away once they are used up. Only 4 hearts will be present. i.e. if the player has 5 hearts and uses their 5th heart, then the susequent heart will fade away and only 4 heart will remain. But if the player uses their 4th heart, it will just become empty.
+=> [Working] Buy Power-Ups at the Main Menu.
+	(-) Check whether any power-ups have been purchased, when the player starts the game by clicking on "Tap To Play".
+	(-) Can make bool check for the power-ups requested or use bits.
+		[=] Using bits for now.
+		[=] [Important] Update gameLogic to include new power indexes if new powers are included or added.
+	(-) Using button to set bits and then using callback to invoke powers for both MainGameplayUI and GameLogic.
+	(-) Make Logic to check for the power price and decide whether to give it or not.
+=> [Do] Check for the coins Balance at the launch of the game
 
 _______________________________________________________________________________________________________________
 _______________________________________________________________________________________________________________

@@ -15,10 +15,9 @@ namespace Untitled_Endless_Runner
         [SerializeField] private GameObject player, mainCamera;
 
         public Action<ObstacleStat> OnObstacleDetected;
-        public Action OnPlayerHealthOver, OnPlayerCaptured, OnGamePlayStarted, OnMainGameplayStarted, 
-            OnResumeClicked, OnHomeClicked, OnRestartFinished;
+        public Action OnPlayerHealthOver, OnPlayerCaptured, OnResumeClicked, OnRestartFinished;
         public Action<bool> OnPause_ResumeClicked;
-        public Action<int> OnRestartClicked, OnGameOver;
+        public Action<int> OnRestartClicked, OnGameOver, OnMainGameplayStarted;
         public Action<ObstacleTag, int> OnPowerUpCollected;
 
         [Header("Player Actions")]
@@ -42,15 +41,14 @@ namespace Untitled_Endless_Runner
         [Space]
         public AudioMixerGroup[] audioMixers;
         private bool toggleMusic = true, toggleSE = true, toggleVibrate = true;
-        public bool gameplayBegan;
+        private int startPowers;
+        //public bool gameplayBegan;
 
         private void OnEnable()
         {
-            OnMainGameplayStarted += EnableObjects;
             OnPlayerHealthOver += EndGamePlay;
             OnPause_ResumeClicked += ToggleGameStatus;
             OnRestartClicked += RestartGame;
-            OnHomeClicked += GoHome;
 
 #if TEST_MODE
             FillUpPlayerHealth += RestorePlayerHealth;
@@ -59,11 +57,9 @@ namespace Untitled_Endless_Runner
 
         private void OnDisable()
         {
-            OnMainGameplayStarted -= EnableObjects;
             OnPlayerHealthOver -= EndGamePlay;
             OnPause_ResumeClicked -= ToggleGameStatus;
             OnRestartClicked -= RestartGame;
-            OnHomeClicked -= GoHome;
 
 #if TEST_MODE
             FillUpPlayerHealth -= RestorePlayerHealth;
@@ -72,22 +68,73 @@ namespace Untitled_Endless_Runner
 
 
 #if TEST_MODE
-        private void RestorePlayerHealth()
-        {
-
-        }
+        private void RestorePlayerHealth() { }
 #endif
 
-        private void EnableObjects()
+        /*******************************************************************************************
+         *  Shield - 0
+         *  Score2x - 1
+         *  AirDash - 2
+         *  HigherJump - 3
+         *  SpeedBoost - 4
+         *******************************************************************************************/
+        //On Debug Power buttons, under the Test Canvas
+        public void StartUpPowers(int powerIndex)
         {
+            //Debug.Log("Binary : " + Convert.ToString(startPowers, 2));
+            //startPowers = 0;
 
+            if ((powerIndex & (1 << 0)) != 0)
+            {
+                Debug.Log($"condition 0 : { (powerIndex & (1 << 0))}");
+                if (GameManager.instance.coinsBalance >= 10)             //Don't have enough coins to buy power-up
+                    GameManager.instance.coinsBalance -= 10;
+                else
+                    return;
+            }
+            else if ((powerIndex & (1 << 1)) != 0)
+            {
+                Debug.Log($"condition 1 : {(powerIndex & (1 << 1))}");
+                if (GameManager.instance.coinsBalance >= 5)             //Don't have enough coins to buy power-up
+                    GameManager.instance.coinsBalance -= 5;
+                else
+                    return;
+            }
+            else if ((powerIndex & (1 << 2)) != 0)
+            {
+                Debug.Log($"condition 2 : {(powerIndex & (1 << 2))}");
+                if (GameManager.instance.coinsBalance >= 7)             //Don't have enough coins to buy power-up
+                    GameManager.instance.coinsBalance -= 7;
+                else
+                    return;
+            }
+            else if ((powerIndex & (1 << 3)) != 0)
+            {
+                Debug.Log($"condition 3 : {(powerIndex & (1 << 3))}");
+                if (GameManager.instance.coinsBalance >= 2)             //Don't have enough coins to buy power-up
+                    GameManager.instance.coinsBalance -= 2;
+                else
+                    return;
+            }
+            else if ((powerIndex & (1 << 4)) != 0)
+            {
+                Debug.Log($"condition 4 : {(powerIndex & (1 << 4))}");
+                if (GameManager.instance.coinsBalance >= 8)             //Don't have enough coins to buy power-up
+                    GameManager.instance.coinsBalance -= 8;
+                else
+                    return;
+            }
+
+            startPowers |= (1 << powerIndex);
+
+            Debug.Log($"Binary : {Convert.ToString(startPowers, 2)}");
         }
 
         //On the Start Panel under the "Tap To Play" button
         public void StartGame()
         {
             disabledObjects[0].SetActive(true);
-            gameplayBegan = true;
+            GameManager.instance.gameStarted = true;
 
             //localBG_Controller.enabled = true;           //Replaced with buttons
             //localObstacleSpawner.enabled = true;           //Replaced with buttons
@@ -100,6 +147,7 @@ namespace Untitled_Endless_Runner
             playerAnimator.Play("Idle_Run", 0, 0f);
             player.GetComponent<PlayerController>().enabled = true;
             player.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+            OnMainGameplayStarted?.Invoke(startPowers);
         }
 
         private void ToggleGameStatus(bool toggleValue)
@@ -113,6 +161,7 @@ namespace Untitled_Endless_Runner
         private void RestartGame(int dummyData)
         {
             ToggleGameStatus(false);
+            startPowers = 0;
 
             //localBG_Controller.enabled = false;           //Replaced with buttons
 
@@ -125,7 +174,7 @@ namespace Untitled_Endless_Runner
             mainCamera.transform.position = new Vector3(0f, mainCamera.transform.position.y, mainCamera.transform.position.z);
             OnRestartFinished?.Invoke();
 
-            gameplayBegan = false;
+            GameManager.instance.gameStarted = false;
             //localObstacleSpawner.enabled = false;           //Replaced with buttons
         }
 
