@@ -25,7 +25,7 @@ namespace Untitled_Endless_Runner
         [SerializeField] private GameLogic localGameLogic;
 
         [Header("Player PowerUps")]
-        private int totalCoins;
+        [SerializeField] private int totalCoins;                    //Serialize For Test
 
         [Space]
         private byte jumpCount;
@@ -460,6 +460,7 @@ namespace Untitled_Endless_Runner
                 case ObstacleTag.Score2x:
                 case ObstacleTag.Dash:
                 case ObstacleTag.SpeedBoost:
+                case ObstacleTag.Heart:
                     break;
 
                 case ObstacleTag.Coin:

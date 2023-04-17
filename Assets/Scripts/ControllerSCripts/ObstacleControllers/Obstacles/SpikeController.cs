@@ -10,7 +10,7 @@ namespace Untitled_Endless_Runner
 
         protected override void ApplyEffect(GameObject player)
         {
-            if (!invincibility)
+            if (!GameManager.instance.invincibility)
             {
                 effectStatus = 1;
 

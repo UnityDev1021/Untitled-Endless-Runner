@@ -12,9 +12,12 @@ namespace Untitled_Endless_Runner
         public Transform cameraTransform;
 
         [Header("Power Ups Section")]
-        public bool gameStarted;
+        public bool gameStarted, invincibility, speedBoost;
         public ObstacleStat[] tagsToBeDetected;
         public int coinsBalance;
+
+        //[Header("PowerUps Section")]
+        //protected bool ;
 
         private static GameManager _instance;
         public static GameManager instance

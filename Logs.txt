@@ -301,6 +301,25 @@ ________________________________________________________________________________
 	(-) Make Logic to check for the power price and decide whether to give it or not.
 => [Do] Check for the coins Balance at the launch of the game
 
+-------------------------------------------------------------------
+							17 April
+-------------------------------------------------------------------
+=> [Do] Update coins balance in main menu.
+=> [Fixed] Shield does not work properly.
+	(-) Made a public invincibility variable in the Game Manager to be accessed by everyone.
+=> [Do] When the player collects higher jump and lands back after jumping, they fall into the ground.
+	(-) Does not happens often.
+=> [Fixed] When the player collects SpeedBoost simultaneously, it keeps on stacking.
+	(-) Made a public speedBoost variable in the Game Manager to be accessed by everyone.
+=> [Check] Sometimes the player triple jumps normally. Might be when colliding with an obstacle or powerup.
+=> Changed to Auto-Rotation, containing Landscape Left/Right.
+=> [Suggestion] Shield degrades after hitting/destroying a certain number of obstacles.
+=> [Suggestion] If while buying powers under GameLogic, there is any error, should show the error.
+=> [Working] Making Ads
+	(-) Acquired a Google AdMob account
+	(-) Made waterfalls/Ad units in AdMob account.
+	(-) Associated Unity Ads with AdMob Account.
+
 _______________________________________________________________________________________________________________
 _______________________________________________________________________________________________________________
 

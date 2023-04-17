@@ -15,7 +15,7 @@ namespace Untitled_Endless_Runner
         [SerializeField] private GameObject player, mainCamera;
 
         public Action<ObstacleStat> OnObstacleDetected;
-        public Action OnPlayerHealthOver, OnPlayerCaptured, OnResumeClicked, OnRestartFinished;
+        public Action OnPlayerHealthOver, OnPlayerCaptured, OnResumeClicked, OnRestartFinished, OnPowersBought;
         public Action<bool> OnPause_ResumeClicked;
         public Action<int> OnRestartClicked, OnGameOver, OnMainGameplayStarted;
         public Action<ObstacleTag, int> OnPowerUpCollected;
@@ -42,6 +42,9 @@ namespace Untitled_Endless_Runner
         public AudioMixerGroup[] audioMixers;
         private bool toggleMusic = true, toggleSE = true, toggleVibrate = true;
         private int startPowers;
+
+        [Header("Power Ups Section")]
+        [SerializeField] private byte[] powersCost;
         //public bool gameplayBegan;
 
         private void OnEnable()
@@ -77,57 +80,43 @@ namespace Untitled_Endless_Runner
          *  AirDash - 2
          *  HigherJump - 3
          *  SpeedBoost - 4
+         *  ExtraHearts - 5
          *******************************************************************************************/
         //On Debug Power buttons, under the Test Canvas
         public void StartUpPowers(int powerIndex)
         {
             //Debug.Log("Binary : " + Convert.ToString(startPowers, 2));
             //startPowers = 0;
+            //Debug.Log($"coins Balance : {GameManager.instance.coinsBalance}, COIN_AMOUNT : {PlayerPrefs.GetInt("COIN_AMOUNT", -1)}");
 
-            if ((powerIndex & (1 << 0)) != 0)
+            try
             {
-                Debug.Log($"condition 0 : { (powerIndex & (1 << 0))}");
-                if (GameManager.instance.coinsBalance >= 10)             //Don't have enough coins to buy power-up
-                    GameManager.instance.coinsBalance -= 10;
+                //Debug.Log($"powersIndex : {powerIndex}, condition 4 : {(powerIndex & (1 << 4))}");
+                if (GameManager.instance.coinsBalance >= powersCost[powerIndex])             //Don't have enough coins to buy power-up
+                {
+                    GameManager.instance.coinsBalance -= powersCost[powerIndex];
+
+                    if (powerIndex == 5)                                                //Heart Power-Up
+                        OnObstacleDetected?.Invoke(GameManager.instance.tagsToBeDetected[powerIndex]);
+                }
                 else
                     return;
             }
-            else if ((powerIndex & (1 << 1)) != 0)
+            catch (Exception e)
             {
-                Debug.Log($"condition 1 : {(powerIndex & (1 << 1))}");
-                if (GameManager.instance.coinsBalance >= 5)             //Don't have enough coins to buy power-up
-                    GameManager.instance.coinsBalance -= 5;
-                else
-                    return;
-            }
-            else if ((powerIndex & (1 << 2)) != 0)
-            {
-                Debug.Log($"condition 2 : {(powerIndex & (1 << 2))}");
-                if (GameManager.instance.coinsBalance >= 7)             //Don't have enough coins to buy power-up
-                    GameManager.instance.coinsBalance -= 7;
-                else
-                    return;
-            }
-            else if ((powerIndex & (1 << 3)) != 0)
-            {
-                Debug.Log($"condition 3 : {(powerIndex & (1 << 3))}");
-                if (GameManager.instance.coinsBalance >= 2)             //Don't have enough coins to buy power-up
-                    GameManager.instance.coinsBalance -= 2;
-                else
-                    return;
-            }
-            else if ((powerIndex & (1 << 4)) != 0)
-            {
-                Debug.Log($"condition 4 : {(powerIndex & (1 << 4))}");
-                if (GameManager.instance.coinsBalance >= 8)             //Don't have enough coins to buy power-up
-                    GameManager.instance.coinsBalance -= 8;
-                else
-                    return;
+                Debug.LogError($"Error Found under StartUpPowers in GameLogic : {e}");
             }
 
             startPowers |= (1 << powerIndex);
+            PlayerPrefs.SetInt("COIN_AMOUNT", GameManager.instance.coinsBalance);
+            OnPowersBought?.Invoke();
 
-            Debug.Log($"Binary : {Convert.ToString(startPowers, 2)}");
+            Debug.Log($"Binary : {Convert.ToString(startPowers, 2)}, coins Balance : {GameManager.instance.coinsBalance}, COIN_AMOUNT : {PlayerPrefs.GetInt("COIN_AMOUNT", -1)}");
+        }
+
+        public void Start()
+        {
+            GameManager.instance.coinsBalance = PlayerPrefs.GetInt("COIN_AMOUNT", 0);
         }
 
         //On the Start Panel under the "Tap To Play" button

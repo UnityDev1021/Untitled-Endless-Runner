@@ -159,7 +159,7 @@ namespace Untitled_Endless_Runner
 
         protected override void ApplyEffect(GameObject player)
         {
-            if (invincibility && !destroyed && powerUpCol.IsTouchingLayers(playerLayerMask))            
+            if (GameManager.instance.invincibility && !destroyed && powerUpCol.IsTouchingLayers(playerLayerMask))            
             {
                 //gameObject.SetActive(false);
                 destroyed = true;
@@ -184,7 +184,7 @@ namespace Untitled_Endless_Runner
         {
             base.ToggleEffects();
             smashed = false;
-            invincibility = false;
+            GameManager.instance.invincibility = false;
         }
     }
 }

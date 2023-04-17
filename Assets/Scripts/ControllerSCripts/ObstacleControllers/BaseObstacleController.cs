@@ -19,17 +19,12 @@ namespace Untitled_Endless_Runner
         public Transform cameraTransform;
         [SerializeField] protected byte effectStatus;
 
-        [Header("PowerUps Section")]
-        protected bool invincibility;
-
         [SerializeField] private ObstacleStat _obstacleStat;
         public ObstacleStat obstacleStat { get { return _obstacleStat; } }
 
         protected virtual void OnEnable()
         {
             Invoke(nameof(EnableActionFunctions), 0.1f);              //Apparently this works somehow.        //Might cause Race Condition
-
-            invincibility = false;
         }
 
         protected virtual void OnDisable()
@@ -93,9 +88,9 @@ namespace Untitled_Endless_Runner
                 case ObstacleTag.Shield:
                     {
                         if (amount == 1)
-                            invincibility = true;
+                            GameManager.instance.invincibility = true;
                         else
-                            invincibility = false;
+                            GameManager.instance.invincibility = false;
 
                         break;
                     }
@@ -106,6 +101,8 @@ namespace Untitled_Endless_Runner
                         break;
                     }
             }
+
+            //Debug.Log($"Invincibility : {GameManager.instance.invincibility}");
         }
 
         private void CheckIfWithinViewport()

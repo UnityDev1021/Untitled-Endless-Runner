@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d1db9ca2b6fd8e43944925a27c8a843, type: 3}
   m_Name: Group_Test 6
   m_EditorClassIdentifier: 
-  obstaclesIndex: 1101
+  obstaclesIndex: 0c0b
   obstacleGroupType: 0000
   disX:
   - 0

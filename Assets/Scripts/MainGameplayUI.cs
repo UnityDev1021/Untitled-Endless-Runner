@@ -1,9 +1,8 @@
-//#define TEST_MODE
+#define TEST_MODE
 
 using System;
 using System.Collections;
 using TMPro;
-using Unity.PlasticSCM.Editor.WebApi;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -34,7 +33,8 @@ namespace Untitled_Endless_Runner
         [SerializeField] private GameObject FadeScreen;
 
         [Header("Power-Up Durations")]
-        [SerializeField] private float armorDurationMultiplier = 0.2f, scoreDurationMultiplier = 0.2f, dashDurationMultiplier = 0.2f, hjDurationMultiplier = 0.2f;
+        [SerializeField] private float armorDurationMultiplier = 0.08f;
+        [SerializeField] private float scoreDurationMultiplier = 0.08f, dashDurationMultiplier = 0.08f, hjDurationMultiplier = 0.08f;
         private Coroutine armourCoroutine, scoreCoroutine, dashCoroutine, hjCoroutine;
 
         private void OnEnable()
@@ -47,6 +47,7 @@ namespace Untitled_Endless_Runner
             localGameLogic.OnGameOver += UpdateFinalScore;
             localGameLogic.OnPowerUpCollected += UpdatePowerUpUI;
             localGameLogic.OnMainGameplayStarted += InvokeStartPowers;
+            localGameLogic.OnPowersBought += UpdateCoins;
 
 #if TEST_MODE
             localGameLogic.FillUpPlayerHealth += RestorePlayerHealth;
@@ -62,6 +63,7 @@ namespace Untitled_Endless_Runner
             localGameLogic.OnGameOver -= UpdateFinalScore;
             localGameLogic.OnPowerUpCollected -= UpdatePowerUpUI;
             localGameLogic.OnMainGameplayStarted -= InvokeStartPowers;
+            localGameLogic.OnPowersBought -= UpdateCoins;
 
 #if TEST_MODE
             localGameLogic.FillUpPlayerHealth -= RestorePlayerHealth;
@@ -82,10 +84,15 @@ namespace Untitled_Endless_Runner
         private void Start()
         {
             currentHeart = (byte)(localGameLogic.totalHearts - 1);
+#if TEST_MODE
+            PlayerPrefs.SetInt("COIN_AMOUNT", 200);
+#endif
+            coinsBalanceTxt.text = PlayerPrefs.GetInt("COIN_AMOUNT", 0).ToString();
         }
 
         private void UpdateHeartUI(ObstacleStat obstacleStat)
         {
+            Debug.Log($"Calling UPgrade");
             switch (obstacleStat.type)
             {
                 case ObstacleType.Attack:
@@ -106,6 +113,8 @@ namespace Untitled_Endless_Runner
                     }
                 case ObstacleType.Power_Up:
                     {
+                        Debug.Log($"Calling Heart PowerUp");
+
                         switch (obstacleStat.tag)
                         {
                             case ObstacleTag.Heart:
@@ -131,6 +140,7 @@ namespace Untitled_Endless_Runner
 
                                         currentHeart++;
                                     }
+                                    Debug.Log($"Current Heart : {currentHeart}");
 
                                     break;
                                 }
@@ -150,9 +160,6 @@ namespace Untitled_Endless_Runner
                         Debug.LogError($"Osbtacle Type Not Found : {obstacleStat.type}");
                         break;
                     }
-            }
-            if (obstacleStat.type.Equals(ObstacleType.Attack))
-            {
             }
         }
 
@@ -220,6 +227,10 @@ namespace Untitled_Endless_Runner
                 }
                 //Debug.Log($"Power Index : {Convert.ToString(powerIndex, 2)}, i : {i} , condition : {(powerIndex & (1 << i))}");
             }
+        }
+        private void UpdateCoins()
+        {
+            coinsBalanceTxt.text = GameManager.instance.coinsBalance.ToString();
         }
 
         private void UpdatePowerUpUI(ObstacleTag detectedTag, int amount)
