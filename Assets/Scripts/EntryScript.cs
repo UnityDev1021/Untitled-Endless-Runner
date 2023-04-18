@@ -1,4 +1,5 @@
 #define SKIP_ENTRY                          //For Testing
+//#define ENABLE_PORTAL                     //Disabed bc not using
 
 using System.Collections;
 //using UnityEditor.Animations;
@@ -8,7 +9,7 @@ namespace Untitled_Endless_Runner
 {
     public class EntryScript : MonoBehaviour
     {
-        [SerializeField] private Animator portalAnimator, playerAnimator, backgroundAnimator;
+        [SerializeField] private Animator playerAnimator, backgroundAnimator;               //portalAnimator, 
         //[SerializeField] private AnimatorController[] backgroundAnimatorControllers;            //Cant use outside Unity Editor
 
         [Header("Local Refernece Scripts")]
@@ -17,7 +18,7 @@ namespace Untitled_Endless_Runner
 
         [Header("Disabled GameObjects")]
         [SerializeField] private GameObject[] disabledObjects;
-        [SerializeField] private GameObject portal, mainMenuPanel, player, entryCamera;
+        [SerializeField] private GameObject mainMenuPanel, player, entryCamera;             //portal, 
         [SerializeField] private Camera mainCamera;
 
         //[Header("Test Variables")]
@@ -47,7 +48,7 @@ namespace Untitled_Endless_Runner
             Invoke(nameof(SetEnvironment), 11.5f);
             //player.transform.position = new Vector2(-8.43f, -2.3f);
 #else
-            disabledObjects[5].SetActive(false);
+            disabledObjects[3].SetActive(false);
             mainCamera.enabled = true;
             player.transform.position = new Vector2(-5.3f, -3.7f);
             player.SetActive(true);                                  //Enable For Actual Gameplay
@@ -68,6 +69,7 @@ namespace Untitled_Endless_Runner
             #endregion CheckAnimationClipLength;
         }
 
+#if ENABLE_PORTAL
         private void EnablePortal()
         {
             portal.SetActive(true);
@@ -81,6 +83,7 @@ namespace Untitled_Endless_Runner
             portalAnimator.Play("Entry", 0);
             StartCoroutine(DisableObjectsAfter(2.6f, 0));
         }
+#endif
 
         private void EnablePlayer()
         {

@@ -15,7 +15,8 @@ namespace Untitled_Endless_Runner
         [SerializeField] private GameObject player, mainCamera;
 
         public Action<ObstacleStat> OnObstacleDetected;
-        public Action OnPlayerHealthOver, OnPlayerCaptured, OnResumeClicked, OnRestartFinished, OnPowersBought;
+        public Action OnPlayerHealthOver, OnPlayerCaptured, OnResumeClicked, OnRestartFinished, OnPowersBought, 
+            OnAdsRewarded, OnGameplayContinued;
         public Action<bool> OnPause_ResumeClicked;
         public Action<int> OnRestartClicked, OnGameOver, OnMainGameplayStarted;
         public Action<ObstacleTag, int> OnPowerUpCollected;

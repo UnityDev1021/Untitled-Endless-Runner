@@ -172,9 +172,9 @@ namespace Untitled_Endless_Runner
         }
 
         //On the TapToPlay button, under the MainMenuPanel
-        public void StartBackGroundScroll()
+        public void StartBackGroundScroll(bool status)
         {
-            scrollBackground = true;
+            scrollBackground = status;
         }
 
         private void ResetEnvironmentProps(int dummyData)

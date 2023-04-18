@@ -319,7 +319,25 @@ ________________________________________________________________________________
 	(-) Acquired a Google AdMob account
 	(-) Made waterfalls/Ad units in AdMob account.
 	(-) Associated Unity Ads with AdMob Account.
-
+	
+-------------------------------------------------------------------
+							18 April
+-------------------------------------------------------------------
+=> [Working] Making Ads Mechanic
+	(-) [Won't need]Show Error panel if the Ads failed to load.
+	(-) [Done For Now] Show Ads at button click.
+		[=] Made PlayerPrefs for Diamonds and made UI for Main Menu to show diamonds.
+=> Make mechanism to continue the game after buying a heart.
+	(~) Player gets a shield at the start to avoid Obstacles.
+	(~) 2 options :
+		(-) Someone magically picks up player and puts the player in the starting position
+			[=] Going with this approach.
+			[=] Made IEnumerator to return to the original position from the fallen position.
+		(-) Lerp background to start from slow to normal speed as player gets up.
+			[=] Lerp time could be set depending on how much far the player is from the centre of the camera.
+=> [Working] Making Panel and button to use Diamonds to buy hearts.
+	(-) For now, 3 diamonds will get 1 heart.
+	(-) Deactivated button if not enough Diamonds.
 _______________________________________________________________________________________________________________
 _______________________________________________________________________________________________________________
 

@@ -12,9 +12,12 @@ namespace Untitled_Endless_Runner
         public Transform cameraTransform;
 
         [Header("Power Ups Section")]
+        public int coinsBalance;
         public bool gameStarted, invincibility, speedBoost;
         public ObstacleStat[] tagsToBeDetected;
-        public int coinsBalance;
+
+        [Header("Power Ups Section")]
+        public int totalDiamonds;
 
         //[Header("PowerUps Section")]
         //protected bool ;
@@ -37,6 +40,12 @@ namespace Untitled_Endless_Runner
 
 
             Application.targetFrameRate = 60;
+        }
+
+        private void Start()
+        {
+            totalDiamonds = PlayerPrefs.GetInt("DIAMONDS_AMOUNT", 0);
+            coinsBalance = PlayerPrefs.GetInt("COIN_AMOUNT", 0);
         }
     }
 }

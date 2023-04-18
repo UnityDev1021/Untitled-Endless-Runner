@@ -1,11 +1,19 @@
+//#define TEST_MODE
+
 using GoogleMobileAds.Api;
-using System;
 using UnityEngine;
 
 namespace Untitled_Endless_Runner
 {
     public class RewardedAdsManager : MonoBehaviour
     {
+        [Header("Local References")]
+        [SerializeField] private GameLogic localGameLogic;
+
+        [Space]
+        [SerializeField] private UnityEngine.UI.Button showAdsBt;
+
+
         // Start is called before the first frame update
         private void Start()
         {
@@ -38,13 +46,9 @@ namespace Untitled_Endless_Runner
         public void LoadRewardedAd()
         {
             // Clean up the old ad before loading a new one.
-            if (rewardedAd != null)
-            {
-                rewardedAd.Destroy();
-                rewardedAd = null;
-            }
+            DestroyAd();
 
-            Debug.Log("Loading the rewarded ad.");
+            //Debug.Log("Loading the rewarded ad.");
 
             // create our request used to load the ad.
             var adRequest = new AdRequest.Builder().Build();
@@ -56,31 +60,39 @@ namespace Untitled_Endless_Runner
                     // if error is not null, the load request failed.
                     if (error != null || ad == null)
                     {
-                        Debug.LogError("Rewarded ad failed to load an ad " +
+                        Debug.Log("Rewarded ad failed to load an ad " +
                                        "with error : " + error);
                         return;
                     }
 
-                    Debug.Log("Rewarded ad loaded with response : "
-                              + ad.GetResponseInfo());
+                    //Debug.Log("Rewarded ad loaded with response : "
+                    //          + ad.GetResponseInfo());
 
                     rewardedAd = ad;
                 });
 
             RegisterEventHandlers(rewardedAd);
+            RegisterReloadHandler(rewardedAd);
         }
 
+        //Should be on the button to show rewards/ get a reward by watching an ad.
         public void ShowRewardedAd()
         {
-            const string rewardMsg =
-                "Rewarded ad rewarded the user. Type: {0}, amount: {1}.";
+            //const string rewardMsg =
+            //    "Rewarded ad rewarded the user. Type: {0}, amount: {1}.";
 
             if (rewardedAd != null && rewardedAd.CanShowAd())
             {
                 rewardedAd.Show((Reward reward) =>
                 {
                     // TODO: Reward the user.
-                    Debug.Log(String.Format(rewardMsg, reward.Type, reward.Amount));
+                    //Debug.Log(String.Format(rewardMsg, reward.Type, reward.Amount));
+#if !TEST_MODE
+                    GameManager.instance.totalDiamonds += 5;
+                    PlayerPrefs.SetInt("DIAMONDS_AMOUNT", GameManager.instance.totalDiamonds);
+                    localGameLogic.OnAdsRewarded?.Invoke();
+                    showAdsBt.enabled = true;
+#endif
                 });
             }
         }
@@ -90,34 +102,38 @@ namespace Untitled_Endless_Runner
             // Raised when the ad is estimated to have earned money.
             ad.OnAdPaid += (AdValue adValue) =>
             {
-                Debug.Log(String.Format("Rewarded ad paid {0} {1}.",
-                    adValue.Value,
-                    adValue.CurrencyCode));
+                //Debug.Log(String.Format("Rewarded ad paid {0} {1}.",
+                //    adValue.Value,
+                //    adValue.CurrencyCode));
             };
             // Raised when an impression is recorded for an ad.
             ad.OnAdImpressionRecorded += () =>
             {
-                Debug.Log("Rewarded ad recorded an impression.");
+                //Debug.Log("Rewarded ad recorded an impression.");
             };
             // Raised when a click is recorded for an ad.
             ad.OnAdClicked += () =>
             {
-                Debug.Log("Rewarded ad was clicked.");
+                //Debug.Log("Rewarded ad was clicked.");
             };
+
             // Raised when an ad opened full screen content.
             ad.OnAdFullScreenContentOpened += () =>
             {
-                Debug.Log("Rewarded ad full screen content opened.");
+                //Debug.Log("Rewarded ad full screen content opened.");
             };
+
             // Raised when the ad closed full screen content.
             ad.OnAdFullScreenContentClosed += () =>
             {
-                Debug.Log("Rewarded ad full screen content closed.");
+                //Debug.Log("Rewarded ad full screen content closed.");
+                DestroyAd();
             };
+
             // Raised when the ad failed to open full screen content.
             ad.OnAdFullScreenContentFailed += (AdError error) =>
             {
-                Debug.LogError("Rewarded ad failed to open full screen content " +
+                Debug.Log("Rewarded ad failed to open full screen content " +
                                "with error : " + error);
             };
         }
@@ -127,7 +143,7 @@ namespace Untitled_Endless_Runner
             // Raised when the ad closed full screen content.
             ad.OnAdFullScreenContentClosed += () =>
             {
-                Debug.Log("Rewarded Ad full screen content closed.");
+                //Debug.Log("Rewarded Ad full screen content closed.");
 
                 // Reload the ad so that we can show another as soon as possible.
                 LoadRewardedAd();
@@ -135,7 +151,7 @@ namespace Untitled_Endless_Runner
             // Raised when the ad failed to open full screen content.
             ad.OnAdFullScreenContentFailed += (AdError error) =>
             {
-                Debug.LogError("Rewarded ad failed to open full screen content " +
+                Debug.Log("Rewarded ad failed to open full screen content " +
                                "with error : " + error);
 
                 // Reload the ad so that we can show another as soon as possible.
@@ -150,7 +166,7 @@ namespace Untitled_Endless_Runner
         {
             if (rewardedAd != null)
             {
-                Debug.Log("Destroying banner ad.");
+                //Debug.Log("Destroying Rewarded ad.");
                 rewardedAd.Destroy();
                 rewardedAd = null;
             }

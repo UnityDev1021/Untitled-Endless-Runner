@@ -30,6 +30,7 @@ namespace Untitled_Endless_Runner
         {
             localGameLogic.OnPause_ResumeClicked += ToggleSpawn;
             localGameLogic.OnPlayerHealthOver += ResetStats;
+            localGameLogic.OnGameplayContinued += ContinueMainGameplay;
 
             spawnEnabled = true;
             Invoke(nameof(SpawnObstacle), initialSpawnTime);
@@ -40,6 +41,7 @@ namespace Untitled_Endless_Runner
         {
             localGameLogic.OnPause_ResumeClicked -= ToggleSpawn;
             localGameLogic.OnPlayerHealthOver -= ResetStats;
+            localGameLogic.OnGameplayContinued -= ContinueMainGameplay;
         }
 
         // Start is called before the first frame update
@@ -87,6 +89,11 @@ namespace Untitled_Endless_Runner
             if (spawnEnabled)
                 Invoke(nameof(SpawnObstacle), obstacleGroups[obstacleGroupIndex].spawnNextAfter);
             //Debug.Log($"Spawning Obstacle : {obstacleGroups[obstacleGroupIndex].name}, Spawn After : {obstacleGroups[obstacleGroupIndex].spawnNextAfter}");
+        }
+
+        private void ContinueMainGameplay()
+        {
+            ToggleSpawn(true);
         }
 
         private void ToggleSpawn(bool toggleValue)

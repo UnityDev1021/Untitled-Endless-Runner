@@ -1,7 +1,9 @@
 #define MOBILE_CONTROLS                     //For Mobile Controls
 #define TEST_MODE
 
+using GooglePlayGames.BasicApi;
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -29,8 +31,9 @@ namespace Untitled_Endless_Runner
 
         [Space]
         private byte jumpCount;
-        private bool hasJumped, unAlive, isSliding, isDashing, firstJump, disableSlide, disableJump, disableDash;
+        private bool hasJumped, unAlive, isSliding, isDashing, disableSlide, disableJump;
         public bool gameStarted;
+        private Vector2 unAlivePos;
 
 #if MOBILE_CONTROLS
         [Header("Mobile Controls")]
@@ -46,6 +49,7 @@ namespace Untitled_Endless_Runner
             localGameLogic.OnPowerUpCollected += TogglePowerUp;
             localGameLogic.OnPlayerAction += ToggleAction;
             localGameLogic.OnMainGameplayStarted += InvokeStartPowers;
+            localGameLogic.OnGameplayContinued += InvokePlayAnimation;
             //localGameLogic.OnRestartFinished += ResetPlayerStats;
 
 #if TEST_MODE
@@ -61,6 +65,7 @@ namespace Untitled_Endless_Runner
             localGameLogic.OnPowerUpCollected -= TogglePowerUp;
             localGameLogic.OnPlayerAction -= ToggleAction;
             localGameLogic.OnMainGameplayStarted -= InvokeStartPowers;
+            localGameLogic.OnGameplayContinued -= InvokePlayAnimation;
             //localGameLogic.OnRestartFinished -= ResetPlayerStats;
 
 #if TEST_MODE
@@ -74,7 +79,6 @@ namespace Untitled_Endless_Runner
             heart = localGameLogic.totalHearts;
         }
 #endif
-
 
         // Start is called before the first frame update
         void Start()
@@ -192,6 +196,39 @@ namespace Untitled_Endless_Runner
             }
         }
 
+        //On the ReturnToOGPos button, under the Test Canvas
+        public void Alive()
+        {
+            localGameLogic.OnPowerUpCollected?.Invoke(ObstacleTag.Shield, 1);               //Give a shield to the player
+            playerRB.bodyType = RigidbodyType2D.Kinematic;
+            playerAnimator.Play("GetUp" ,0 ,0f);
+            _ = StartCoroutine(ReturnToOgPos());
+        }
+
+        private IEnumerator ReturnToOgPos()
+        {
+            Vector2 startPos = transform.position;
+            Vector2 endPos = new Vector2(unAlivePos.x, -1f);
+            float time = 0f;
+
+            while (true)
+            {
+                time += Time.deltaTime;
+
+                if (time >= 1f)
+                    break;
+
+                transform.position = Vector2.Lerp(startPos, endPos, time);
+                yield return null;
+            }
+            playerRB.bodyType = RigidbodyType2D.Dynamic;
+
+            yield return new WaitForSeconds(0.5f);
+            unAlive = true;
+            gameStarted = true;
+            GameManager.instance.gameStarted = true;
+        }
+
         private void ToggleAction(PlayerAction actionTaken, byte status)
         {
             switch (actionTaken)
@@ -247,6 +284,11 @@ namespace Untitled_Endless_Runner
         public void SetPlayerAfterEntry()
         {
             playerRenderer.maskInteraction = SpriteMaskInteraction.None;
+        }
+
+        private void InvokePlayAnimation()
+        {
+            //PlayAnimation(0);
         }
 
         private void PlayAnimation(int animationIndex)
@@ -501,11 +543,12 @@ namespace Untitled_Endless_Runner
             }
         }
 
-        public void UnAlive()
+        private void UnAlive()
         {
             unAlive = true;
             //Debug.Log($"Player is unalived : {unAlive}");
             playerAnimator.Play("Hit", 0);
+            unAlivePos = transform.position;
             playerRB.AddForce(transform.right * 12f, ForceMode2D.Impulse);
 
             int coinsBalance = PlayerPrefs.GetInt("COIN_AMOUNT", 0);

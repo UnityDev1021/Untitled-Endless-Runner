@@ -15,9 +15,9 @@ namespace Untitled_Endless_Runner
         private bool halfHeart;
 
         [Header("UI")]
-        [SerializeField] private Sprite[] heartSprites, jumpBtModes;
-        [SerializeField] private GameObject heartContainer, gameOverPanel, airDashBt, jumpBt;
-        [SerializeField] private TMP_Text finalScoreTxt, totalCoinsTxt, highScoreTxt, coinsBalanceTxt;
+        [SerializeField] private Sprite[] heartSprites;
+        [SerializeField] private GameObject heartContainer, buyHeartsPanel, airDashBt, jumpBt, buyHeartsBt;
+        [SerializeField] private TMP_Text finalScoreTxt, totalCoinsTxt, highScoreTxt, coinsBalanceTxt, diamondsTxt;
         [SerializeField] private Image armorTimer, score2xTimer;
 
         [Header ("Prefabs List")]
@@ -40,14 +40,16 @@ namespace Untitled_Endless_Runner
         private void OnEnable()
         {
             localGameLogic.OnObstacleDetected += UpdateHeartUI;
-            localGameLogic.OnPlayerHealthOver += DisplayEndGameScreen;
+            localGameLogic.OnPlayerHealthOver += DisplayBuyHeartsPanel;
             localGameLogic.OnPlayerCaptured += EmptyHearts;
             localGameLogic.OnRestartFinished += CallFadeOut;
             localGameLogic.OnRestartFinished += FillHearts;
+            localGameLogic.OnRestartFinished += UpdateDiamondsAmount;
             localGameLogic.OnGameOver += UpdateFinalScore;
             localGameLogic.OnPowerUpCollected += UpdatePowerUpUI;
             localGameLogic.OnMainGameplayStarted += InvokeStartPowers;
             localGameLogic.OnPowersBought += UpdateCoins;
+            localGameLogic.OnAdsRewarded += UpdateDiamondsAmount;
 
 #if TEST_MODE
             localGameLogic.FillUpPlayerHealth += RestorePlayerHealth;
@@ -56,14 +58,16 @@ namespace Untitled_Endless_Runner
         private void OnDisable()
         {
             localGameLogic.OnObstacleDetected -= UpdateHeartUI;
-            localGameLogic.OnPlayerHealthOver -= DisplayEndGameScreen;
+            localGameLogic.OnPlayerHealthOver -= DisplayBuyHeartsPanel;
             localGameLogic.OnPlayerCaptured -= EmptyHearts;
             localGameLogic.OnRestartFinished -= CallFadeOut;
             localGameLogic.OnRestartFinished -= FillHearts;
+            localGameLogic.OnRestartFinished -= UpdateDiamondsAmount;
             localGameLogic.OnGameOver -= UpdateFinalScore;
             localGameLogic.OnPowerUpCollected -= UpdatePowerUpUI;
             localGameLogic.OnMainGameplayStarted -= InvokeStartPowers;
             localGameLogic.OnPowersBought -= UpdateCoins;
+            localGameLogic.OnAdsRewarded -= UpdateDiamondsAmount;
 
 #if TEST_MODE
             localGameLogic.FillUpPlayerHealth -= RestorePlayerHealth;
@@ -88,11 +92,12 @@ namespace Untitled_Endless_Runner
             PlayerPrefs.SetInt("COIN_AMOUNT", 200);
 #endif
             coinsBalanceTxt.text = PlayerPrefs.GetInt("COIN_AMOUNT", 0).ToString();
+            diamondsTxt.text = PlayerPrefs.GetInt("DIAMONDS_AMOUNT", 0).ToString();
         }
 
         private void UpdateHeartUI(ObstacleStat obstacleStat)
         {
-            Debug.Log($"Calling UPgrade");
+            //Debug.Log($"Calling UPgrade");
             switch (obstacleStat.type)
             {
                 case ObstacleType.Attack:
@@ -113,7 +118,7 @@ namespace Untitled_Endless_Runner
                     }
                 case ObstacleType.Power_Up:
                     {
-                        Debug.Log($"Calling Heart PowerUp");
+                        //Debug.Log($"Calling Heart PowerUp");
 
                         switch (obstacleStat.tag)
                         {
@@ -140,7 +145,7 @@ namespace Untitled_Endless_Runner
 
                                         currentHeart++;
                                     }
-                                    Debug.Log($"Current Heart : {currentHeart}");
+                                    //Debug.Log($"Current Heart : {currentHeart}");
 
                                     break;
                                 }
@@ -181,10 +186,24 @@ namespace Untitled_Endless_Runner
             }
         }
 
-        private void DisplayEndGameScreen()
+        private void DisplayBuyHeartsPanel()
         {
-            gameOverPanel.SetActive(true);
+            buyHeartsPanel.SetActive(true);
+            if (PlayerPrefs.GetInt("DIAMONDS_AMOUNT", 0) >= 3)
+                buyHeartsBt.GetComponent<Button>().enabled = true;
+
             //Debug.Log($"Game Over Panel Active : {gameOverPanel.activeSelf}");
+        }
+
+        //On BuyHearts button under BuyHearts Panel
+        public void BuyHearts()
+        {
+            localGameLogic.OnGameplayContinued?.Invoke();           //Alive Player            
+        }
+
+        private void UpdateDiamondsAmount()
+        {
+            diamondsTxt.text = PlayerPrefs.GetInt("DIAMONDS_AMOUNT", 0).ToString();
         }
 
         private void UpdateFinalScore(int finalScore)

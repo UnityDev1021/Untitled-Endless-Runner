@@ -52,6 +52,7 @@ namespace Untitled_Endless_Runner
             localGameLogic.OnPlayerHealthOver += ToggleEffects;
             localGameLogic.OnRestartFinished += ToggleEffects;
             localGameLogic.OnPowerUpCollected += CheckPowerUp;
+            localGameLogic.OnGameplayContinued += ToggleEffects;
             //Debug.Log($"Enabling");
         }
 
@@ -62,6 +63,7 @@ namespace Untitled_Endless_Runner
             localGameLogic.OnPlayerHealthOver -= ToggleEffects;
             localGameLogic.OnRestartFinished -= ToggleEffects;
             localGameLogic.OnPowerUpCollected -= CheckPowerUp;
+            localGameLogic.OnGameplayContinued -= ToggleEffects;
             //Debug.Log($"Disabling");
         }
 

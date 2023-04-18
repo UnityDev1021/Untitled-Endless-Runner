@@ -20,11 +20,11 @@ AnimationClip:
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: -1665010013, guid: cdbb65c0d3cb6a34ab52fdb0b171404b, type: 3}
+      value: {fileID: 1714159402, guid: 22ad7ca8ba8503a42a939d7ab8b31603, type: 3}
     - time: 0.13333334
-      value: {fileID: -871325150, guid: 46e23bda5608f8e459557e60a57407eb, type: 3}
+      value: {fileID: 21300000, guid: b72822226b348694aa999b6b2615d4f1, type: 3}
     - time: 0.26666668
-      value: {fileID: -1893487367, guid: 46e23bda5608f8e459557e60a57407eb, type: 3}
+      value: {fileID: 21300000, guid: 528504ecaf011084d87cbd7c4908e688, type: 3}
     attribute: m_Sprite
     path: Bhagoda
     classID: 212
@@ -44,9 +44,9 @@ AnimationClip:
       customType: 23
       isPPtrCurve: 1
     pptrCurveMapping:
-    - {fileID: -1665010013, guid: cdbb65c0d3cb6a34ab52fdb0b171404b, type: 3}
-    - {fileID: -871325150, guid: 46e23bda5608f8e459557e60a57407eb, type: 3}
-    - {fileID: -1893487367, guid: 46e23bda5608f8e459557e60a57407eb, type: 3}
+    - {fileID: 1714159402, guid: 22ad7ca8ba8503a42a939d7ab8b31603, type: 3}
+    - {fileID: 21300000, guid: b72822226b348694aa999b6b2615d4f1, type: 3}
+    - {fileID: 21300000, guid: 528504ecaf011084d87cbd7c4908e688, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
