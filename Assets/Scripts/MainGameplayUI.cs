@@ -11,14 +11,15 @@ namespace Untitled_Endless_Runner
     public class MainGameplayUI : MonoBehaviour
     {
         [Header ("Heart Logic")]
-        private byte currentHeart = 4;                      //By defautl will be 4. Will increase as time goes by or the player collects more hearts.
+        private sbyte currentHeart = 4;                      //By defautl will be 4. Will increase as time goes by or the player collects more hearts.
         private bool halfHeart;
 
         [Header("UI")]
         [SerializeField] private Sprite[] heartSprites;
-        [SerializeField] private GameObject heartContainer, buyHeartsPanel, airDashBt, jumpBt, buyHeartsBt;
-        [SerializeField] private TMP_Text finalScoreTxt, totalCoinsTxt, highScoreTxt, coinsBalanceTxt, diamondsTxt;
+        [SerializeField] private GameObject heartContainer, buyHeartsPanel, airDashBt, jumpBt;
+        [SerializeField] private TMP_Text finalScoreTxt, totalCoinsTxt, highScoreTxt, coinsBalanceTxt, diamondsTxt, coinsCollectedTxt;
         [SerializeField] private Image armorTimer, score2xTimer;
+        [SerializeField] private Button[] buyHeartsBt;
 
         [Header ("Prefabs List")]
         [SerializeField] private GameObject heartPrefab;
@@ -87,7 +88,7 @@ namespace Untitled_Endless_Runner
 
         private void Start()
         {
-            currentHeart = (byte)(localGameLogic.totalHearts - 1);
+            currentHeart = (sbyte)(localGameLogic.totalHearts - 1);
 #if TEST_MODE
             PlayerPrefs.SetInt("COIN_AMOUNT", 200);
 #endif
@@ -132,7 +133,7 @@ namespace Untitled_Endless_Runner
                                         currentHeart++;
                                     }
                                     else
-                                    {
+                                    {                                        
                                         //if half-heart, then fill the next heart with half heart, and fill the current heart with full heart
                                         if (halfHeart)
                                         {
@@ -141,8 +142,15 @@ namespace Untitled_Endless_Runner
                                         }
                                         //if the next heart is empty, then fill the next heart with full heart
                                         else
-                                            heartContainer.transform.GetChild(currentHeart + 1).GetComponent<Image>().sprite = heartSprites[0];
+                                        {
+                                            //Debug.Log($"Temp Heart Count : {currentHeart}");
+                                            //byte tempHeartCount = (currentHeart == 0) ? (byte) 0 : (byte) (currentHeart + 1);             //Consider Reset
+                                            //Debug.Log($"Temp Heart Count : {tempHeartCount}");
 
+                                            heartContainer.transform.GetChild(currentHeart + 1).GetComponent<Image>().sprite = heartSprites[0];
+                                        }
+
+                                        //currentHeart = (currentHeart == 0) ? (sbyte) 0 : currentHeart++;             //Consider Reset
                                         currentHeart++;
                                     }
                                     //Debug.Log($"Current Heart : {currentHeart}");
@@ -168,6 +176,46 @@ namespace Untitled_Endless_Runner
             }
         }
 
+        #region OldCode
+        //Moved to PlayController
+        /*private IEnumerator DisplayHurtPanel()
+        {
+            float time = 0, startVal = 0f, endVal = 0.45f, timeSpeedMultiplier = 2f;
+             byte executedTime = 0;
+
+             while (true)
+             {
+                 time += timeSpeedMultiplier * Time.deltaTime;
+
+                 if (time >= 1f)
+                 {
+                     float temp = startVal;
+                     startVal = endVal;
+                     endVal = temp;
+                     time = 0f;
+
+                     executedTime++;
+                     Debug.Log($"Executed Time : {executedTime}");
+                     if (executedTime == 2)                  //Break when returning to original value of 0
+                     {
+                         Debug.Log($"Breaking : {executedTime}");
+                         break;
+                     }
+                 }
+
+                 playerHurtPanel.color = new Color(1f, 0f, 0f, Mathf.Lerp(startVal, endVal, time));
+
+                 yield return null;
+             }
+        }*/
+        #endregion OldCode
+
+        //On the BuyHeartsBt under the BuyHeartsPanel
+        public void ResetCurrentHeart()
+        {
+            currentHeart = 0;
+        }
+
         private void EmptyHearts()
         {
             for (int i = 0; i < heartContainer.transform.childCount ; i++)
@@ -178,7 +226,7 @@ namespace Untitled_Endless_Runner
 
         private void FillHearts()
         {
-            currentHeart = (byte)(localGameLogic.totalHearts - 1);
+            currentHeart = (sbyte)(localGameLogic.totalHearts - 1);
 
             for (int i = 0; i < heartContainer.transform.childCount; i++)
             {
@@ -189,21 +237,30 @@ namespace Untitled_Endless_Runner
         private void DisplayBuyHeartsPanel()
         {
             buyHeartsPanel.SetActive(true);
+
             if (PlayerPrefs.GetInt("DIAMONDS_AMOUNT", 0) >= 3)
-                buyHeartsBt.GetComponent<Button>().enabled = true;
+                buyHeartsBt[0].enabled = true;
+            if (PlayerPrefs.GetInt("DIAMONDS_AMOUNT", 0) >= 5)
+                buyHeartsBt[1].enabled = true;
+            if (PlayerPrefs.GetInt("DIAMONDS_AMOUNT", 0) >= 8)
+                buyHeartsBt[2].enabled = true;
 
             //Debug.Log($"Game Over Panel Active : {gameOverPanel.activeSelf}");
         }
 
         //On BuyHearts button under BuyHearts Panel
-        public void BuyHearts()
+        public void BuyHearts(int heartCost)
         {
+            int diamondsAmount = PlayerPrefs.GetInt("DIAMONDS_AMOUNT", 0);
+            diamondsAmount -= heartCost;
+            PlayerPrefs.SetInt("DIAMONDS_AMOUNT", diamondsAmount);
             localGameLogic.OnGameplayContinued?.Invoke();           //Alive Player            
         }
 
         private void UpdateDiamondsAmount()
         {
             diamondsTxt.text = PlayerPrefs.GetInt("DIAMONDS_AMOUNT", 0).ToString();
+            totalCoinsTxt.text = "0";
         }
 
         private void UpdateFinalScore(int finalScore)
@@ -232,6 +289,7 @@ namespace Untitled_Endless_Runner
                 SaveSystem.SaveHighScore(playerData);
             }
 
+            coinsCollectedTxt.text = totalCoinsTxt.text;
             coinsBalanceTxt.text = PlayerPrefs.GetInt("COIN_AMOUNT", 0).ToString();
             //Debug.Log("Coins Amount After : " + PlayerPrefs.GetInt("COIN_AMOUNT", -1));
         }

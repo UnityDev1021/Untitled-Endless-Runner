@@ -130,8 +130,8 @@ namespace Untitled_Endless_Runner
             //localObstacleSpawner.enabled = true;           //Replaced with buttons
 
             //backgroundAnimator.keepAnimatorStateOnDisable = true;
-            backgroundAnimator.enabled = true;
-            backgroundAnimator.Play("Day_Night_Cycle2", 0, 0f);
+            //backgroundAnimator.enabled = true;                                //Keeping BG static
+            //backgroundAnimator.Play("Day_Night_Cycle2", 0, 0f);                                //Keeping BG static
 
             //playerAnimator.SetBool("RUN", true);
             playerAnimator.Play("Idle_Run", 0, 0f);

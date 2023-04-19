@@ -27,6 +27,7 @@ namespace Untitled_Endless_Runner
             localGameLogic.OnRestartClicked += ResetEnvironmentProps;
             localGameLogic.OnPowerUpCollected += CheckPowerUp;
             localGameLogic.OnPlayerAction += InvokeToggleSpeed;
+            localGameLogic.OnGameplayContinued += InvokeBGScrolling;
         }
 
         private void OnDisable()
@@ -35,6 +36,7 @@ namespace Untitled_Endless_Runner
             localGameLogic.OnRestartClicked -= ResetEnvironmentProps;
             localGameLogic.OnPowerUpCollected -= CheckPowerUp;
             localGameLogic.OnPlayerAction -= InvokeToggleSpeed;
+            localGameLogic.OnGameplayContinued -= InvokeBGScrolling;
         }
 
         // Update is called once per frame
@@ -172,9 +174,14 @@ namespace Untitled_Endless_Runner
         }
 
         //On the TapToPlay button, under the MainMenuPanel
-        public void StartBackGroundScroll(bool status)
+        public void StartBackGroundScroll()
         {
-            scrollBackground = status;
+            scrollBackground = true;
+        }
+
+        private void InvokeBGScrolling()
+        {
+            Invoke(nameof(StartBackGroundScroll), 1.5f);
         }
 
         private void ResetEnvironmentProps(int dummyData)

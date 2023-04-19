@@ -24,16 +24,17 @@ namespace Untitled_Endless_Runner
             // Initialize the Google Mobile Ads SDK.
             MobileAds.Initialize(initStatus =>
             {
-                Debug.Log($"Rewarded Initialization Status : {initStatus.ToString()}");
+                //Debug.Log($"Rewarded Initialization Status : {initStatus.ToString()}");
                 LoadRewardedAd();
             });
         }
 
         // These ad units are configured to always serve test ads.
 #if UNITY_ANDROID
-        private string _adUnitId = "ca-app-pub-3940256099942544/5224354917";
+        private string _adUnitId = "ca-app-pub-3940256099942544/5224354917";        //Test ID
+        //private string _adUnitId = "ca-app-pub-6547462235936410/9801503599";            //Live ID
 #elif UNITY_IPHONE
-  private string _adUnitId = "ca-app-pub-3940256099942544/1712485313";
+  private string _adUnitId = "ca-app-pub-3940256099942544/1712485313";              //notconfigured now
 #else
   private string _adUnitId = "unused";
 #endif
@@ -69,10 +70,11 @@ namespace Untitled_Endless_Runner
                     //          + ad.GetResponseInfo());
 
                     rewardedAd = ad;
-                });
+                    showAdsBt.enabled = true;
 
-            RegisterEventHandlers(rewardedAd);
-            RegisterReloadHandler(rewardedAd);
+                    RegisterEventHandlers(rewardedAd);
+                    RegisterReloadHandler(rewardedAd);
+                });
         }
 
         //Should be on the button to show rewards/ get a reward by watching an ad.

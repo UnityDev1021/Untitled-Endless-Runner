@@ -335,9 +335,33 @@ ________________________________________________________________________________
 			[=] Made IEnumerator to return to the original position from the fallen position.
 		(-) Lerp background to start from slow to normal speed as player gets up.
 			[=] Lerp time could be set depending on how much far the player is from the centre of the camera.
-=> [Working] Making Panel and button to use Diamonds to buy hearts.
+=> [Done For Now] Making Panel and button to use Diamonds to buy hearts.
 	(-) For now, 3 diamonds will get 1 heart.
 	(-) Deactivated button if not enough Diamonds.
+	
+-------------------------------------------------------------------
+							19 April
+-------------------------------------------------------------------
+=> [Fixed For Now] Heart mechanism when reset after buying heart with diamonds.
+=> [Done For Now] Make the background scroll again after buying hearts.
+	(-) Calling Invoke after 1.5 seconds, accounting for the player being picked up and falling to the ground. Might need sme calibaration.
+=> [Done For Now] Making Hurt MEchanism Visual
+	(-) Made the Screen Flash Red when the PLayer is hurt
+		[=] Using Ienumerator to slowly fade in red and then fade out.
+		[=] Instead of using IEnumerator, just enabling and disabling the red panel.
+	(-) Flashing Screen Red multiple times might not be a good idea.
+	(-) Making the player flsah red for a certain amount of time to indicate that the player has taken damage.
+=> [Done For Now] Showing Total coins collected during the run on the game over panel.
+=> [Done For Now] The Ads will give 5 diamonds per ad.
+=> [Done For Now] On buying hearts, invoking ToggleSpawn after 1.5s as it takes time for the player to reset to the original position.
+=> [Fixed For Now] Buying Multiple Hearts causes problem where the currentHeart does not work properly as we use byte, which is unsigned.
+	(-) Instead using signed byte (sbyte).
+=> [Fixed For Now] AdsManager throws error in RegisterEventHandlers
+	(-) They were being called without ad initializing.
+=> [Important] Checking off verbose logging of Version Handler.
+=> Keeping Background static for now.
+=> Searching Sound Effects.
+
 _______________________________________________________________________________________________________________
 _______________________________________________________________________________________________________________
 

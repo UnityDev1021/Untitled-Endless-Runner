@@ -28,12 +28,19 @@ namespace Untitled_Endless_Runner
 
         [Header("Player PowerUps")]
         [SerializeField] private int totalCoins;                    //Serialize For Test
+        [SerializeField] private ObstacleStat heartStat;
+        [SerializeField] private SpriteRenderer playerSprite;
+        private Coroutine hurtCoroutine;
 
         [Space]
         private byte jumpCount;
         private bool hasJumped, unAlive, isSliding, isDashing, disableSlide, disableJump;
         public bool gameStarted;
         private Vector2 unAlivePos;
+
+        [Header("Sound Effects")]
+        [SerializeField] private AudioSource soundEffectsSource;
+        [SerializeField] private AudioClip[] soundEffectsClips;
 
 #if MOBILE_CONTROLS
         [Header("Mobile Controls")]
@@ -49,7 +56,6 @@ namespace Untitled_Endless_Runner
             localGameLogic.OnPowerUpCollected += TogglePowerUp;
             localGameLogic.OnPlayerAction += ToggleAction;
             localGameLogic.OnMainGameplayStarted += InvokeStartPowers;
-            localGameLogic.OnGameplayContinued += InvokePlayAnimation;
             //localGameLogic.OnRestartFinished += ResetPlayerStats;
 
 #if TEST_MODE
@@ -65,7 +71,6 @@ namespace Untitled_Endless_Runner
             localGameLogic.OnPowerUpCollected -= TogglePowerUp;
             localGameLogic.OnPlayerAction -= ToggleAction;
             localGameLogic.OnMainGameplayStarted -= InvokeStartPowers;
-            localGameLogic.OnGameplayContinued -= InvokePlayAnimation;
             //localGameLogic.OnRestartFinished -= ResetPlayerStats;
 
 #if TEST_MODE
@@ -197,9 +202,13 @@ namespace Untitled_Endless_Runner
         }
 
         //On the ReturnToOGPos button, under the Test Canvas
-        public void Alive()
+        public void Alive(int heartsAmount)
         {
             localGameLogic.OnPowerUpCollected?.Invoke(ObstacleTag.Shield, 1);               //Give a shield to the player
+            for (int i = 0; i < heartsAmount; i++)
+            {
+                localGameLogic.OnObstacleDetected?.Invoke(heartStat);                    //Give a heart to the player
+            }
             playerRB.bodyType = RigidbodyType2D.Kinematic;
             playerAnimator.Play("GetUp" ,0 ,0f);
             _ = StartCoroutine(ReturnToOgPos());
@@ -269,8 +278,9 @@ namespace Untitled_Endless_Runner
         private void ResetPlayerStats(int dummyData)
         {
             unAlive = false;
+            totalCoins = 0;
             gameStarted = false;
-            Debug.Log($"Un Alive set to false : {unAlive}");
+            //Debug.Log($"Un Alive set to false : {unAlive}");
             this.enabled = false;
         }
 
@@ -284,11 +294,6 @@ namespace Untitled_Endless_Runner
         public void SetPlayerAfterEntry()
         {
             playerRenderer.maskInteraction = SpriteMaskInteraction.None;
-        }
-
-        private void InvokePlayAnimation()
-        {
-            //PlayAnimation(0);
         }
 
         private void PlayAnimation(int animationIndex)
@@ -340,7 +345,7 @@ namespace Untitled_Endless_Runner
 
         public void ObstacleDetected(ObstacleStat obstacleStat)
         {
-            //Debug.Log($"Obstacle Detected : {obstacleStat.tag}");
+            Debug.Log($"Obstacle Detected : {obstacleStat.tag}");
             switch (obstacleStat.type)
             {
                 case ObstacleType.Attack:
@@ -560,12 +565,26 @@ namespace Untitled_Endless_Runner
 
         public void TakeDamage()
         {
+            soundEffectsSource.clip = soundEffectsClips[0];
+            soundEffectsSource.Play();
+
             heart -= damageFromObstacle;
 
             if (heart <= 0f)
                 UnAlive();
 
-            //Debug.Log($"Taking Damage : {heart}, Damage : {damageFromObstacle}");
+            if (hurtCoroutine != null)
+                StopCoroutine(hurtCoroutine);
+            playerSprite.color = Color.red;
+            hurtCoroutine = StartCoroutine(ReturnSpriteToNormal());
+            //Debug.Log($"Taking Damage : {heart}, Damage : {damageFromObstacle}, Aplha value : {playerSprite.color}");
+        }
+
+        private IEnumerator ReturnSpriteToNormal()
+        {
+            yield return new WaitForSeconds(0.1f);
+            playerSprite.color = new Color(1f, 1f, 1f, 1f);
+            //Debug.Log($"Flashing, Player : {playerSprite.color}");
         }
     }
 }

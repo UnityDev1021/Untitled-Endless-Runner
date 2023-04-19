@@ -71,7 +71,7 @@ namespace Untitled_Endless_Runner
                 // Continue with Play Games Services
                 PlayGamesPlatform.Instance.RequestServerSideAccess(/* forceRefreshToken= */ true, async code =>
                 {
-                    Debug.Log("Authorization code: " + code);
+                    //Debug.Log("Authorization code: " + code);
                     tokenGPGS = code;
                     // send code to server          // This token serves as an example to be used for SignInWithGooglePlayGames                    
                     await SignInWithGooglePlayGamesAsync(tokenGPGS);

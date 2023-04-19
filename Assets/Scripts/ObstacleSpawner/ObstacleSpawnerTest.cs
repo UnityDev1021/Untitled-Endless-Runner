@@ -93,6 +93,11 @@ namespace Untitled_Endless_Runner
 
         private void ContinueMainGameplay()
         {
+            Invoke(nameof(InvokeToggleSpawn), 1.5f);
+        }
+
+        private void InvokeToggleSpawn()
+        {
             ToggleSpawn(true);
         }
 
