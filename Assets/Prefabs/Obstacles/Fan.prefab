@@ -4994,7 +4994,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcb32a9f2d9171b4d9b5d5650a067e34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enableMove: 0
   localGameLogic: {fileID: 0}
   cameraTransform: {fileID: 0}
   effectStatus: 3

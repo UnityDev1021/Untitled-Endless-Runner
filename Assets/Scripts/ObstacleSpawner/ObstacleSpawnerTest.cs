@@ -55,7 +55,7 @@ namespace Untitled_Endless_Runner
         {
             transform.localPosition = Vector3.zero;
             ToggleSpawn(false);
-            //Debug.Log($"Calling For Reset : {spawnEnabled}");
+            Debug.Log($"Calling For Reset : {spawnEnabled}");
         }
 
         public void SpawnObstacle()

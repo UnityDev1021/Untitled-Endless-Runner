@@ -1,4 +1,4 @@
-#define TEST_MODE
+//#define TEST_MODE
 
 using System;
 using System.Collections;
@@ -48,7 +48,6 @@ namespace Untitled_Endless_Runner
             localGameLogic.OnRestartFinished += UpdateDiamondsAmount;
             localGameLogic.OnGameOver += UpdateFinalScore;
             localGameLogic.OnPowerUpCollected += UpdatePowerUpUI;
-            localGameLogic.OnMainGameplayStarted += InvokeStartPowers;
             localGameLogic.OnPowersBought += UpdateCoins;
             localGameLogic.OnAdsRewarded += UpdateDiamondsAmount;
 
@@ -66,7 +65,6 @@ namespace Untitled_Endless_Runner
             localGameLogic.OnRestartFinished -= UpdateDiamondsAmount;
             localGameLogic.OnGameOver -= UpdateFinalScore;
             localGameLogic.OnPowerUpCollected -= UpdatePowerUpUI;
-            localGameLogic.OnMainGameplayStarted -= InvokeStartPowers;
             localGameLogic.OnPowersBought -= UpdateCoins;
             localGameLogic.OnAdsRewarded -= UpdateDiamondsAmount;
 
@@ -101,6 +99,11 @@ namespace Untitled_Endless_Runner
             //Debug.Log($"Calling UPgrade");
             switch (obstacleStat.type)
             {
+                case ObstacleType.Boost:
+                case ObstacleType.Normal:
+                case ObstacleType.Normal_Attack:
+                    break;
+
                 case ObstacleType.Attack:
                     {
                         if (!halfHeart)
@@ -294,17 +297,6 @@ namespace Untitled_Endless_Runner
             //Debug.Log("Coins Amount After : " + PlayerPrefs.GetInt("COIN_AMOUNT", -1));
         }
 
-        private void InvokeStartPowers(int powerIndex)
-        {
-            for (int i = 0; i < 5; i++)
-            {
-                if ((powerIndex & (1 << i)) != 0)               //The "i" contains the Power Index which needs to be activated.
-                {
-                    UpdatePowerUpUI(GameManager.instance.tagsToBeDetected[i].tag, 1);
-                }
-                //Debug.Log($"Power Index : {Convert.ToString(powerIndex, 2)}, i : {i} , condition : {(powerIndex & (1 << i))}");
-            }
-        }
         private void UpdateCoins()
         {
             coinsBalanceTxt.text = GameManager.instance.coinsBalance.ToString();

@@ -1,4 +1,4 @@
-#define TEST_MODE
+//#define TEST_MODE
 
 using System;
 //using UnityEditor.Animations;
@@ -18,7 +18,7 @@ namespace Untitled_Endless_Runner
         public Action OnPlayerHealthOver, OnPlayerCaptured, OnResumeClicked, OnRestartFinished, OnPowersBought, 
             OnAdsRewarded, OnGameplayContinued;
         public Action<bool> OnPause_ResumeClicked;
-        public Action<int> OnRestartClicked, OnGameOver, OnMainGameplayStarted;
+        public Action<int> OnRestartClicked, OnGameOver;
         public Action<ObstacleTag, int> OnPowerUpCollected;
 
         [Header("Player Actions")]
@@ -99,6 +99,8 @@ namespace Untitled_Endless_Runner
 
                     if (powerIndex == 5)                                                //Heart Power-Up
                         OnObstacleDetected?.Invoke(GameManager.instance.tagsToBeDetected[powerIndex]);
+                    //else
+                    //    OnPowerUpCollected?.Invoke(GameManager.instance.tagsToBeDetected[powerIndex].tag, 1);
                 }
                 else
                     return;
@@ -133,11 +135,26 @@ namespace Untitled_Endless_Runner
             //backgroundAnimator.enabled = true;                                //Keeping BG static
             //backgroundAnimator.Play("Day_Night_Cycle2", 0, 0f);                                //Keeping BG static
 
+            backgroundAnimator.enabled = true;                                //Keeping BG static
+            backgroundAnimator.Play("DayAnim", 0, 0f);                                //Keeping BG static
+
             //playerAnimator.SetBool("RUN", true);
             playerAnimator.Play("Idle_Run", 0, 0f);
             player.GetComponent<PlayerController>().enabled = true;
             player.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
-            OnMainGameplayStarted?.Invoke(startPowers);
+            InvokeStartPowers();
+        }
+
+        private void InvokeStartPowers()
+        {
+            for (int i = 0; i < 5; i++)
+            {
+                if ((startPowers & (1 << i)) != 0)               //The "i" contains the Power Index which needs to be activated.
+                {
+                    OnPowerUpCollected?.Invoke(GameManager.instance.tagsToBeDetected[i].tag, 1);
+                }
+                //Debug.Log($"Power Index : {Convert.ToString(powerIndex, 2)}, i : {i} , condition : {(powerIndex & (1 << i))}");
+            }
         }
 
         private void ToggleGameStatus(bool toggleValue)
@@ -164,7 +181,7 @@ namespace Untitled_Endless_Runner
             mainCamera.transform.position = new Vector3(0f, mainCamera.transform.position.y, mainCamera.transform.position.z);
             OnRestartFinished?.Invoke();
 
-            GameManager.instance.gameStarted = false;
+            //GameManager.instance.gameStarted = false;
             //localObstacleSpawner.enabled = false;           //Replaced with buttons
         }
 

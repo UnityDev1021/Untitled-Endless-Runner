@@ -96,6 +96,11 @@ namespace Untitled_Endless_Runner
             {
                 switch (actionTaken)
                 {
+                    //Do Nothing
+                    case PlayerAction.Hit:
+                    case PlayerAction.Jump:
+                        break;
+
                     case PlayerAction.Slide:
                         {
                             moveSpeed = 0.2f;

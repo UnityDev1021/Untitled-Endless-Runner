@@ -122,7 +122,7 @@ namespace Untitled_Endless_Runner
 
         private void DisableObstacle(int dummyData)
         {
-            //Debug.Log($"Restart activated, Disabling Obstacle");
+            Debug.Log($"Restart activated, Disabling Obstacle : {transform.name}");
             gameObject.SetActive(false);
         }
 
@@ -134,7 +134,7 @@ namespace Untitled_Endless_Runner
             {
                 //collision.transform.GetComponent<PlayerController>().ObstacleDetected(obstacleStat);
 
-                if ((effectStatus == 0 && effectStatus != 2) || effectStatus >= 3)      //3 - Continuos, 2 - Nothing, 0 - Once
+                if (GameManager.instance.gameStarted && ((effectStatus == 0 && effectStatus != 2) || effectStatus >= 3))      //3 - Continuos, 2 - Nothing, 0 - Once
                 {
                     ApplyEffect(collision.gameObject);
                     //Invoke("EnableEffectAgain", 1f);
@@ -144,7 +144,7 @@ namespace Untitled_Endless_Runner
 
         private void OnTriggerExit2D(Collider2D collision)
         {
-            if (collision.transform.CompareTag("Player"))
+            if (collision.transform.CompareTag("Player") && effectStatus != 4)
             {
                 ClearEffects();
             }

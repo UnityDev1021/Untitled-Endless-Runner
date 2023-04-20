@@ -1,4 +1,4 @@
-#define SKIP_ENTRY                          //For Testing
+#define SKIP_ENTRY                          //For Testing#define SKIP_ENTRY                          //For Testing
 //#define ENABLE_PORTAL                     //Disabed bc not using
 
 using System.Collections;
@@ -100,7 +100,7 @@ namespace Untitled_Endless_Runner
         private void SetEnvironment()
         {
             mainCamera.enabled = true;
-            disabledObjects[5].SetActive(false);
+            disabledObjects[3].SetActive(false);
             player.SetActive(true);
             StartCoroutine(DisableObjectsAfter(0f, 1));              //<==========Entry should be over by this point
         }
@@ -117,7 +117,7 @@ namespace Untitled_Endless_Runner
                 case 0:
                     {
                         yield return new WaitForSeconds(seconds);
-                        disabledObjects[4].SetActive(false);
+                        disabledObjects[3].SetActive(false);
 
                         break;
                     }

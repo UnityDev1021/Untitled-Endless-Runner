@@ -15,7 +15,6 @@ namespace Untitled_Endless_Runner
 
         protected override void ApplyEffect(GameObject player)
         {
-            //Debug.Log($"Applying Fan effect");
             distanceFromPlayer = Mathf.Abs(player.transform.position.y - transform.position.y);
             Vector2 force = new Vector2(0f, fanForce / distanceFromPlayer);
             //Vector2 force = new Vector2(0f, fanForce / distanceFromPlayer * distanceFromPlayer);
@@ -24,12 +23,15 @@ namespace Untitled_Endless_Runner
             //As it is Fan, needs to be executed only once
             if (effectStatus == 3)
             {
+                //Debug.Log($"ACtivating, Effect Status : {effectStatus}");
                 effectStatus = 4;
                 obstacleStat.activated = true;
                 localGameLogic.OnObstacleDetected?.Invoke(obstacleStat);
                 Invoke(nameof(ClearEffects), 1.5f);
+                //Debug.Log($"ACtivated, Effect Status : {effectStatus}");
             }
             //multiplier += 0.01f;
+            //Debug.Log($"Applying Fan effect, Force applied : {force}, Player velocity : {player.GetComponent<Rigidbody2D>().velocity}");
         }
 
         public override void AssignGroupTypes(byte groupType, float dummyData)
@@ -51,7 +53,9 @@ namespace Untitled_Endless_Runner
 
         protected override void ClearEffects()
         {
+            //Debug.Log($"Clearing Effect, effect Status : {effectStatus}");
             effectStatus = 3;
+            //Debug.Log($"Cleared Effect, effect Status : {effectStatus}");
             //multiplier = 0f;
         }
     }

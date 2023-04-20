@@ -361,7 +361,51 @@ ________________________________________________________________________________
 => [Important] Checking off verbose logging of Version Handler.
 => Keeping Background static for now.
 => Searching Sound Effects.
+=> [Fixed For Now] after unalive, the player still goes up from fan. the player does jump animation.
+	(-) Maybe the obstacles don't realize that the player is unalive.
+	(-) Added the gameStarted bool check on baseObstacleController to only ApplyEffect when it is true.
+=> [Bug] Sliding disables the trampoline.
+=> [Fixed For Now] Sliding above fan/ maybe trampoline doubles the jump height.
+	(-) Was calling mobile_jump but now manually defining what to do instead of calling the function. The function was adding extra velocity to the player.
+=> [Bug] SpikedHead is detected but pushes the player to the ground and the player lives.
+=> [Fixed For Now] Spawn reset not working properly.
+	(-) gameStarted was being toggle after OnPlayerHEalthOver in PlayerController, so moved it beneath.
+=> [Bug] After Sliding into Fan, and coming down to ground, the player dows not slide for a certain time.
+	(-) ClearEffects was being called at OnTriggerExit2D, so the effects were being cleared as soon as the player exited and then again being triggered as the effects were cleared.
 
+-------------------------------------------------------------------
+							20 April
+-------------------------------------------------------------------
+=> Shield stays up for 13 sec. (approx)
+=> Jump - Retro Jump Simple B 05
+=> Slide - GrassRip1
+=> Coins/Heart - Retro Event Acute 08
+=> Dash - https://elements.envato.com/boost-01-Y9AFTU8?utm_source=mixkit&utm_medium=referral&utm_campaign=elements_mixkit_cs_sfx_search_no_results&_ga=2.202608913.1459408397.1681965403-2145604815.1678796053
+=> Speed Boost - https://elements.envato.com/recharge-boost-02-964HYM2?utm_source=mixkit&utm_medium=referral&utm_campaign=elements_mixkit_cs_sfx_search_no_results&_ga=2.134388721.1459408397.1681965403-2145604815.1678796053
+
+=> Change Moon To Sun
+=> Sound Manager will have 2 Audio Sources. The First will be for the "click" sounds or "player buttons" sounds.
+	(-) As one of the two, would be playing at a time. So can use the first one in this way.
+	
+=> Music :-
+	(-) Music for Arcade Style Game - Music by lucadialessandro from Pixabay
+	(-) On The Road To The Eighties - Music by Grand_Project from Pixabay
+	(-) Play Again - Classic Arcade Game - Music by Dream-Protocol from Pixabay
+	(-) Item Check - Video Game Theme - Music by GiriIS from Pixabay
+	(-) Arcade Room - Music by jimgor33 from Pixabay
+	
+=> [Fixed] Powers were not being activated.
+	(-) Instead of having a separate callback for Invoking powers at the start. Using the same callback of OnPowerUpCollected to invoke start powers.
+	
+=> [SFX] (Working) Making script to play sound effects for player action.
+	(-) Having callback OnPlayerAction for playing sound effects when any action button is pressed.
+		[=] Can't place Sound effects on button as when the button is pressed multiple times, that many times the sound effect is played.
+		[=] [Not Required] Having OnPlayerAction for hit obstacles on obstacles. Already have this on PlayerController.
+	(-) BGM loops back on itself with an Invoke function.
+	(-) [Fixed] Some Effects can cancel out each other if played simultaneously, such as, if Speed Boost is collected and jump is clicked.
+		[=] Using PlayOneShot instead of Play to overlap sound effects. Works properly for now.
+
+=> Changing to Day in BackGround.
 _______________________________________________________________________________________________________________
 _______________________________________________________________________________________________________________
 

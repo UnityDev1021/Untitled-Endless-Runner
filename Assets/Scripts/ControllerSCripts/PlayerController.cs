@@ -1,15 +1,13 @@
 #define MOBILE_CONTROLS                     //For Mobile Controls
-#define TEST_MODE
+//#define TEST_MODE
 
-using GooglePlayGames.BasicApi;
 using System;
 using System.Collections;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Untitled_Endless_Runner
 {
-    public enum PlayerAction { Slide, Dash, SpeedBoost }
+    public enum PlayerAction { Jump, Slide, Dash, SpeedBoost, Hit }
 
     public class PlayerController : MonoBehaviour
     {
@@ -34,7 +32,7 @@ namespace Untitled_Endless_Runner
 
         [Space]
         private byte jumpCount;
-        private bool hasJumped, unAlive, isSliding, isDashing, disableSlide, disableJump;
+        private bool hasJumped, isSliding, isDashing, disableSlide, disableJump;        //, unAlive
         public bool gameStarted;
         private Vector2 unAlivePos;
 
@@ -55,7 +53,6 @@ namespace Untitled_Endless_Runner
             localGameLogic.OnRestartClicked += ResetPlayerStats;
             localGameLogic.OnPowerUpCollected += TogglePowerUp;
             localGameLogic.OnPlayerAction += ToggleAction;
-            localGameLogic.OnMainGameplayStarted += InvokeStartPowers;
             //localGameLogic.OnRestartFinished += ResetPlayerStats;
 
 #if TEST_MODE
@@ -70,7 +67,6 @@ namespace Untitled_Endless_Runner
             localGameLogic.OnRestartClicked -= ResetPlayerStats;
             localGameLogic.OnPowerUpCollected -= TogglePowerUp;
             localGameLogic.OnPlayerAction -= ToggleAction;
-            localGameLogic.OnMainGameplayStarted -= InvokeStartPowers;
             //localGameLogic.OnRestartFinished -= ResetPlayerStats;
 
 #if TEST_MODE
@@ -152,9 +148,10 @@ namespace Untitled_Endless_Runner
         {
             if (!hasJumped && !disableJump)
             {
-                //Debug.Log($"Jumping");
+                Debug.Log($"Jumping. Jump Count : {jumpCount}");
 
                 disableSlide = true;
+                localGameLogic.OnPlayerAction?.Invoke(PlayerAction.Jump , 0);
                 playerRB.velocity = transform.up * jumpForce;
                 playerAnimator.Play("Jump", 0, 0f);
                 jumpCount++;
@@ -162,7 +159,10 @@ namespace Untitled_Endless_Runner
                 //Invoke(nameof(PlayAnimation), 1.01f);
 
                 if (jumpCount == 3)
+                {
                     hasJumped = true;
+                    Debug.Log($"Jumping. Jump Count : {jumpCount}, hasJumped : {hasJumped}");
+                }
 
                 //Debug.Log($"Disable Sliding : {disableSlide}");
             }
@@ -233,51 +233,50 @@ namespace Untitled_Endless_Runner
             playerRB.bodyType = RigidbodyType2D.Dynamic;
 
             yield return new WaitForSeconds(0.5f);
-            unAlive = true;
             gameStarted = true;
             GameManager.instance.gameStarted = true;
         }
 
         private void ToggleAction(PlayerAction actionTaken, byte status)
         {
-            switch (actionTaken)
+            if (status == 1)
             {
-                //Do Nothing
-                case PlayerAction.SpeedBoost:
-                    break;
+                switch (actionTaken)
+                {
+                    //Do Nothing
+                    case PlayerAction.Jump:
+                    case PlayerAction.SpeedBoost:
+                    case PlayerAction.Hit:
+                        break;
 
-                case PlayerAction.Slide:
-                    {
-                        if (status == 1)
+                    case PlayerAction.Slide:
                         {
                             isSliding = false;
                             disableJump = false;
-                        }
-                        break;
-                    }
 
-                case PlayerAction.Dash:
-                    {
-                        if (status == 1)
+                            break;
+                        }
+
+                    case PlayerAction.Dash:
                         {
                             disableSlide = false;
                             isDashing = false;
-                        }
-                        break;
-                    }
 
-                default:
-                    {
-                        Debug.LogError($"Wait Index not found : {actionTaken.ToString()}");
-                        break;
-                    }
+                            break;
+                        }
+
+                    default:
+                        {
+                            Debug.LogError($"Wait Index not found : {actionTaken.ToString()}");
+                            break;
+                        }
+                }
             }
         }
 
         //This never gets executed
         private void ResetPlayerStats(int dummyData)
         {
-            unAlive = false;
             totalCoins = 0;
             gameStarted = false;
             //Debug.Log($"Un Alive set to false : {unAlive}");
@@ -324,15 +323,20 @@ namespace Untitled_Endless_Runner
             {
                 if (jumpCount > 1)
                 {
-                    //Debug.Log($"Resetting under Trigger");
+                    Debug.Log($"Resetting under Trigger, jumpCount : {jumpCount}, Collision : {collision.tag}");
                     jumpCount = 0;              //To ensure that the player can double jump from the obstacle
                     disableSlide = false;
 
                     if (hasJumped)
                         hasJumped = false;
+                    Debug.Log($"Resetted under Trigger, jumpCount : {jumpCount}, Collision : {collision.tag}");
                 }
                 else                            //Increase counter when the player leaves the ground for the first time
+                {
+                    Debug.Log($"Increasing jumpCount : {jumpCount}, Collision : {collision.tag}");
                     jumpCount++;                
+                    Debug.Log($"Increased jumpCount : {jumpCount}, Collision : {collision.tag}");
+                }
             }
 
             if (gameStarted && collision.CompareTag("Captured"))
@@ -345,7 +349,7 @@ namespace Untitled_Endless_Runner
 
         public void ObstacleDetected(ObstacleStat obstacleStat)
         {
-            Debug.Log($"Obstacle Detected : {obstacleStat.tag}");
+            //Debug.Log($"Obstacle Detected : {obstacleStat.tag}");
             switch (obstacleStat.type)
             {
                 case ObstacleType.Attack:
@@ -389,8 +393,15 @@ namespace Untitled_Endless_Runner
                             case ObstacleTag.Fan:
                             case ObstacleTag.Trampoline:
                                 {
+                                    Debug.Log($"Boost, Obstacle Tag : {obstacleStat.tag.ToString()}, jumpCount : {jumpCount}");
+
                                     if (jumpCount != 2)
-                                        Mobile_Jump();
+                                    {
+                                        jumpCount++;
+                                        playerAnimator.Play("Jump", 0, 0f);
+                                        disableSlide = true;
+                                        Debug.Log($"Jumping, disable Slide : {disableSlide}, jump Count : {jumpCount}");
+                                    }
 
                                     break;
                                 }
@@ -487,18 +498,6 @@ namespace Untitled_Endless_Runner
             }
         }
 
-        private void InvokeStartPowers(int powerIndex)
-        {
-            for (int i = 0; i < 5; i++)
-            {
-                if ((powerIndex & (1 << i)) != 0)               //The "i" contains the Power Index which needs to be activated.
-                {
-                    TogglePowerUp(GameManager.instance.tagsToBeDetected[i].tag, 1);
-                }
-                //Debug.Log($"Power Index : {Convert.ToString(powerIndex, 2)}, i : {i} , condition : {(powerIndex & (1 << i))}");
-            }
-        }
-
         private void TogglePowerUp(ObstacleTag detectedTag, int amount)
         {
             switch (detectedTag)
@@ -550,7 +549,6 @@ namespace Untitled_Endless_Runner
 
         private void UnAlive()
         {
-            unAlive = true;
             //Debug.Log($"Player is unalived : {unAlive}");
             playerAnimator.Play("Hit", 0);
             unAlivePos = transform.position;
@@ -561,6 +559,7 @@ namespace Untitled_Endless_Runner
             GameManager.instance.coinsBalance = totalCoins + coinsBalance;
             //Debug.Log("Coins Amount : " + PlayerPrefs.GetInt("COIN_AMOUNT", -1));
             localGameLogic.OnPlayerHealthOver?.Invoke();
+            GameManager.instance.gameStarted = false;
         }
 
         public void TakeDamage()
