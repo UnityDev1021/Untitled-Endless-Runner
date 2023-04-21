@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Runtime.CompilerServices;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Untitled_Endless_Runner

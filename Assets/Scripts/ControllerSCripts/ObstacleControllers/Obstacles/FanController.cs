@@ -1,4 +1,3 @@
-using System.Drawing;
 using UnityEngine;
 
 namespace Untitled_Endless_Runner

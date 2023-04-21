@@ -361,18 +361,6 @@ ________________________________________________________________________________
 => [Important] Checking off verbose logging of Version Handler.
 => Keeping Background static for now.
 => Searching Sound Effects.
-=> [Fixed For Now] after unalive, the player still goes up from fan. the player does jump animation.
-	(-) Maybe the obstacles don't realize that the player is unalive.
-	(-) Added the gameStarted bool check on baseObstacleController to only ApplyEffect when it is true.
-=> [Bug] Sliding disables the trampoline.
-=> [Fixed For Now] Sliding above fan/ maybe trampoline doubles the jump height.
-	(-) Was calling mobile_jump but now manually defining what to do instead of calling the function. The function was adding extra velocity to the player.
-=> [Bug] SpikedHead is detected but pushes the player to the ground and the player lives.
-=> [Fixed For Now] Spawn reset not working properly.
-	(-) gameStarted was being toggle after OnPlayerHEalthOver in PlayerController, so moved it beneath.
-=> [Bug] After Sliding into Fan, and coming down to ground, the player dows not slide for a certain time.
-	(-) ClearEffects was being called at OnTriggerExit2D, so the effects were being cleared as soon as the player exited and then again being triggered as the effects were cleared.
-
 -------------------------------------------------------------------
 							20 April
 -------------------------------------------------------------------
@@ -406,6 +394,28 @@ ________________________________________________________________________________
 		[=] Using PlayOneShot instead of Play to overlap sound effects. Works properly for now.
 
 => Changing to Day in BackGround.
+=> [Fixed For Now] after unalive, the player still goes up from fan. the player does jump animation.
+	(-) Maybe the obstacles don't realize that the player is unalive.
+	(-) Added the gameStarted bool check on baseObstacleController to only ApplyEffect when it is true.
+=> [Bug] Sliding disables the trampoline.
+=> [Fixed For Now] Sliding above fan/ maybe trampoline doubles the jump height.
+	(-) Was calling mobile_jump but now manually defining what to do instead of calling the function. The function was adding extra velocity to the player.
+=> [Bug] SpikedHead is detected but pushes the player to the ground and the player lives.
+=> [Fixed For Now] Spawn reset not working properly.
+	(-) gameStarted was being toggle after OnPlayerHEalthOver in PlayerController, so moved it beneath.
+=> [Bug] After Sliding into Fan, and coming down to ground, the player dows not slide for a certain time.
+	(-) ClearEffects was being called at OnTriggerExit2D, so the effects were being cleared as soon as the player exited and then again being triggered as the effects were cleared.
+	(-) The player does a triple jump, if the player encounters a boost obstacle such as fan or trampoline, then the player could a triple jump. This rarely happens but if the player hits the jump button on a set time, then this could occur. When the player leaves the ground, the "Reset Trigger" is hit, which resets the jumpCount to 0, thus enabling the player to basically do a triple jump.		//Fun Mechanic, gonna leave this here.
+
+
+-------------------------------------------------------------------
+							21 April
+-------------------------------------------------------------------
+=> [Fixed] Fire Controller working properly now.
+	(-) Added the invincibility check.
+=> [BG Anim] 11029 - 12229
+=> [BG Anim] 4679 - 6120
+=> Updated BG Anim.
 _______________________________________________________________________________________________________________
 _______________________________________________________________________________________________________________
 
@@ -476,3 +486,4 @@ ________________________________________________________________________________
 _______________________________________________________________________________________________________________
 
 => Celeste Mid-Air Jumps / Ultra jumps / Slide-Jumps /Instantaneous jumps
+=> Key Password - $ElectroBolt@270218$

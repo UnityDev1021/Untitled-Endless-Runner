@@ -3,10 +3,6 @@
  * Intervals are :- 25% [-3.005y][0.875sp], 50% [-2.47y][1.05sp], 75% [-1.935y][1.225]
  ***********************************************/
 
-
-
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 namespace Untitled_Endless_Runner
 {
@@ -159,6 +155,7 @@ namespace Untitled_Endless_Runner
 
         protected override void ApplyEffect(GameObject player)
         {
+            //The Obstacle is destroyed
             if (GameManager.instance.invincibility && !destroyed && powerUpCol.IsTouchingLayers(playerLayerMask))            
             {
                 //gameObject.SetActive(false);
@@ -169,6 +166,7 @@ namespace Untitled_Endless_Runner
             }
             else
             {
+                //Debug.Log($"Detected Player : {player.name}");
                 if (!smashed && powerUpCol.IsTouchingLayers(playerLayerMask))               //No LayerMask check as the player does not have anything to stand on, can add a small platform
                 {
                     effectStatus = 1;

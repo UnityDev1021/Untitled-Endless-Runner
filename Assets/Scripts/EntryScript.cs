@@ -1,4 +1,4 @@
-#define SKIP_ENTRY                          //For Testing#define SKIP_ENTRY                          //For Testing
+//#define SKIP_ENTRY                          //For Testing#define SKIP_ENTRY                          //For Testing
 //#define ENABLE_PORTAL                     //Disabed bc not using
 
 using System.Collections;
@@ -18,7 +18,7 @@ namespace Untitled_Endless_Runner
 
         [Header("Disabled GameObjects")]
         [SerializeField] private GameObject[] disabledObjects;
-        [SerializeField] private GameObject mainMenuPanel, player, entryCamera;             //portal, 
+        [SerializeField] private GameObject mainMenuPanel, player, entryCamera, videoPlayer, videoPlayer2;             //portal, 
         [SerializeField] private Camera mainCamera;
 
         //[Header("Test Variables")]
@@ -100,6 +100,8 @@ namespace Untitled_Endless_Runner
         private void SetEnvironment()
         {
             mainCamera.enabled = true;
+            //videoPlayer.SetActive(true);
+            //videoPlayer2.SetActive(true);
             disabledObjects[3].SetActive(false);
             player.SetActive(true);
             StartCoroutine(DisableObjectsAfter(0f, 1));              //<==========Entry should be over by this point

@@ -6,12 +6,15 @@ namespace Untitled_Endless_Runner
     {
         protected override void ApplyEffect(GameObject player)
         {
-            effectStatus = 1;
+            if (!GameManager.instance.invincibility)
+            {
+                effectStatus = 1;
 
-            //Debug.Log($"Applying Fire Effect");
-            //player.GetComponent<PlayerController>().TakeDamage(damage);
-            localGameLogic.OnObstacleDetected?.Invoke(obstacleStat);
-            Invoke(nameof(EnableEffectAgain), 1f);
+                //Debug.Log($"Applying Fire Effect");
+                //player.GetComponent<PlayerController>().TakeDamage(damage);
+                localGameLogic.OnObstacleDetected?.Invoke(obstacleStat);
+                Invoke(nameof(EnableEffectAgain), 1f);
+            }
         }
 
         public override void AssignGroupTypes(byte groupType, float dummyData)
