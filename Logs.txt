@@ -407,7 +407,6 @@ ________________________________________________________________________________
 	(-) ClearEffects was being called at OnTriggerExit2D, so the effects were being cleared as soon as the player exited and then again being triggered as the effects were cleared.
 	(-) The player does a triple jump, if the player encounters a boost obstacle such as fan or trampoline, then the player could a triple jump. This rarely happens but if the player hits the jump button on a set time, then this could occur. When the player leaves the ground, the "Reset Trigger" is hit, which resets the jumpCount to 0, thus enabling the player to basically do a triple jump.		//Fun Mechanic, gonna leave this here.
 
-
 -------------------------------------------------------------------
 							21 April
 -------------------------------------------------------------------
@@ -416,6 +415,18 @@ ________________________________________________________________________________
 => [BG Anim] 11029 - 12229
 => [BG Anim] 4679 - 6120
 => Updated BG Anim.
+
+-------------------------------------------------------------------
+							24 April
+-------------------------------------------------------------------
+=> Made Game Over Panel/Settings Panel
+=> Updating Intro Animation
+	(-) Going back to portal animation.
+	(-) The Camera orthographic siz was being changed by the animator, so changed it to script animation. If need be to chnage the animation, the script would have to be changed.
+		[=] Initial orthographic size is 1.7f and the final is the calculated size.
+=> [Do] Show Diamonds on the "Buy hearts Panel".
+=> Added extra sprites in order to adjust to Screen Resolution changes.
+
 _______________________________________________________________________________________________________________
 _______________________________________________________________________________________________________________
 

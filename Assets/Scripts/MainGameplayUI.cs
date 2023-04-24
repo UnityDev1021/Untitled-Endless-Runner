@@ -17,9 +17,12 @@ namespace Untitled_Endless_Runner
         [Header("UI")]
         [SerializeField] private Sprite[] heartSprites;
         [SerializeField] private GameObject heartContainer, buyHeartsPanel, airDashBt, jumpBt;
-        [SerializeField] private TMP_Text finalScoreTxt, totalCoinsTxt, highScoreTxt, coinsBalanceTxt, diamondsTxt, coinsCollectedTxt;
         [SerializeField] private Image armorTimer, score2xTimer;
         [SerializeField] private Button[] buyHeartsBt;
+
+        [Header("UI Text")]
+        [SerializeField] private TMP_Text finalScoreTxt;
+        [SerializeField] private TMP_Text totalCoinsTxt, highScoreTxt, coinsBalanceTxt, diamondsTxt, coinsCollectedTxt, diamondsBalTxt;
 
         [Header ("Prefabs List")]
         [SerializeField] private GameObject heartPrefab;
@@ -240,6 +243,7 @@ namespace Untitled_Endless_Runner
         private void DisplayBuyHeartsPanel()
         {
             buyHeartsPanel.SetActive(true);
+            diamondsBalTxt.text = PlayerPrefs.GetInt("DIAMONDS_AMOUNT", 0).ToString();
 
             if (PlayerPrefs.GetInt("DIAMONDS_AMOUNT", 0) >= 3)
                 buyHeartsBt[0].enabled = true;

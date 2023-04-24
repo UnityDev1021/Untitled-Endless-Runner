@@ -18,8 +18,13 @@ namespace Untitled_Endless_Runner
 
         [Header("Disabled GameObjects")]
         [SerializeField] private GameObject[] disabledObjects;
-        [SerializeField] private GameObject mainMenuPanel, player, entryCamera, videoPlayer, videoPlayer2;             //portal, 
+        [SerializeField] private GameObject mainMenuPanel, player, entryCamera;             //portal, 
+        //[SerializeField] private GameObject videoPlayer, videoPlayer2;                  //~
         [SerializeField] private Camera mainCamera;
+
+        [Header("Camera Rect")]
+        public float sceneWidth = 10, tempTime;        // Set this to the in-world distance between the left & right edges of your scene.
+        [SerializeField] private Camera _camera;
 
         //[Header("Test Variables")]
         //[SerializeField] private AnimationClip testClip;
@@ -45,7 +50,8 @@ namespace Untitled_Endless_Runner
             //backgroundAnimator.Play("Entry", 0);
             //Invoke(nameof(EnablePortal), 9.5f);
             //Invoke(nameof(EnablePlayer), 10f);
-            Invoke(nameof(SetEnvironment), 11.5f);
+            Invoke(nameof(SetEnvironment), 7.8f);
+            _ = StartCoroutine(CameraRectLerp());
             //player.transform.position = new Vector2(-8.43f, -2.3f);
 #else
             disabledObjects[3].SetActive(false);
@@ -84,6 +90,29 @@ namespace Untitled_Endless_Runner
             StartCoroutine(DisableObjectsAfter(2.6f, 0));
         }
 #endif
+        private IEnumerator CameraRectLerp()
+        {
+            yield return new WaitForSeconds(1f);
+
+            float startOrthoSize = 1.7f;
+            float unitsPerPixel = sceneWidth / Screen.width;
+            float desiredHalfHeight = 0.5f * unitsPerPixel * Screen.height;
+            _camera.orthographicSize = desiredHalfHeight;
+
+            while (true)
+            {
+                tempTime += 0.223f * Time.deltaTime;                //0.223 for the time taken between the transition
+
+                if (tempTime >= 1)
+                {
+                    tempTime = 0;
+                    break;
+                }
+
+                _camera.orthographicSize = Mathf.Lerp(startOrthoSize, desiredHalfHeight, tempTime);
+                yield return null;
+            }
+        }
 
         private void EnablePlayer()
         {

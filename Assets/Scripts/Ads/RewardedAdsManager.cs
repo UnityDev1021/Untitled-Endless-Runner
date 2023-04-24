@@ -13,7 +13,6 @@ namespace Untitled_Endless_Runner
         [Space]
         [SerializeField] private UnityEngine.UI.Button showAdsBt;
 
-
         // Start is called before the first frame update
         private void Start()
         {
