@@ -424,8 +424,28 @@ ________________________________________________________________________________
 	(-) Going back to portal animation.
 	(-) The Camera orthographic siz was being changed by the animator, so changed it to script animation. If need be to chnage the animation, the script would have to be changed.
 		[=] Initial orthographic size is 1.7f and the final is the calculated size.
-=> [Do] Show Diamonds on the "Buy hearts Panel".
+=> [Done For Now] Show Diamonds on the "Buy hearts Panel".
 => Added extra sprites in order to adjust to Screen Resolution changes.
+
+-------------------------------------------------------------------
+							25 April
+-------------------------------------------------------------------
+=> [Do] Assign the "Sign In" text in PlayGameServices.
+	(-) Show Toast on error while Sign In, everywhere possible.
+=> [Do] Post LeaderBoard score even when the internet is not available. i.e. post at a later time when the internet is available
+
+-------------------------------------------------------------------
+							25 April
+-------------------------------------------------------------------
+=> [Fix] Increase Coin Frequency
+=> [Do] TapToPlay blinks
+
+-------------------------------------------------------------------
+							01 May
+-------------------------------------------------------------------
+=> [Do] Music and SOund Effects button to include cross and other image separately
+=> [Do] Not Done :-
+	(-) Higher Jump Icon
 
 _______________________________________________________________________________________________________________
 _______________________________________________________________________________________________________________
@@ -498,3 +518,65 @@ ________________________________________________________________________________
 
 => Celeste Mid-Air Jumps / Ultra jumps / Slide-Jumps /Instantaneous jumps
 => Key Password - $ElectroBolt@270218$
+
+_______________________________________________________________________________________________________________
+
+													Credits
+_______________________________________________________________________________________________________________
+	
+=> Music :-
+	(-) Music for Arcade Style Game - Music by lucadialessandro from Pixabay
+	(-) On The Road To The Eighties - Music by Grand_Project from Pixabay
+	(-) Play Again - Classic Arcade Game - Music by Dream-Protocol from Pixabay
+	(-) Item Check - Video Game Theme - Music by GiriIS from Pixabay
+	(-) Arcade Room - Music by jimgor33 from Pixabay
+	
+=> Sprites :-
+	(-) mikailain from FreePik	(Ninja)
+	(-) Elthen from itch.io	(Portal)
+	(-) (@ansimuz) from itch.io	(Mountains parallax)
+	(-) (@vnitti) from itch.io	(Ice Mountains parallax) (clouds)
+	(-) (@Pixel Frog) from itch.io	(Traps)
+	(-) (@TotusLotus) from itch.io	(Coins)
+	
+_______________________________________________________________________________________________________________
+
+													Ads
+_______________________________________________________________________________________________________________
+
+	AndroidPlayer "POCO_2201117PI@ADB:4XVGHMAMA64D6XPJ:0" Rewarded ad loaded with response : {
+  "Response ID": "H41PZIixC6OFs8IP-8efmAQ",
+  "Mediation Adapter Class Name": "com.google.ads.mediation.admob.AdMobAdapter",
+  "Adapter Responses": [
+    {
+      "Adapter": "com.google.ads.mediation.admob.AdMobAdapter",
+      "Latency": 1451,
+      "Ad Source Name": "Reservation campaign",
+      "Ad Source ID": "7068401028668408324",
+      "Ad Source Instance Name": "[DO NOT EDIT] Publisher Test Video Campaign",
+      "Ad Source Instance ID": "6877926149710223",
+      "Credentials": {
+        "pubid": "ca-app-pub-3940256099942544\/5224354917\/cak=no_cache&cadc=2b&caqid=H41PZMq3CoGL8AKIu6KwDw",
+        "campaign_id": "1057492276"
+      },
+      "Ad Error": "null"
+    }
+  ],
+  "Loaded Adapter Response": {
+    "Adapter": "com.google.ads.mediation.admob.AdMobAdapter",
+    "Latency": 1451,
+    "Ad Source Name": "Reservation campaign",
+    "Ad Source ID": "7068401028668408324",
+    "Ad Source Instance Name": "[DO NOT EDIT] Publisher Test Video Campaign",
+    "Ad Source Instance ID": "6877926149710223",
+    "Credentials": {
+      "pubid": "ca-app-pub-3940256099942544\/5224354917\/cak=no_cache&cadc=2b&caqid=H41PZMq3CoGL8AKIu6KwDw",
+      "campaign_id": "1057492276"
+    },
+    "Ad Error": "null"
+  },
+  "Response Extras": {
+    "mediation_group_name": "Campaign"
+  }
+}
+

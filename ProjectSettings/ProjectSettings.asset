@@ -12,8 +12,8 @@ PlayerSettings:
   targetDevice: 2
   useOnDemandResources: 0
   accelerometerFrequency: 60
-  companyName: Psiborg Technologies
-  productName: Untitled Endless Runner
+  companyName: ElectroBolt
+  productName: Bhagoda Ninja
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -134,7 +134,7 @@ PlayerSettings:
     16:10: 1
     16:9: 1
     Others: 1
-  bundleVersion: 1.4c
+  bundleVersion: 1.4d
   preloadedAssets: []
   metroInputSource: 0
   wsaTransparentSwapchain: 0
@@ -155,14 +155,14 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Android: com.PsiborgTechnologies.UntitledEndlessRunner
+    Android: com.ElectroBolt.BhagodaNinja
     Standalone: com.DefaultCompany.2DProject
   buildNumber:
     Standalone: 0
     iPhone: 0
     tvOS: 0
   overrideDefaultApplicationIdentifier: 1
-  AndroidBundleVersionCode: 11
+  AndroidBundleVersionCode: 12
   AndroidMinSdkVersion: 24
   AndroidTargetSdkVersion: 0
   AndroidPreferredInstallLocation: 1
@@ -772,7 +772,7 @@ PlayerSettings:
   cloudProjectId: 8f72ccbc-b5fd-4d07-b4ad-7c854df9a000
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: Untitled Endless Runner
+  projectName: Bhagoda Ninja
   organizationId: electro-bolt
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0

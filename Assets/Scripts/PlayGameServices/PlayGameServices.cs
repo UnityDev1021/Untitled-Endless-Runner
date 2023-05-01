@@ -13,7 +13,8 @@ namespace Untitled_Endless_Runner
 {
     public class PlayGameServices : MonoBehaviour
     {
-        [SerializeField] private TMP_Text debugText, signInStatus;
+        [SerializeField] private TMP_Text signInStatus;
+        private bool signedIn;
 
         [Header("Local References")]
         [SerializeField] private GameLogic localGameLogic;
@@ -50,9 +51,12 @@ namespace Untitled_Endless_Runner
         //On the Sign In button, under the settings panel on the Main Menu
         public void LoginGooglePlayGamesManually()
         {
-            // Initialize next line under PlayGamesPlatform from within Awake
-            PlayGamesPlatform.Activate();
-            PlayGamesPlatform.Instance.ManuallyAuthenticate(ProcessAuthentication);
+            if (!signedIn)
+            {
+                // Initialize next line under PlayGamesPlatform from within Awake
+                PlayGamesPlatform.Activate();
+                PlayGamesPlatform.Instance.ManuallyAuthenticate(ProcessAuthentication);
+            }
         }
 
         private void LoginGooglePlayGames()
@@ -83,6 +87,9 @@ namespace Untitled_Endless_Runner
                 // to ask users to sign-in. Clicking it should call
                 //debugText.text = "Status : " + status.ToString();
                 Debug.Log($"Not Successful Google Play Games  Sign in. Error Details : {status}");
+#if UNITY_ANDROID && !UNITY_EDITOR
+                _ShowAndroidToastMessage($"Error Signing In, Status : {status}");
+#endif
             }
         }
 
@@ -92,6 +99,7 @@ namespace Untitled_Endless_Runner
             {
                 await AuthenticationService.Instance.SignInWithGooglePlayGamesAsync(authCode);
                 signInStatus.text = $"Sign Out";
+                signedIn = true;
 
                 //debugText.text = "Status : Google Play Games Successful Sign in";
                 Debug.Log("SignIn is successful.");
@@ -101,41 +109,73 @@ namespace Untitled_Endless_Runner
                 // Compare error code to AuthenticationErrorCodes
                 // Notify the player with the proper error message
                 Debug.LogException(ex);
+#if UNITY_ANDROID && !UNITY_EDITOR
+                _ShowAndroidToastMessage($"Error Signing In : {ex.Message}");
+#endif
             }
             catch (RequestFailedException ex)
             {
                 // Compare error code to CommonErrorCodes
                 // Notify the player with the proper error message
                 Debug.LogException(ex);
+#if UNITY_ANDROID && !UNITY_EDITOR
+                _ShowAndroidToastMessage($"Error Signing In : {ex.Message}");
+#endif
             }
         }
 
         //On the Sign Out button, under the Settings Panel on the Main Menu
         public void SignOutOfServices()
         {
-            if (!AuthenticationService.Instance.IsSignedIn) return;
-            if (PlayGamesPlatform.Instance.IsAuthenticated())
+            if (signedIn)
             {
-                signInStatus.text = $"Sign In";
-                AuthenticationService.Instance.SignOut();
-                Debug.Log("Signed Out");
+                if (!AuthenticationService.Instance.IsSignedIn) return;
+                if (PlayGamesPlatform.Instance.IsAuthenticated())
+                {
+                    signedIn = false;
+                    signInStatus.text = $"Sign In";
+                    AuthenticationService.Instance.SignOut();
+                    Debug.Log("Signed Out");
+                }
             }
         }
 
         private void PostScoreToLeaderBoard(int score)
         {
-            Social.ReportScore(score, "CgkI8bj98OQMEAIQAg", (bool success) =>
+            Social.ReportScore(score, "CgkIp9_L4-cFEAIQAg", (bool success) =>
             {
                 if (success)
-                    debugText.text = $"Successfully Added Score to LeaderBoard : {score}";
+                    Debug.Log($"Successfully Added Score to LeaderBoard : {score}");
                 else
-                    debugText.text = $"Not Successfull : {score}";
+                {
+#if UNITY_ANDROID
+                    _ShowAndroidToastMessage($"Unable To Add Score To LeaderBoard");
+#endif
+                    Debug.Log($"Unable To Add Score To LeaderBoard : {score}");
+                }
             });
         }
 
         public void ShowLeaderBoard()
         {
             Social.ShowLeaderboardUI();
+        }
+
+        /// <param name="message">Message string to show in the toast.</param>
+        private void _ShowAndroidToastMessage(string message)
+        {
+            AndroidJavaClass unityPlayer = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+            AndroidJavaObject unityActivity = unityPlayer.GetStatic<AndroidJavaObject>("currentActivity");
+
+            if (unityActivity != null)
+            {
+                AndroidJavaClass toastClass = new AndroidJavaClass("android.widget.Toast");
+                unityActivity.Call("runOnUiThread", new AndroidJavaRunnable(() =>
+                {
+                    AndroidJavaObject toastObject = toastClass.CallStatic<AndroidJavaObject>("makeText", unityActivity, message, 0);
+                    toastObject.Call("show");
+                }));
+            }
         }
     }
 }
