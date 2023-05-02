@@ -13,6 +13,7 @@ namespace Untitled_Endless_Runner
         public int totalHearts { get => _totalHearts; }
 
         [SerializeField] private GameObject player, mainCamera;
+        [SerializeField] private GameObject[] musicImgStatus, soundImgStatus;
 
         public Action<ObstacleStat> OnObstacleDetected;
         public Action OnPlayerHealthOver, OnPlayerCaptured, OnResumeClicked, OnRestartFinished, OnPowersBought, 
@@ -189,6 +190,22 @@ namespace Untitled_Endless_Runner
         public void ToggleSE()
         {
             toggleSE = !toggleSE;
+
+            if (toggleSE)
+            {
+                soundImgStatus[0].SetActive(true);
+                soundImgStatus[1].SetActive(false);
+                soundImgStatus[2].SetActive(true);
+                soundImgStatus[3].SetActive(false);
+            }
+            else
+            {
+                soundImgStatus[0].SetActive(false);
+                soundImgStatus[1].SetActive(true);
+                soundImgStatus[2].SetActive(false);
+                soundImgStatus[3].SetActive(true);
+            }
+
             audioMixers[0].audioMixer.SetFloat("VolumeSE", !toggleSE ? -80f : 0f);
         }
 
@@ -196,7 +213,22 @@ namespace Untitled_Endless_Runner
         public void ToggleBGM()
         {
             toggleMusic = !toggleMusic;
-            audioMixers[1].audioMixer.SetFloat("VolumeBGM", !toggleMusic ? -80f : 0f);
+
+            if (toggleMusic)
+            {
+                musicImgStatus[0].SetActive(true);
+                musicImgStatus[1].SetActive(false);
+                musicImgStatus[2].SetActive(true);
+                musicImgStatus[3].SetActive(false);
+            }
+            else
+            {
+                musicImgStatus[0].SetActive(false);
+                musicImgStatus[1].SetActive(true);
+                musicImgStatus[2].SetActive(false);
+                musicImgStatus[3].SetActive(true);
+            }
+            audioMixers[1].audioMixer.SetFloat("VolumeBGM", !toggleMusic ? -80f : -10f);
         }
 
         public void ToggleVibrate()

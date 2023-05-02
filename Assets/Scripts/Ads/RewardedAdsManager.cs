@@ -11,7 +11,7 @@ namespace Untitled_Endless_Runner
         [SerializeField] private GameLogic localGameLogic;
 
         [Space]
-        [SerializeField] private UnityEngine.UI.Button showAdsBt;
+        [SerializeField] private UnityEngine.UI.Button showAdsBt, showAdsBt_BuyHearts;
 
         // Start is called before the first frame update
         private void Start()
@@ -69,7 +69,8 @@ namespace Untitled_Endless_Runner
                     //          + ad.GetResponseInfo());
 
                     rewardedAd = ad;
-                    showAdsBt.enabled = true;
+                    showAdsBt.interactable = true;
+                    showAdsBt_BuyHearts.interactable = true;
 
                     RegisterEventHandlers(rewardedAd);
                     RegisterReloadHandler(rewardedAd);
@@ -92,7 +93,8 @@ namespace Untitled_Endless_Runner
                     GameManager.instance.totalDiamonds += 5;
                     PlayerPrefs.SetInt("DIAMONDS_AMOUNT", GameManager.instance.totalDiamonds);
                     localGameLogic.OnAdsRewarded?.Invoke();
-                    showAdsBt.enabled = true;
+                    showAdsBt.interactable = true;
+                    showAdsBt_BuyHearts.interactable = true;
 #endif
                 });
             }

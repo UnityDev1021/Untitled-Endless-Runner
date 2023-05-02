@@ -148,7 +148,7 @@ namespace Untitled_Endless_Runner
         {
             if (!hasJumped && !disableJump)
             {
-                Debug.Log($"Jumping. Jump Count : {jumpCount}");
+                //Debug.Log($"Jumping. Jump Count : {jumpCount}");
 
                 disableSlide = true;
                 localGameLogic.OnPlayerAction?.Invoke(PlayerAction.Jump , 0);
@@ -161,7 +161,7 @@ namespace Untitled_Endless_Runner
                 if (jumpCount == 3)
                 {
                     hasJumped = true;
-                    Debug.Log($"Jumping. Jump Count : {jumpCount}, hasJumped : {hasJumped}");
+                    //Debug.Log($"Jumping. Jump Count : {jumpCount}, hasJumped : {hasJumped}");
                 }
 
                 //Debug.Log($"Disable Sliding : {disableSlide}");
@@ -323,19 +323,19 @@ namespace Untitled_Endless_Runner
             {
                 if (jumpCount > 1)
                 {
-                    Debug.Log($"Resetting under Trigger, jumpCount : {jumpCount}, Collision : {collision.tag}");
+                    //Debug.Log($"Resetting under Trigger, jumpCount : {jumpCount}, Collision : {collision.tag}");
                     jumpCount = 0;              //To ensure that the player can double jump from the obstacle
                     disableSlide = false;
 
                     if (hasJumped)
                         hasJumped = false;
-                    Debug.Log($"Resetted under Trigger, jumpCount : {jumpCount}, Collision : {collision.tag}");
+                    //Debug.Log($"Resetted under Trigger, jumpCount : {jumpCount}, Collision : {collision.tag}");
                 }
                 else                            //Increase counter when the player leaves the ground for the first time
                 {
-                    Debug.Log($"Increasing jumpCount : {jumpCount}, Collision : {collision.tag}");
+                    //Debug.Log($"Increasing jumpCount : {jumpCount}, Collision : {collision.tag}");
                     jumpCount++;                
-                    Debug.Log($"Increased jumpCount : {jumpCount}, Collision : {collision.tag}");
+                    //Debug.Log($"Increased jumpCount : {jumpCount}, Collision : {collision.tag}");
                 }
             }
 
@@ -393,14 +393,14 @@ namespace Untitled_Endless_Runner
                             case ObstacleTag.Fan:
                             case ObstacleTag.Trampoline:
                                 {
-                                    Debug.Log($"Boost, Obstacle Tag : {obstacleStat.tag.ToString()}, jumpCount : {jumpCount}");
+                                    //Debug.Log($"Boost, Obstacle Tag : {obstacleStat.tag.ToString()}, jumpCount : {jumpCount}");
 
                                     if (jumpCount != 2)
                                     {
                                         jumpCount++;
                                         playerAnimator.Play("Jump", 0, 0f);
                                         disableSlide = true;
-                                        Debug.Log($"Jumping, disable Slide : {disableSlide}, jump Count : {jumpCount}");
+                                        //Debug.Log($"Jumping, disable Slide : {disableSlide}, jump Count : {jumpCount}");
                                     }
 
                                     break;

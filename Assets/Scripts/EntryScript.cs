@@ -31,12 +31,12 @@ namespace Untitled_Endless_Runner
 
         private void OnEnable()
         {
-            localGameLogic.OnRestartClicked += ResetPlayerPosition;
+            localGameLogic.OnRestartFinished += ResetPlayerPosition;
         }
 
         private void OnDisable()
         {
-            localGameLogic.OnRestartClicked -= ResetPlayerPosition;
+            localGameLogic.OnRestartFinished -= ResetPlayerPosition;
         }
 
         private void Start()
@@ -118,7 +118,7 @@ namespace Untitled_Endless_Runner
         {
             player.SetActive(true);
             playerAnimator.Play("Entry", 0);
-            StartCoroutine(DisableObjectsAfter(1.75f, 1));              //<==========Entry should be over by this point
+            StartCoroutine(DisableObjectsAfter(1.75f, 1, false));              //<==========Entry should be over by this point
         }
 
         private void DisableMask()
@@ -133,15 +133,16 @@ namespace Untitled_Endless_Runner
             //videoPlayer2.SetActive(true);
             disabledObjects[3].SetActive(false);
             player.SetActive(true);
-            StartCoroutine(DisableObjectsAfter(0f, 1));              //<==========Entry should be over by this point
+            StartCoroutine(DisableObjectsAfter(0f, 1, false));              //<==========Entry should be over by this point
         }
 
-        private void ResetPlayerPosition(int dummyData)
+        private void ResetPlayerPosition()
         {
-            _ = StartCoroutine(DisableObjectsAfter(0, 1));
+            player.SetActive(false);
+            _ = StartCoroutine(DisableObjectsAfter(2.3f, 1, true));
         }
 
-        private IEnumerator DisableObjectsAfter(float seconds, int objectIndex)
+        private IEnumerator DisableObjectsAfter(float seconds, int objectIndex, bool restartClicked)
         {
             switch (objectIndex)
             {
@@ -156,6 +157,8 @@ namespace Untitled_Endless_Runner
                 case 1:
                     {
                         yield return new WaitForSeconds(seconds);
+                        if (restartClicked)
+                            player.SetActive(true);
                         player.transform.position = new Vector2(-5.58f, -3.7f);
                         player.GetComponent<PlayerController>().enabled = true;
                         player.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;

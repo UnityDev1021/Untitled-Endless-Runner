@@ -134,9 +134,14 @@ namespace Untitled_Endless_Runner
 
         private byte ChooseObstacleGroup()
         {
-            byte obstacleUnitIndex;
+            byte obstacleUnitIndex, coinIndex;
 
-            obstacleUnitIndex = (byte)Random.Range(1, obstacleGroups.Length);           //0 would be for Test
+            coinIndex = (byte)Random.Range(0, 11);
+
+            if (coinIndex < 5)
+                obstacleUnitIndex = 51;
+            else
+                obstacleUnitIndex = (byte)Random.Range(1, obstacleGroups.Length);           //0 would be for Test
 
             return obstacleUnitIndex;
         }

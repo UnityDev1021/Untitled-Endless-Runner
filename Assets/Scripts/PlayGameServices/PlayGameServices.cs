@@ -148,7 +148,7 @@ namespace Untitled_Endless_Runner
                     Debug.Log($"Successfully Added Score to LeaderBoard : {score}");
                 else
                 {
-#if UNITY_ANDROID
+#if UNITY_ANDROID && !UNITY_EDITOR
                     _ShowAndroidToastMessage($"Unable To Add Score To LeaderBoard");
 #endif
                     Debug.Log($"Unable To Add Score To LeaderBoard : {score}");

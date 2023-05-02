@@ -16,8 +16,9 @@ namespace Untitled_Endless_Runner
 
         [Header("UI")]
         [SerializeField] private Sprite[] heartSprites;
-        [SerializeField] private GameObject heartContainer, buyHeartsPanel, airDashBt, jumpBt;
+        [SerializeField] private GameObject heartContainer, buyHeartsPanel, airDashBt, jumpBt, mainMenuPanel;
         [SerializeField] private Image armorTimer, score2xTimer;
+        [SerializeField] private GameObject[] heartsDisabledPanel;
         [SerializeField] private Button[] buyHeartsBt;
 
         [Header("UI Text")]
@@ -242,15 +243,27 @@ namespace Untitled_Endless_Runner
 
         private void DisplayBuyHeartsPanel()
         {
+            foreach(var disabledPanel in heartsDisabledPanel)            
+                disabledPanel.SetActive(true);            
+
             buyHeartsPanel.SetActive(true);
             diamondsBalTxt.text = PlayerPrefs.GetInt("DIAMONDS_AMOUNT", 0).ToString();
 
             if (PlayerPrefs.GetInt("DIAMONDS_AMOUNT", 0) >= 3)
+            {
                 buyHeartsBt[0].enabled = true;
+                heartsDisabledPanel[0].SetActive(false);
+            }
             if (PlayerPrefs.GetInt("DIAMONDS_AMOUNT", 0) >= 5)
+            {
                 buyHeartsBt[1].enabled = true;
+                heartsDisabledPanel[1].SetActive(false);
+            }
             if (PlayerPrefs.GetInt("DIAMONDS_AMOUNT", 0) >= 8)
+            {
                 buyHeartsBt[2].enabled = true;
+                heartsDisabledPanel[2].SetActive(false);
+            }
 
             //Debug.Log($"Game Over Panel Active : {gameOverPanel.activeSelf}");
         }
@@ -267,6 +280,7 @@ namespace Untitled_Endless_Runner
         private void UpdateDiamondsAmount()
         {
             diamondsTxt.text = PlayerPrefs.GetInt("DIAMONDS_AMOUNT", 0).ToString();
+            diamondsBalTxt.text = PlayerPrefs.GetInt("DIAMONDS_AMOUNT", 0).ToString();
             totalCoinsTxt.text = "0";
         }
 
@@ -550,6 +564,7 @@ namespace Untitled_Endless_Runner
 
             yield return new WaitForSeconds(1.1f);
             FadeScreen.SetActive(false);
+            mainMenuPanel.SetActive(true);
         }
     }
 }
