@@ -51,11 +51,11 @@ namespace Untitled_Endless_Runner
             //startPosX = transform.position.x;
         }
 
-        private void ResetStats()
+        private void ResetStats(int dummyValue)                 //In both restart cases, it will require to turn off
         {
             transform.localPosition = Vector3.zero;
             ToggleSpawn(false);
-            Debug.Log($"Calling For Reset : {spawnEnabled}");
+            //Debug.Log($"Calling For Reset : {spawnEnabled}");
         }
 
         public void SpawnObstacle()

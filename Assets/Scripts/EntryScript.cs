@@ -2,7 +2,6 @@
 //#define ENABLE_PORTAL                     //Disabed bc not using
 
 using System.Collections;
-//using UnityEditor.Animations;
 using UnityEngine;
 
 namespace Untitled_Endless_Runner
@@ -92,6 +91,7 @@ namespace Untitled_Endless_Runner
 #endif
         private IEnumerator CameraRectLerp()
         {
+            _camera.orthographicSize = 1.7f;            //(startOrthoSize)
             yield return new WaitForSeconds(1f);
 
             float startOrthoSize = 1.7f;

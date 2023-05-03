@@ -15,8 +15,8 @@ namespace Untitled_Endless_Runner
         private int score;
 
         [Header("BackGround Reference")]
-        [SerializeField] private GameObject BackGround;
         [SerializeField] private float[] BackgroundPropsPos;
+        [SerializeField] private GameObject BackGround, mainCamera;
 
         [Header("Local Reference Script")]
         [SerializeField] private GameLogic localGameLogic;
@@ -24,7 +24,7 @@ namespace Untitled_Endless_Runner
         private void OnEnable()
         {
             localGameLogic.OnPlayerHealthOver += StopBackGroundScroll;
-            localGameLogic.OnRestartClicked += ResetEnvironmentProps;
+            localGameLogic.OnRestartClicked += CallResetEnvironment;
             localGameLogic.OnPowerUpCollected += CheckPowerUp;
             localGameLogic.OnPlayerAction += InvokeToggleSpeed;
             localGameLogic.OnGameplayContinued += InvokeBGScrolling;
@@ -33,7 +33,7 @@ namespace Untitled_Endless_Runner
         private void OnDisable()
         {
             localGameLogic.OnPlayerHealthOver -= StopBackGroundScroll;
-            localGameLogic.OnRestartClicked -= ResetEnvironmentProps;
+            localGameLogic.OnRestartClicked -= CallResetEnvironment;
             localGameLogic.OnPowerUpCollected -= CheckPowerUp;
             localGameLogic.OnPlayerAction -= InvokeToggleSpeed;
             localGameLogic.OnGameplayContinued -= InvokeBGScrolling;
@@ -172,10 +172,12 @@ namespace Untitled_Endless_Runner
             }
         }
 
-        private void StopBackGroundScroll()
+        private void StopBackGroundScroll(int restartStatus)
         {
             scrollBackground = false;
-            localGameLogic.OnGameOver?.Invoke(score);
+
+            if (restartStatus == 0)
+                localGameLogic.OnGameOver?.Invoke(score);
         }
 
         //On the TapToPlay button, under the MainMenuPanel
@@ -189,8 +191,16 @@ namespace Untitled_Endless_Runner
             Invoke(nameof(StartBackGroundScroll), 1.5f);
         }
 
-        private void ResetEnvironmentProps(int dummyData)
+        private void CallResetEnvironment(int dummyData)
         {
+            Invoke(nameof(ResetEnvironmentProps), 1.1f);
+        }
+
+        private void ResetEnvironmentProps()
+        {
+            mainCamera.transform.position = new Vector3(0f, mainCamera.transform.position.y, mainCamera.transform.position.z);
+
+            //Debug.Log($"Restart Clicked");
             int totalGroups = BackGround.transform.childCount;
             //Debug.Log($"Total Groups : {totalGroups}");
 
@@ -212,6 +222,8 @@ namespace Untitled_Endless_Runner
                     //    $"Local Position : {BackGround.transform.GetChild(i).GetChild(j).localPosition}");
                 }
             }
+
+            this.enabled = false;
         }
 
         //private Vector3 SetPosition()

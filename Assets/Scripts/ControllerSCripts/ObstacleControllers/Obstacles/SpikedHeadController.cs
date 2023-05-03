@@ -178,7 +178,7 @@ namespace Untitled_Endless_Runner
             }
         }
 
-        protected override void ToggleEffects()
+        protected override void ToggleEffects(int dummyData = 0)
         {
             base.ToggleEffects();
             smashed = false;

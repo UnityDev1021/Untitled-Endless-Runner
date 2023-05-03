@@ -453,6 +453,20 @@ ________________________________________________________________________________
 => [Do] Coins update when power buy
 => Original Shield Sprite scale is :- x(0.15), y(0.15)
 
+-------------------------------------------------------------------
+							03 May
+-------------------------------------------------------------------
+=> OnPlayerHealthOver has an int overload for now :-
+	(-) 0 will go for (Game Over) Restart
+	(-) 1 will go for (Main Gameplay) Restart
+=> [Important] There is Race Condition. LOL
+	(-) MainGameplayUI.RestartClicked will call for GameLogic.ToggleGameStatus which will pause the game by toggling Time.timeScale to 0f.
+	(-) MainGameplayUI.Pause_ResumeClicked will also call for GameLogic.ToggleGameStatus which will try to pause or resume the game.
+	(-) So it depends on which is called first or there could be a chance of race condition also.
+=> CHanged HEart prefab for ui to the new sprite of heart
+=> Restart Mechanism
+	(-) Resetting Camera position in BAckground Controller.
+	(-) Also resetting environment positions after a certain delay so that the Fade In occurs, and then the environment resets.
 _______________________________________________________________________________________________________________
 _______________________________________________________________________________________________________________
 

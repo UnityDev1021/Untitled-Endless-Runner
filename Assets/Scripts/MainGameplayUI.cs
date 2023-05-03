@@ -1,6 +1,5 @@
 //#define TEST_MODE
 
-using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
@@ -16,14 +15,15 @@ namespace Untitled_Endless_Runner
 
         [Header("UI")]
         [SerializeField] private Sprite[] heartSprites;
-        [SerializeField] private GameObject heartContainer, buyHeartsPanel, airDashBt, jumpBt, mainMenuPanel;
+        [SerializeField] private GameObject heartContainer, buyHeartsPanel, airDashBt, jumpBt, mainMenuPanel, gameOverPanel;
         [SerializeField] private Image armorTimer, score2xTimer;
         [SerializeField] private GameObject[] heartsDisabledPanel;
         [SerializeField] private Button[] buyHeartsBt;
 
         [Header("UI Text")]
         [SerializeField] private TMP_Text finalScoreTxt;
-        [SerializeField] private TMP_Text totalCoinsTxt, highScoreTxt, coinsBalanceTxt, diamondsTxt, coinsCollectedTxt, diamondsBalTxt;
+        [SerializeField] private TMP_Text totalCoinsTxt, highScoreTxt, coinsBalance_MM_Txt, coinsBalance_BPU_Txt, diamondsTxt, 
+                                            coinsCollectedTxt, diamondsBalTxt;
 
         [Header ("Prefabs List")]
         [SerializeField] private GameObject heartPrefab;
@@ -94,7 +94,8 @@ namespace Untitled_Endless_Runner
 #if TEST_MODE
             PlayerPrefs.SetInt("COIN_AMOUNT", 200);
 #endif
-            coinsBalanceTxt.text = PlayerPrefs.GetInt("COIN_AMOUNT", 0).ToString();
+            coinsBalance_MM_Txt.text = PlayerPrefs.GetInt("COIN_AMOUNT", 0).ToString();
+            coinsBalance_BPU_Txt.text = PlayerPrefs.GetInt("COIN_AMOUNT", 0).ToString();
             diamondsTxt.text = PlayerPrefs.GetInt("DIAMONDS_AMOUNT", 0).ToString();
         }
 
@@ -241,10 +242,21 @@ namespace Untitled_Endless_Runner
             }
         }
 
-        private void DisplayBuyHeartsPanel()
+        private void DisplayBuyHeartsPanel(int restartStatus)
         {
-            foreach(var disabledPanel in heartsDisabledPanel)            
-                disabledPanel.SetActive(true);            
+            //Debug.Log($"Restart Status : {restartStatus}");
+
+            if (restartStatus == 1)
+                return;
+
+            if (PlayerPrefs.GetInt("DIAMONDS_AMOUNT", 0) >= 3)
+            {
+                gameOverPanel.SetActive(true);
+                return;
+            }
+
+            foreach (var disabledPanel in heartsDisabledPanel)
+                disabledPanel.SetActive(true);
 
             buyHeartsPanel.SetActive(true);
             diamondsBalTxt.text = PlayerPrefs.GetInt("DIAMONDS_AMOUNT", 0).ToString();
@@ -311,13 +323,15 @@ namespace Untitled_Endless_Runner
             }
 
             coinsCollectedTxt.text = totalCoinsTxt.text;
-            coinsBalanceTxt.text = PlayerPrefs.GetInt("COIN_AMOUNT", 0).ToString();
+            coinsBalance_MM_Txt.text = PlayerPrefs.GetInt("COIN_AMOUNT", 0).ToString();
+            coinsBalance_BPU_Txt.text = PlayerPrefs.GetInt("COIN_AMOUNT", 0).ToString();
             //Debug.Log("Coins Amount After : " + PlayerPrefs.GetInt("COIN_AMOUNT", -1));
         }
 
         private void UpdateCoins()
         {
-            coinsBalanceTxt.text = GameManager.instance.coinsBalance.ToString();
+            coinsBalance_MM_Txt.text = GameManager.instance.coinsBalance.ToString();
+            coinsBalance_BPU_Txt.text = GameManager.instance.coinsBalance.ToString();
         }
 
         private void UpdatePowerUpUI(ObstacleTag detectedTag, int amount)
@@ -545,11 +559,23 @@ namespace Untitled_Endless_Runner
         }
 
         //On Pause Panel, under the restart button
-        public void RestartClicked()
+        public void RestartClicked(bool gameOver)
         {
+            if (!gameOver)
+            {
+                localGameLogic.OnPlayerHealthOver?.Invoke(1);
+                GameManager.instance.gameStarted = false;
+            }
+
             FadeScreen.SetActive(true);
             canvasAnimator.Play("FadeIn", 0, 0f);
             localGameLogic.OnRestartClicked?.Invoke(0);
+        }
+
+        //On Settings Panel, under the More Games button
+        public void MoreGames()
+        {
+            Application.OpenURL("https://play.google.com/store/apps/developer?id=PsiBorg+Technologies");
         }
 
         private void CallFadeOut()

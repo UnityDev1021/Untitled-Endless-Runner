@@ -47,9 +47,9 @@ namespace Untitled_Endless_Runner
         {
             localGameLogic.OnRestartClicked += DisableObstacle;
             localGameLogic.OnPlayerHealthOver += ToggleEffects;
-            localGameLogic.OnRestartFinished += ToggleEffects;
+            localGameLogic.OnRestartFinished += CallToggleEffects;
             localGameLogic.OnPowerUpCollected += CheckPowerUp;
-            localGameLogic.OnGameplayContinued += ToggleEffects;
+            localGameLogic.OnGameplayContinued += CallToggleEffects;
             //Debug.Log($"Enabling");
         }
 
@@ -58,9 +58,9 @@ namespace Untitled_Endless_Runner
         {
             localGameLogic.OnRestartClicked -= DisableObstacle;
             localGameLogic.OnPlayerHealthOver -= ToggleEffects;
-            localGameLogic.OnRestartFinished -= ToggleEffects;
+            localGameLogic.OnRestartFinished -= CallToggleEffects;
             localGameLogic.OnPowerUpCollected -= CheckPowerUp;
-            localGameLogic.OnGameplayContinued -= ToggleEffects;
+            localGameLogic.OnGameplayContinued -= CallToggleEffects;
             //Debug.Log($"Disabling");
         }
 
@@ -112,14 +112,19 @@ namespace Untitled_Endless_Runner
             Invoke(nameof(CheckIfWithinViewport), 1f);
         }
 
-        protected virtual void ToggleEffects()
+        private void CallToggleEffects()
+        {
+            ToggleEffects(0);
+        }
+
+        protected virtual void ToggleEffects(int dummyData = 0)
         {
             enableEffects = !enableEffects;
         }
 
         private void DisableObstacle(int dummyData)
         {
-            Debug.Log($"Restart activated, Disabling Obstacle : {transform.name}");
+            //Debug.Log($"Restart activated, Disabling Obstacle : {transform.name}");
             gameObject.SetActive(false);
         }
 

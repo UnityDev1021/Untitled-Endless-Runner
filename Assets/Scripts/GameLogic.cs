@@ -12,14 +12,14 @@ namespace Untitled_Endless_Runner
         private byte _totalHearts = 4;
         public int totalHearts { get => _totalHearts; }
 
-        [SerializeField] private GameObject player, mainCamera;
+        [SerializeField] private GameObject player;
         [SerializeField] private GameObject[] musicImgStatus, soundImgStatus;
 
         public Action<ObstacleStat> OnObstacleDetected;
-        public Action OnPlayerHealthOver, OnPlayerCaptured, OnResumeClicked, OnRestartFinished, OnPowersBought, 
+        public Action OnPlayerCaptured, OnResumeClicked, OnRestartFinished, OnPowersBought, 
             OnAdsRewarded, OnGameplayContinued;
         public Action<bool> OnPause_ResumeClicked;
-        public Action<int> OnRestartClicked, OnGameOver;
+        public Action<int> OnRestartClicked, OnGameOver, OnPlayerHealthOver;
         public Action<ObstacleTag, int> OnPowerUpCollected;
 
         [Header("Player Actions")]
@@ -158,12 +158,18 @@ namespace Untitled_Endless_Runner
             }
         }
 
+        //This is called twice upon restart
         private void ToggleGameStatus(bool toggleValue)
         {
+            //if (!GameManager.instance.gameStarted)
+            //    return;
+
             if (toggleValue)
                 Time.timeScale = 1f;
             else
                 Time.timeScale = 0f;
+
+            //Debug.Log($"Time.timeScale : {Time.timeScale}");
         }
 
         private void RestartGame(int dummyData)
@@ -178,8 +184,6 @@ namespace Untitled_Endless_Runner
 
             //player.GetComponent<PlayerController>().enabled = false;
             player.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Kinematic;
-
-            mainCamera.transform.position = new Vector3(0f, mainCamera.transform.position.y, mainCamera.transform.position.z);
             OnRestartFinished?.Invoke();
 
             //GameManager.instance.gameStarted = false;
@@ -242,7 +246,7 @@ namespace Untitled_Endless_Runner
 
         }
 
-        private void EndGamePlay()
+        private void EndGamePlay(int dummyValue)            //In both restart cases, it will require to turn off
         {
             disabledObjects[0].SetActive(false);
         }

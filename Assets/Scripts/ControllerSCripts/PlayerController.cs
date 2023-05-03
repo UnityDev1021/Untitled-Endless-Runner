@@ -558,7 +558,7 @@ namespace Untitled_Endless_Runner
             PlayerPrefs.SetInt("COIN_AMOUNT", totalCoins + coinsBalance);
             GameManager.instance.coinsBalance = totalCoins + coinsBalance;
             //Debug.Log("Coins Amount : " + PlayerPrefs.GetInt("COIN_AMOUNT", -1));
-            localGameLogic.OnPlayerHealthOver?.Invoke();
+            localGameLogic.OnPlayerHealthOver?.Invoke(0);
             GameManager.instance.gameStarted = false;
         }
 

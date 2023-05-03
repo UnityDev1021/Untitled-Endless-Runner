@@ -34,33 +34,37 @@ namespace Untitled_Endless_Runner
         // Update is called once per frame
         private void FixedUpdate()
         {
-            tempPosXVal = (cam.transform.position.x * (1 - parallaxEffect));
-            distance = (cam.transform.position.x * parallaxEffect);
-
-            transform.position = new Vector3(startPos + distance, transform.position.y, transform.position.z);
-
-            //Debug.Log($"temp : {temp}, transform.position.x : {transform.position.x}");
-            if (tempPosXVal > startPos + (length * sceneMultiplier))
+            if (GameManager.instance.gameStarted)
             {
-                float tempPosX = transform.GetChild(prevSceneIndex).transform.position.x;
+                tempPosXVal = (cam.transform.position.x * (1 - parallaxEffect));
+                distance = (cam.transform.position.x * parallaxEffect);
 
-                if (prevSceneIndex == (transform.childCount - 1))               // If the Scene at, the extreme end of the camera or last in line ,is about to go inside, then change to the one at the first in line
-                    prevSceneIndex = 0;                
-                else
-                    prevSceneIndex++;
+                transform.position = new Vector3(startPos + distance, transform.position.y, transform.position.z);
 
-                transform.GetChild(prevSceneIndex).transform.position = 
-                    new Vector3(tempPosX + length, transform.GetChild(prevSceneIndex).transform.position.y, 
-                    transform.GetChild(prevSceneIndex).transform.position.z);
-                sceneMultiplier++;
-                //length *= sceneMultiplier;
+                //Debug.Log($"temp : {temp}, transform.position.x : {transform.position.x}");
+                if (tempPosXVal > startPos + (length * sceneMultiplier))
+                {
+                    float tempPosX = transform.GetChild(prevSceneIndex).transform.position.x;
+
+                    if (prevSceneIndex == (transform.childCount - 1))               // If the Scene at, the extreme end of the camera or last in line ,is about to go inside, then change to the one at the first in line
+                        prevSceneIndex = 0;
+                    else
+                        prevSceneIndex++;
+
+                    transform.GetChild(prevSceneIndex).transform.position =
+                        new Vector3(tempPosX + length, transform.GetChild(prevSceneIndex).transform.position.y,
+                        transform.GetChild(prevSceneIndex).transform.position.z);
+                    sceneMultiplier++;
+                    //length *= sceneMultiplier;
+                }
+                else if (tempPosXVal < startPos - length)
+                    startPos -= length;
             }
-            else if (tempPosXVal < startPos - length)
-                startPos -= length;
         }
 
         private void ResetStats()
         {
+            Debug.Log($"Reset Stats Called from {transform.name}");
             sceneMultiplier = 1;
             prevSceneIndex = (transform.childCount - 1);                                    //The last scnen in line
         }
