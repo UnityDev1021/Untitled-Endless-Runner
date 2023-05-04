@@ -11,4 +11,16 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/AdsTest.unity
     guid: 084f77a85cfaa5c478a6e3e31018c749
+  - enabled: 0
+    path: Assets/Scenes/MainGameplay_Test.unity
+    guid: 4209c627538a1bb419b6cd0b7e2046ff
+  - enabled: 0
+    path: Assets/Scenes/Temp/main menu.unity
+    guid: b970ca71cfe4ca34db35ffcfa1b49d7f
+  - enabled: 0
+    path: Assets/Scenes/PlayServicesTest.unity
+    guid: 5d58dc226f5d2f14b99b0327441d9c9d
+  - enabled: 0
+    path: Assets/Scenes/TransitionTest.unity
+    guid: 9611eedacbff06543a0c7a73362891bd
   m_configObjects: {}

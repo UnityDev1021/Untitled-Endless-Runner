@@ -78,7 +78,7 @@ namespace Untitled_Endless_Runner
         }
 
         //Should be on the button to show rewards/ get a reward by watching an ad.
-        public void ShowRewardedAd()
+        public void ShowRewardedAd(bool showBuyHeartPanel)
         {
             //const string rewardMsg =
             //    "Rewarded ad rewarded the user. Type: {0}, amount: {1}.";
@@ -92,7 +92,8 @@ namespace Untitled_Endless_Runner
 #if !TEST_MODE
                     GameManager.instance.totalDiamonds += 5;
                     PlayerPrefs.SetInt("DIAMONDS_AMOUNT", GameManager.instance.totalDiamonds);
-                    localGameLogic.OnAdsRewarded?.Invoke();
+                    
+                    localGameLogic.OnAdsRewarded?.Invoke(showBuyHeartPanel);
                     showAdsBt.interactable = true;
                     showAdsBt_BuyHearts.interactable = true;
 #endif

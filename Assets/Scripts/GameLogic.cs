@@ -16,9 +16,8 @@ namespace Untitled_Endless_Runner
         [SerializeField] private GameObject[] musicImgStatus, soundImgStatus;
 
         public Action<ObstacleStat> OnObstacleDetected;
-        public Action OnPlayerCaptured, OnResumeClicked, OnRestartFinished, OnPowersBought, 
-            OnAdsRewarded, OnGameplayContinued;
-        public Action<bool> OnPause_ResumeClicked;
+        public Action OnPlayerCaptured, OnResumeClicked, OnRestartFinished, OnPowersBought, OnGameplayContinued;
+        public Action<bool> OnPause_ResumeClicked, OnAdsRewarded;
         public Action<int> OnRestartClicked, OnGameOver, OnPlayerHealthOver;
         public Action<ObstacleTag, int> OnPowerUpCollected;
 
@@ -85,6 +84,7 @@ namespace Untitled_Endless_Runner
          *  ExtraHearts - 5
          *******************************************************************************************/
         //On Debug Power buttons, under the Test Canvas
+        //On the Buy buttons, under the PowerUpsPanel
         public void StartUpPowers(int powerIndex)
         {
             //Debug.Log("Binary : " + Convert.ToString(startPowers, 2));

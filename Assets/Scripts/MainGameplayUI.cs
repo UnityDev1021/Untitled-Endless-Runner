@@ -1,4 +1,5 @@
 //#define TEST_MODE
+#define TEST_CANVAS
 
 using System.Collections;
 using TMPro;
@@ -25,6 +26,13 @@ namespace Untitled_Endless_Runner
         [SerializeField] private TMP_Text totalCoinsTxt, highScoreTxt, coinsBalance_MM_Txt, coinsBalance_BPU_Txt, diamondsTxt, 
                                             coinsCollectedTxt, diamondsBalTxt;
 
+        #region TestVariables
+        [Header("Test Canvas")]
+#if TEST_CANVAS
+        [SerializeField] private TMP_Text debugTxt;
+#endif
+        #endregion
+
         [Header ("Prefabs List")]
         [SerializeField] private GameObject heartPrefab;
 
@@ -49,7 +57,8 @@ namespace Untitled_Endless_Runner
             localGameLogic.OnPlayerCaptured += EmptyHearts;
             localGameLogic.OnRestartFinished += CallFadeOut;
             localGameLogic.OnRestartFinished += FillHearts;
-            localGameLogic.OnRestartFinished += UpdateDiamondsAmount;
+            localGameLogic.OnRestartFinished += InvokeUpdateDiamondAmount;
+            localGameLogic.OnRestartFinished += ResetStats;
             localGameLogic.OnGameOver += UpdateFinalScore;
             localGameLogic.OnPowerUpCollected += UpdatePowerUpUI;
             localGameLogic.OnPowersBought += UpdateCoins;
@@ -66,7 +75,8 @@ namespace Untitled_Endless_Runner
             localGameLogic.OnPlayerCaptured -= EmptyHearts;
             localGameLogic.OnRestartFinished -= CallFadeOut;
             localGameLogic.OnRestartFinished -= FillHearts;
-            localGameLogic.OnRestartFinished -= UpdateDiamondsAmount;
+            localGameLogic.OnRestartFinished -= InvokeUpdateDiamondAmount;
+            localGameLogic.OnRestartFinished -= ResetStats;
             localGameLogic.OnGameOver -= UpdateFinalScore;
             localGameLogic.OnPowerUpCollected -= UpdatePowerUpUI;
             localGameLogic.OnPowersBought -= UpdateCoins;
@@ -94,9 +104,29 @@ namespace Untitled_Endless_Runner
 #if TEST_MODE
             PlayerPrefs.SetInt("COIN_AMOUNT", 200);
 #endif
+
+#if TEST_CANVAS
+            debugTxt = GameObject.Find("DebugText_TC (TMP)").GetComponent<TMP_Text>();
+#endif
+
             coinsBalance_MM_Txt.text = PlayerPrefs.GetInt("COIN_AMOUNT", 0).ToString();
             coinsBalance_BPU_Txt.text = PlayerPrefs.GetInt("COIN_AMOUNT", 0).ToString();
             diamondsTxt.text = PlayerPrefs.GetInt("DIAMONDS_AMOUNT", 0).ToString();
+        }
+
+        private void Update()
+        {
+#if TEST_CANVAS
+            debugTxt.text = $"Invincibility : {GameManager.instance.invincibility}\n" +
+                $"Speed Boost : {GameManager.instance.speedBoost}\n" +
+                $"armorTimer : {armorTimer.gameObject.activeSelf}\n" +
+                $"score2xTimer : {score2xTimer.gameObject.activeSelf}\n" +
+                $"DashTimer : {airDashBt.gameObject.activeSelf}\n" +
+                $"HigherJump : {jumpBt.transform.GetChild(1).gameObject.activeSelf}\n" +
+                $"currentHeart : {currentHeart}\n" +
+                $"halfHeart : {halfHeart}\n" +
+                $"Game Started : {GameManager.instance.gameStarted}\n";
+#endif
         }
 
         private void UpdateHeartUI(ObstacleStat obstacleStat)
@@ -235,6 +265,15 @@ namespace Untitled_Endless_Runner
         private void FillHearts()
         {
             currentHeart = (sbyte)(localGameLogic.totalHearts - 1);
+            byte totalHearts = (byte)(heartContainer.transform.childCount);
+
+            //while (heartContainer.transform.childCount >= localGameLogic.totalHearts)               //Destroying Extra Hearts
+            while (totalHearts > localGameLogic.totalHearts)               //Destroying Extra Hearts
+            {
+                //Debug.Log($"Name : {heartContainer.transform.GetChild(localGameLogic.totalHearts).name}");
+                //heartContainer.transform.GetChild(localGameLogic.totalHearts).gameObject.SetActive(false);
+                Destroy(heartContainer.transform.GetChild(--totalHearts).gameObject);
+            }
 
             for (int i = 0; i < heartContainer.transform.childCount; i++)
             {
@@ -244,16 +283,16 @@ namespace Untitled_Endless_Runner
 
         private void DisplayBuyHeartsPanel(int restartStatus)
         {
-            //Debug.Log($"Restart Status : {restartStatus}");
+            Debug.Log($"Restart Status : {restartStatus}");
 
             if (restartStatus == 1)
                 return;
 
-            if (PlayerPrefs.GetInt("DIAMONDS_AMOUNT", 0) >= 3)
-            {
-                gameOverPanel.SetActive(true);
-                return;
-            }
+            //if (PlayerPrefs.GetInt("DIAMONDS_AMOUNT", 0) >= 3)
+            //{
+            //    gameOverPanel.SetActive(true);
+            //    return;
+            //}
 
             foreach (var disabledPanel in heartsDisabledPanel)
                 disabledPanel.SetActive(true);
@@ -289,11 +328,28 @@ namespace Untitled_Endless_Runner
             localGameLogic.OnGameplayContinued?.Invoke();           //Alive Player            
         }
 
-        private void UpdateDiamondsAmount()
+        private void InvokeUpdateDiamondAmount()
+        {
+            UpdateDiamondsAmount(true);
+        }
+
+        private void UpdateDiamondsAmount(bool showBuyHeartPanel)
         {
             diamondsTxt.text = PlayerPrefs.GetInt("DIAMONDS_AMOUNT", 0).ToString();
             diamondsBalTxt.text = PlayerPrefs.GetInt("DIAMONDS_AMOUNT", 0).ToString();
             totalCoinsTxt.text = "0";
+
+            if (!showBuyHeartPanel)
+                DisplayBuyHeartsPanel(0);
+        }
+
+        private void ResetStats()
+        {
+            armorTimer.gameObject.SetActive(false);
+            score2xTimer.gameObject.SetActive(false);
+            airDashBt.SetActive(false);
+            jumpBt.transform.GetChild(0).gameObject.SetActive(true);
+            jumpBt.transform.GetChild(1).gameObject.SetActive(false);
         }
 
         private void UpdateFinalScore(int finalScore)
@@ -461,7 +517,7 @@ namespace Untitled_Endless_Runner
                             }
 
                             armorTimer.fillAmount = Mathf.Lerp(1, 0, tempTime);
-                            //Debug.Log($"Temp Time : {tempTime}, armor FIll Amount : {armorTimer.fillAmount}");
+                            Debug.Log($"Temp Time : {tempTime}, armor FIll Amount : {armorTimer.fillAmount}");
 
                             yield return null;
                         }

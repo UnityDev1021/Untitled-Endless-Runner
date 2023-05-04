@@ -8,6 +8,7 @@ namespace Untitled_Endless_Runner
         {
             base.OnEnable();
             obstacleStat.activated = false;
+            EnableEffectAgain();
         }
 
         protected override void ApplyEffect(GameObject player)
@@ -17,7 +18,7 @@ namespace Untitled_Endless_Runner
             obstacleStat.activated = true;
             //localGameLogic.OnObstacleDetected?.Invoke(obstacleStat);                  //Not Doing Anything
             localGameLogic.OnPowerUpCollected?.Invoke(ObstacleTag.Shield, 1);
-            Invoke(nameof(EnableEffectAgain), 0.5f);
+            //Invoke(nameof(EnableEffectAgain), 0.5f);
             gameObject.SetActive(false);
         }
 

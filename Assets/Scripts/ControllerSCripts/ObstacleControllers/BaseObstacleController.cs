@@ -115,6 +115,7 @@ namespace Untitled_Endless_Runner
         private void CallToggleEffects()
         {
             ToggleEffects(0);
+            localGameLogic.OnPowerUpCollected?.Invoke(_obstacleStat.tag, 0);     //does nothing if the obstacle is not active       
         }
 
         protected virtual void ToggleEffects(int dummyData = 0)

@@ -1,5 +1,7 @@
 //#define TEST_MODE
+#define TEST_CANVAS
 
+using TMPro;
 using UnityEngine;
 
 namespace Untitled_Endless_Runner
@@ -11,7 +13,7 @@ namespace Untitled_Endless_Runner
 
         [Space]
         [SerializeField] private Camera mainCamera;
-        private float parallaxEffect = 0.1f, startPosX;
+        //private float parallaxEffect = 0.1f, startPosX;
         //[SerializeField] private Vector3[] spawnPointsAbove, spawnPointsBelow;              //Why Vector3??
         [SerializeField] private float[] spawnPointsAbove, spawnPointsBelow, comboSpawnPoints, headSpawnPoints;              //Why Vector3??
         [SerializeField] private float initialSpawnTime, timeAtSpawn;
@@ -22,6 +24,13 @@ namespace Untitled_Endless_Runner
         //Obstacle Spawn Groups
         [SerializeField] private ObstacleGroup[] obstacleGroups;
         [SerializeField] private bool spawnEnabled = true;                  //Serialize for test
+
+        #region TestVariables
+        [Header("Test Canvas")]
+#if TEST_CANVAS
+        [SerializeField] private TMP_Text debugTxt;
+#endif
+        #endregion
 
         [Header("Local Refernce Script")]
         [SerializeField] private GameLogic localGameLogic;
@@ -34,7 +43,7 @@ namespace Untitled_Endless_Runner
 
             spawnEnabled = true;
             Invoke(nameof(SpawnObstacle), initialSpawnTime);
-            startPosX = transform.position.x;
+            //startPosX = transform.position.x;                         //Not Needed Now
         }
 
         private void OnDisable()
@@ -49,6 +58,10 @@ namespace Untitled_Endless_Runner
         {
             //Invoke(nameof(SpawnObstacle), initialSpawnTime);
             //startPosX = transform.position.x;
+
+#if TEST_CANVAS
+            debugTxt = GameObject.Find("DebugText_TC2 (TMP)").GetComponent<TMP_Text>();
+#endif
         }
 
         private void ResetStats(int dummyValue)                 //In both restart cases, it will require to turn off
@@ -126,10 +139,20 @@ namespace Untitled_Endless_Runner
             //Debug.Log($"Toggle Spawn status : {spawnEnabled}");
         }
 
+#if TEST_CANVAS
+        private void Update()
+        {
+            debugTxt.text = $"spawnEnabled : {spawnEnabled}\n" +
+                //$"startPosX : {startPosX}\n" +
+                $"timeAtSpawn : {timeAtSpawn}\n" +
+                $"obstacleGroupIndex : {obstacleGroupIndex}\n";
+        }
+#endif
+
         private void FixedUpdate()
         {
             //To Move along with the ground
-            transform.position = new Vector3(startPosX + (mainCamera.transform.position.x * parallaxEffect), transform.position.y, transform.position.z);
+            //transform.position = new Vector3(startPosX + (mainCamera.transform.position.x * parallaxEffect), transform.position.y, transform.position.z);
         }
 
         private byte ChooseObstacleGroup()

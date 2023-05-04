@@ -467,6 +467,26 @@ ________________________________________________________________________________
 => Restart Mechanism
 	(-) Resetting Camera position in BAckground Controller.
 	(-) Also resetting environment positions after a certain delay so that the Fade In occurs, and then the environment resets.
+=> [Do] After showing Ads and getting diamonds, recheck if powers can be brought again.
+
+-------------------------------------------------------------------
+							04 May
+-------------------------------------------------------------------
+=> [Important] Be careful of when the ResetStats for Parallax Script is called. The BackGroundController updates the camera pos after 1.1f, and the same goes to ParallaxScript. So the environment props gets reset before the camera.
+	(-) Increasing the call time from 1.1f to 1.2f.
+	
+	05-04 11:35:57.983: E/BufferQueueProducer(29299): BQDUMP(mConsumerName=SurfaceTexture-1-29299-0, mConnectedApi=3, mConsumerUsageBits=256, mId=727300000002, producer=[29299:com.ElectroBolt.BhagodaNinja], consumer=[29299:com.ElectroBolt.BhagodaNinja])
+	
+	05-04 11:56:09.926: E/ndroid.systemu(2366): Failed to open APK '/data/app/~~UH2SSaKv3Co77PkOSGSsGA==/com.ElectroBolt.BhagodaNinja-TrZxSSxXucgiinANV74ZYQ==/base.apk': I/O error
+
+=> PLayer doesnt die when touching SpikeHead after sliding and getting in touch.
+=> Making a test canvas to profile all the variables.
+=> Haptic Feedback when PowerUp or struck with Obstacle.
+=> Player gets stuck in the block.
+=> [Fixed] Total Hearts in UI was not getting updated, if the player collected hearts from the previous run and restarted, the hearts persisted to the next run.
+=> [Fix] If a powerUp is collected and the player restarts, then the power-ups also persist to next session.
+
+
 _______________________________________________________________________________________________________________
 _______________________________________________________________________________________________________________
 

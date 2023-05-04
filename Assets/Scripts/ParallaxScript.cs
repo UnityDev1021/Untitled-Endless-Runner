@@ -14,12 +14,12 @@ namespace Untitled_Endless_Runner
 
         private void OnEnable()
         {
-            localGameLogic.OnRestartFinished += ResetStats;
+            localGameLogic.OnRestartFinished += CallReset;
         }
 
         private void OnDisable()
         {
-            localGameLogic.OnRestartFinished -= ResetStats;
+            localGameLogic.OnRestartFinished -= CallReset;
         }
 
         // Start is called before the first frame update
@@ -36,37 +36,48 @@ namespace Untitled_Endless_Runner
         {
             if (GameManager.instance.gameStarted)
             {
-                tempPosXVal = (cam.transform.position.x * (1 - parallaxEffect));
-                distance = (cam.transform.position.x * parallaxEffect);
-
-                transform.position = new Vector3(startPos + distance, transform.position.y, transform.position.z);
-
-                //Debug.Log($"temp : {temp}, transform.position.x : {transform.position.x}");
-                if (tempPosXVal > startPos + (length * sceneMultiplier))
-                {
-                    float tempPosX = transform.GetChild(prevSceneIndex).transform.position.x;
-
-                    if (prevSceneIndex == (transform.childCount - 1))               // If the Scene at, the extreme end of the camera or last in line ,is about to go inside, then change to the one at the first in line
-                        prevSceneIndex = 0;
-                    else
-                        prevSceneIndex++;
-
-                    transform.GetChild(prevSceneIndex).transform.position =
-                        new Vector3(tempPosX + length, transform.GetChild(prevSceneIndex).transform.position.y,
-                        transform.GetChild(prevSceneIndex).transform.position.z);
-                    sceneMultiplier++;
-                    //length *= sceneMultiplier;
-                }
-                else if (tempPosXVal < startPos - length)
-                    startPos -= length;
+                UpdatePosition();
             }
+        }
+
+        private void UpdatePosition()
+        {
+            tempPosXVal = (cam.transform.position.x * (1 - parallaxEffect));
+            distance = (cam.transform.position.x * parallaxEffect);
+
+            transform.position = new Vector3(startPos + distance, transform.position.y, transform.position.z);
+
+            //Debug.Log($"tempPosXVal : {tempPosXVal}, transform.position.x : {transform.position.x}, name : {transform.name}");
+            if (tempPosXVal > startPos + (length * sceneMultiplier))
+            {
+                float tempPosX = transform.GetChild(prevSceneIndex).transform.position.x;
+
+                if (prevSceneIndex == (transform.childCount - 1))               // If the Scene at, the extreme end of the camera or last in line ,is about to go inside, then change to the one at the first in line
+                    prevSceneIndex = 0;
+                else
+                    prevSceneIndex++;
+
+                transform.GetChild(prevSceneIndex).transform.position =
+                    new Vector3(tempPosX + length, transform.GetChild(prevSceneIndex).transform.position.y,
+                    transform.GetChild(prevSceneIndex).transform.position.z);
+                sceneMultiplier++;
+                //length *= sceneMultiplier;
+            }
+            else if (tempPosXVal < startPos - length)
+                startPos -= length;
         }
 
         private void ResetStats()
         {
-            Debug.Log($"Reset Stats Called from {transform.name}");
+            //Debug.Log($"Reset Stats Called from {transform.name}");
             sceneMultiplier = 1;
             prevSceneIndex = (transform.childCount - 1);                                    //The last scnen in line
+            UpdatePosition();
+        }
+
+        private void CallReset()
+        {
+            Invoke(nameof(ResetStats), 1.2f);
         }
     }
 }

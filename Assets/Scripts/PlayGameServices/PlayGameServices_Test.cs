@@ -11,25 +11,20 @@ using System;
 
 namespace Untitled_Endless_Runner
 {
-    public class PlayGameServices : MonoBehaviour
+    public class PlayGameServices_Test : MonoBehaviour
     {
-        [SerializeField] private TMP_Text signInStatus;
+        [SerializeField] private TMP_Text signInStatus, debugText;
         private bool signedIn;
-
-        [Header("Local References")]
-        [SerializeField] private GameLogic localGameLogic;
 
         private void OnEnable()
         {
 #if MOBILE_MODE
-            localGameLogic.OnGameOver += PostScoreToLeaderBoard;
 #endif
         }
 
         private void OnDisable()
         {
 #if MOBILE_MODE
-            localGameLogic.OnGameOver -= PostScoreToLeaderBoard;
 #endif
         }
 
@@ -75,7 +70,7 @@ namespace Untitled_Endless_Runner
                 // Continue with Play Games Services
                 PlayGamesPlatform.Instance.RequestServerSideAccess(/* forceRefreshToken= */ true, async code =>
                 {
-                    //Debug.Log("Authorization code: " + code);
+                    Debug.Log($"Authorization code: {code}");
                     tokenGPGS = code;
                     // send code to server          // This token serves as an example to be used for SignInWithGooglePlayGames                    
                     await SignInWithGooglePlayGamesAsync(tokenGPGS);
@@ -85,8 +80,8 @@ namespace Untitled_Endless_Runner
             {
                 // Disable your integration with Play Games Services or show a login button
                 // to ask users to sign-in. Clicking it should call
-                //debugText.text = "Status : " + status.ToString();
-                //Debug.Log($"Not Successful Google Play Games  Sign in. Error Details : {status}");
+                debugText.text = "Status : " + status.ToString();
+                Debug.Log($"Not Successful Google Play Games  Sign in. Error Details : {status}");
 #if UNITY_ANDROID && !UNITY_EDITOR
                 _ShowAndroidToastMessage($"Error Signing In, Status : {status}");
 #endif
@@ -102,13 +97,15 @@ namespace Untitled_Endless_Runner
                 signedIn = true;
 
                 //debugText.text = "Status : Google Play Games Successful Sign in";
-                //Debug.Log("SignIn is successful.");
+                Debug.Log("SignIn is successful.");
+                debugText.text = "SignIn is successful.";
             }
             catch (Unity.Services.Authentication.AuthenticationException ex)
             {
                 // Compare error code to AuthenticationErrorCodes
                 // Notify the player with the proper error message
                 Debug.LogException(ex);
+                debugText.text = $"Error Signing In. AuthenticationException Message : {ex.Message}";
 #if UNITY_ANDROID && !UNITY_EDITOR
                 _ShowAndroidToastMessage($"Error Signing In : {ex.Message}");
 #endif
@@ -118,6 +115,7 @@ namespace Untitled_Endless_Runner
                 // Compare error code to CommonErrorCodes
                 // Notify the player with the proper error message
                 Debug.LogException(ex);
+                debugText.text = $"Error Signing In. RequestFailedException Message : {ex.Message}";
 #if UNITY_ANDROID && !UNITY_EDITOR
                 _ShowAndroidToastMessage($"Error Signing In : {ex.Message}");
 #endif
@@ -135,6 +133,7 @@ namespace Untitled_Endless_Runner
                     signedIn = false;
                     signInStatus.text = $"Sign In";
                     AuthenticationService.Instance.SignOut();
+                    debugText.text = $"Signed Out";
                     Debug.Log("Signed Out");
                 }
             }

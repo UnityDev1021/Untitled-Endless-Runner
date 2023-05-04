@@ -1,8 +1,10 @@
 #define MOBILE_CONTROLS                     //For Mobile Controls
 //#define TEST_MODE
+#define TEST_CANVAS
 
 using System;
 using System.Collections;
+using TMPro;
 using UnityEngine;
 
 namespace Untitled_Endless_Runner
@@ -45,6 +47,12 @@ namespace Untitled_Endless_Runner
         private bool mobile_Jump, mobile_Slide;
 #endif
 
+        #region TestVariables
+        [Header("Test Canvas")]
+#if TEST_CANVAS
+        [SerializeField] private TMP_Text debugTxt;
+#endif
+        #endregion
 
         private void OnEnable()
         {
@@ -86,6 +94,10 @@ namespace Untitled_Endless_Runner
         {
             playerRB = GetComponent<Rigidbody2D>();
             heart = localGameLogic.totalHearts;
+
+#if TEST_CANVAS
+            debugTxt = GameObject.Find("DebugText_TC3 (TMP)").GetComponent<TMP_Text>();
+#endif
         }
 
 #if !MOBILE_CONTROLS
@@ -201,6 +213,18 @@ namespace Untitled_Endless_Runner
             }
         }
 
+#if TEST_CANVAS
+        private void Update()
+        {
+            debugTxt.text = $"disableSlide : {disableSlide}\n" +
+                $"isDashing : {isDashing}\n" +
+                $"disableJump : {disableJump}\n" +
+                $"isSliding : {isSliding}\n" +
+                $"heart : {heart}\n" +
+                $"jumpCount : {jumpCount}\n";
+        }
+#endif
+
         //On the ReturnToOGPos button, under the Test Canvas
         public void Alive(int heartsAmount)
         {
@@ -281,6 +305,8 @@ namespace Untitled_Endless_Runner
             gameStarted = false;
             //Debug.Log($"Un Alive set to false : {unAlive}");
             this.enabled = false;
+            transform.GetChild(1).gameObject.SetActive(false);          //Shield
+            jumpForce = 12f;                                            //Jump
         }
 
         private void SetSlideOn()

@@ -1,3 +1,5 @@
+//#define TEST_MODE
+
 using System;
 using System.Collections;
 using TMPro;
@@ -44,7 +46,10 @@ namespace Untitled_Endless_Runner
         {
             if (scrollBackground)
             {
+#if TEST_MODE
+#else
                 transform.Translate(new Vector3(moveSpeed, 0f, 0f));
+#endif
                 score = (int)MathF.Round(transform.position.x);
 
                 if (enableScore2x)                  //As for each forward x position, we get 1 point, so x+1 point for multiplier. Can make scoreMultiplier if needs be.            
@@ -200,7 +205,7 @@ namespace Untitled_Endless_Runner
         {
             mainCamera.transform.position = new Vector3(0f, mainCamera.transform.position.y, mainCamera.transform.position.z);
 
-            //Debug.Log($"Restart Clicked");
+            Debug.Log($"Restart Clicked");
             int totalGroups = BackGround.transform.childCount;
             //Debug.Log($"Total Groups : {totalGroups}");
 
