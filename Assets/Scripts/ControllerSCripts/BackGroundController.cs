@@ -1,4 +1,5 @@
 //#define TEST_MODE
+#define TEST_CANVAS
 
 using System;
 using System.Collections;
@@ -23,10 +24,18 @@ namespace Untitled_Endless_Runner
         [Header("Local Reference Script")]
         [SerializeField] private GameLogic localGameLogic;
 
+        #region TestVariables
+        [Header("Test Canvas")]
+#if TEST_CANVAS
+        [SerializeField] private TMP_Text debugTxt;
+#endif
+        #endregion
+
         private void OnEnable()
         {
             localGameLogic.OnPlayerHealthOver += StopBackGroundScroll;
             localGameLogic.OnRestartClicked += CallResetEnvironment;
+            localGameLogic.OnRestartFinished += ResetPowerUpStats;
             localGameLogic.OnPowerUpCollected += CheckPowerUp;
             localGameLogic.OnPlayerAction += InvokeToggleSpeed;
             localGameLogic.OnGameplayContinued += InvokeBGScrolling;
@@ -36,10 +45,27 @@ namespace Untitled_Endless_Runner
         {
             localGameLogic.OnPlayerHealthOver -= StopBackGroundScroll;
             localGameLogic.OnRestartClicked -= CallResetEnvironment;
+            localGameLogic.OnRestartFinished -= ResetPowerUpStats;
             localGameLogic.OnPowerUpCollected -= CheckPowerUp;
             localGameLogic.OnPlayerAction -= InvokeToggleSpeed;
             localGameLogic.OnGameplayContinued -= InvokeBGScrolling;
         }
+
+#if TEST_CANVAS
+        private void Start()
+        {
+            debugTxt = GameObject.Find("DebugText_TC4 (TMP)").GetComponent<TMP_Text>();
+        }
+#endif
+
+#if TEST_CANVAS
+        private void Update()
+        {
+            debugTxt.text = $"enableScore2x : {enableScore2x}\n" +
+                $"moveSpeed : {moveSpeed}" +
+                $"scrollBackground : {scrollBackground}";
+        }
+#endif
 
         // Update is called once per frame
         private void FixedUpdate()
@@ -180,7 +206,7 @@ namespace Untitled_Endless_Runner
         private void StopBackGroundScroll(int restartStatus)
         {
             scrollBackground = false;
-
+             
             if (restartStatus == 0)
                 localGameLogic.OnGameOver?.Invoke(score);
         }
@@ -229,6 +255,13 @@ namespace Untitled_Endless_Runner
             }
 
             this.enabled = false;
+        }
+
+        private void ResetPowerUpStats()
+        {
+            moveSpeed = 0.1f;
+            GameManager.instance.speedBoost = false;
+            enableScore2x = false;
         }
 
         //private Vector3 SetPosition()

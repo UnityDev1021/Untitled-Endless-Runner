@@ -2,10 +2,14 @@
 //#define TEST_MODE
 #define TEST_CANVAS
 
+using GooglePlayGames.BasicApi;
 using System;
 using System.Collections;
 using TMPro;
 using UnityEngine;
+#if !MOBILE_CONTROLS
+using UnityEngine.InputSystem;
+#endif
 
 namespace Untitled_Endless_Runner
 {
@@ -34,9 +38,9 @@ namespace Untitled_Endless_Runner
 
         [Space]
         private byte jumpCount;
-        private bool hasJumped, isSliding, isDashing, disableSlide, disableJump;        //, unAlive
-        public bool gameStarted;
+        private bool hasJumped, isSliding, isDashing, disableSlide, disableJump, captured, gameStarted;        //, unAlive
         private Vector2 unAlivePos;
+        [SerializeField] private GameObject mainCamera;
 
         [Header("Sound Effects")]
         [SerializeField] private AudioSource soundEffectsSource;
@@ -52,7 +56,7 @@ namespace Untitled_Endless_Runner
 #if TEST_CANVAS
         [SerializeField] private TMP_Text debugTxt;
 #endif
-        #endregion
+#endregion
 
         private void OnEnable()
         {
@@ -124,7 +128,7 @@ namespace Untitled_Endless_Runner
 
                 disableJump = true;
                 isSliding = true;
-                localGameLogic.OnPlayerSlide?.Invoke();
+                //localGameLogic.OnPlayerSlide?.Invoke();
                 playerAnimator.Play("Slide", 0, 0f);
 
                 //tempPosX = transform.localPosition.x;               //Store current X Co-Ordinate
@@ -148,7 +152,18 @@ namespace Untitled_Endless_Runner
                 }
             }*/
         }
+#elif TEST_CANVAS
+        private void Update()
+        {
+            debugTxt.text = $"disableSlide : {disableSlide}\n" +
+                $"isDashing : {isDashing}\n" +
+                $"disableJump : {disableJump}\n" +
+                $"isSliding : {isSliding}\n" +
+                $"heart : {heart}\n" +
+                $"jumpCount : {jumpCount}\n";
+        }
 #endif
+
 
         public void SetStartPlayer()
         {
@@ -213,18 +228,6 @@ namespace Untitled_Endless_Runner
             }
         }
 
-#if TEST_CANVAS
-        private void Update()
-        {
-            debugTxt.text = $"disableSlide : {disableSlide}\n" +
-                $"isDashing : {isDashing}\n" +
-                $"disableJump : {disableJump}\n" +
-                $"isSliding : {isSliding}\n" +
-                $"heart : {heart}\n" +
-                $"jumpCount : {jumpCount}\n";
-        }
-#endif
-
         //On the ReturnToOGPos button, under the Test Canvas
         public void Alive(int heartsAmount)
         {
@@ -242,6 +245,11 @@ namespace Untitled_Endless_Runner
         {
             Vector2 startPos = transform.position;
             Vector2 endPos = new Vector2(unAlivePos.x, -1f);
+
+            if (captured)
+                endPos = new Vector2(mainCamera.transform.position.x - 5.58f, mainCamera.transform.position.y - 3.7f);
+            else
+                endPos = new Vector2(unAlivePos.x, -1f);
             float time = 0f;
 
             while (true)
@@ -256,9 +264,18 @@ namespace Untitled_Endless_Runner
             }
             playerRB.bodyType = RigidbodyType2D.Dynamic;
 
-            yield return new WaitForSeconds(0.5f);
+            yield return new WaitForSeconds(0.4f);                  //This can cause problem because this toggle enableSpawn
+
+            //Can combine below into a function 
+            captured = false;
             gameStarted = true;
             GameManager.instance.gameStarted = true;
+            jumpForce = 12f;                                            //Jump
+            disableSlide = false;
+            isDashing = false;
+            isSliding = false;
+            disableJump = false;
+            jumpCount = 0;
         }
 
         private void ToggleAction(PlayerAction actionTaken, byte status)
@@ -307,6 +324,11 @@ namespace Untitled_Endless_Runner
             this.enabled = false;
             transform.GetChild(1).gameObject.SetActive(false);          //Shield
             jumpForce = 12f;                                            //Jump
+
+            disableSlide = false;
+            isDashing = false;
+            isSliding = false;
+            disableJump = false;
         }
 
         private void SetSlideOn()
@@ -325,9 +347,10 @@ namespace Untitled_Endless_Runner
         {
             switch(animationIndex)
             {
+                //Reset Player Stats
                 case 0:
                     {
-                        playerAnimator.Play("Idle", 0, 0f);
+                        //playerAnimator.Play("Idle", 0, 0f);
                         heart = localGameLogic.totalHearts;
 
                         break;
@@ -368,8 +391,10 @@ namespace Untitled_Endless_Runner
             if (gameStarted && collision.CompareTag("Captured"))
             {
                 heart = 0f;
+                captured = true;
                 UnAlive();
                 localGameLogic.OnPlayerCaptured?.Invoke();
+                //Debug.Log($"Player captured : {captured}, gameStarted : {gameStarted}");
             }
         }
 
@@ -583,9 +608,11 @@ namespace Untitled_Endless_Runner
             int coinsBalance = PlayerPrefs.GetInt("COIN_AMOUNT", 0);
             PlayerPrefs.SetInt("COIN_AMOUNT", totalCoins + coinsBalance);
             GameManager.instance.coinsBalance = totalCoins + coinsBalance;
-            //Debug.Log("Coins Amount : " + PlayerPrefs.GetInt("COIN_AMOUNT", -1));
+            Debug.Log("Coins Amount : " + PlayerPrefs.GetInt("COIN_AMOUNT", -1));
             localGameLogic.OnPlayerHealthOver?.Invoke(0);
             GameManager.instance.gameStarted = false;
+            gameStarted = false;
+            hasJumped = false;
         }
 
         public void TakeDamage()

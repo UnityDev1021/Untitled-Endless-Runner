@@ -71,6 +71,11 @@ namespace Untitled_Endless_Runner
             //Debug.Log($"Calling For Reset : {spawnEnabled}");
         }
 
+        public void EnableSpawn()
+        {
+
+        }
+
         public void SpawnObstacle()
         {
             //enableSpawn = false;
@@ -116,6 +121,8 @@ namespace Untitled_Endless_Runner
 
         private void ToggleSpawn(bool toggleValue)
         {
+            //Debug.Log($"GameManager.instance.gameStarted : {GameManager.instance.gameStarted}");
+
             //As this is called multiple times. i.e. at restart is twice called
             if (GameManager.instance.gameStarted)
             {
@@ -133,10 +140,10 @@ namespace Untitled_Endless_Runner
                     CancelInvoke(nameof(SpawnObstacle));
                 }
             }
-            else
-                this.enabled = false;               //If Called again during Restart
+            //else
+            //    this.enabled = false;               //If Called again during Restart
 
-            //Debug.Log($"Toggle Spawn status : {spawnEnabled}");
+            //Debug.Log($"Toggle Spawn status : {spawnEnabled}, toggleValue After: {toggleValue}");
         }
 
 #if TEST_CANVAS

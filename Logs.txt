@@ -483,9 +483,26 @@ ________________________________________________________________________________
 => Making a test canvas to profile all the variables.
 => Haptic Feedback when PowerUp or struck with Obstacle.
 => Player gets stuck in the block.
-=> [Fixed] Total Hearts in UI was not getting updated, if the player collected hearts from the previous run and restarted, the hearts persisted to the next run.
-=> [Fix] If a powerUp is collected and the player restarts, then the power-ups also persist to next session.
+=> [Fixed For Now] Total Hearts in UI was not getting updated, if the player collected hearts from the previous run and restarted, the hearts persisted to the next run.
+=> [Fixed For Now] If a powerUp is collected and the player restarts, then the power-ups also persist to next session.
+=> [Fixed For Now] The gap between SpikedHead and other obstacles is too much/big.
 
+-------------------------------------------------------------------
+							05 May
+-------------------------------------------------------------------
+=> [Bugs] Invincibility off but spike head does not unalive player.
+	(-) Triple jumps occur in between
+	(-) After Restart, player goes through the rockhead.
+	(-) Spawn disables after revive
+	(-) On Restart Obstacles are not detected.
+	(-) Heart UI breaks.
+		[=] Sometimes the currentHeart goes to -1 but heart remains 0.5f
+=> [Fix] Restart breaks things.
+=> If player unalives at captured, then the player after reviving gets unalive again as the player touches captured.
+=> gameStarted was not being set false in the PlayerController when the player unalives.
+=> Under PlayerController, under ReturnToOgPos. The toggle GameManager.instance.gameStarted is set to true after 0.5f, if this is set late then the variable spawnEnabled in ObstacleSpawner will not be enabled.
+=> [Feature] If a player encounters steppable, then the jump counter resets in succession. So player can do successful triple jumps.
+=> Instead of calling OnPowerUpCollected, resetting everything manually.
 
 _______________________________________________________________________________________________________________
 _______________________________________________________________________________________________________________

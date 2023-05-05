@@ -31,6 +31,8 @@ namespace Untitled_Endless_Runner
             EnableEffectAgain();
             destroyed = false;
             GetComponent<Animator>().Play("Nothing", 0, 0f);                //If the RockHead is smashed
+            transform.GetChild(0).gameObject.SetActive(true);
+            GetComponent<BoxCollider2D>().enabled = true;
             //Debug.Log($"On Enable");
         }
 

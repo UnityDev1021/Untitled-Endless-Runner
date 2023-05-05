@@ -23,10 +23,10 @@ namespace Untitled_Endless_Runner
             if (effectStatus == 3)
             {
                 //Debug.Log($"ACtivating, Effect Status : {effectStatus}");
-                effectStatus = 4;
-                obstacleStat.activated = true;
+                //effectStatus = 4;
+                //obstacleStat.activated = true;
                 localGameLogic.OnObstacleDetected?.Invoke(obstacleStat);
-                Invoke(nameof(ClearEffects), 1.5f);
+                //Invoke(nameof(ClearEffects), 1.5f);
                 //Debug.Log($"ACtivated, Effect Status : {effectStatus}");
             }
             //multiplier += 0.01f;

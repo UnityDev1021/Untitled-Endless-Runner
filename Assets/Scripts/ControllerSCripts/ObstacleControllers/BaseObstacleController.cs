@@ -115,7 +115,9 @@ namespace Untitled_Endless_Runner
         private void CallToggleEffects()
         {
             ToggleEffects(0);
-            localGameLogic.OnPowerUpCollected?.Invoke(_obstacleStat.tag, 0);     //does nothing if the obstacle is not active       
+            enableEffects = true;
+            GameManager.instance.invincibility = false;
+            //localGameLogic.OnPowerUpCollected?.Invoke(_obstacleStat.tag, 0);     //does nothing if the obstacle is not active       
         }
 
         protected virtual void ToggleEffects(int dummyData = 0)
@@ -131,7 +133,7 @@ namespace Untitled_Endless_Runner
 
         protected virtual void OnTriggerStay2D(Collider2D collision)
         {
-            //Debug.Log($"Found Player");
+            Debug.Log($"Found Player");
 
             if (enableEffects && collision.transform.CompareTag("Player"))
             {

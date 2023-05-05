@@ -1,4 +1,4 @@
-//#define TEST_MODE
+#define TEST_MODE
 
 using GoogleMobileAds.Api;
 using UnityEngine;
@@ -26,6 +26,10 @@ namespace Untitled_Endless_Runner
                 //Debug.Log($"Rewarded Initialization Status : {initStatus.ToString()}");
                 LoadRewardedAd();
             });
+
+#if TEST_MODE
+            PlayerPrefs.SetInt("DIAMONDS_AMOUNT", 1000);
+#endif
         }
 
         // These ad units are configured to always serve test ads.

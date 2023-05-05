@@ -114,9 +114,9 @@ namespace Untitled_Endless_Runner
             diamondsTxt.text = PlayerPrefs.GetInt("DIAMONDS_AMOUNT", 0).ToString();
         }
 
+#if TEST_CANVAS
         private void Update()
         {
-#if TEST_CANVAS
             debugTxt.text = $"Invincibility : {GameManager.instance.invincibility}\n" +
                 $"Speed Boost : {GameManager.instance.speedBoost}\n" +
                 $"armorTimer : {armorTimer.gameObject.activeSelf}\n" +
@@ -126,8 +126,8 @@ namespace Untitled_Endless_Runner
                 $"currentHeart : {currentHeart}\n" +
                 $"halfHeart : {halfHeart}\n" +
                 $"Game Started : {GameManager.instance.gameStarted}\n";
-#endif
         }
+#endif
 
         private void UpdateHeartUI(ObstacleStat obstacleStat)
         {
@@ -152,6 +152,7 @@ namespace Untitled_Endless_Runner
                             currentHeart--;
                             halfHeart = false;
                         }
+                        Debug.Log($"currentHeart : {currentHeart}, halfHEart : {halfHeart}");
 
                         break;
                     }
@@ -260,6 +261,7 @@ namespace Untitled_Endless_Runner
             {
                 heartContainer.transform.GetChild(i).GetComponent<Image>().sprite = heartSprites[2];
             }
+            currentHeart = 0;
         }
 
         private void FillHearts()
@@ -343,15 +345,6 @@ namespace Untitled_Endless_Runner
                 DisplayBuyHeartsPanel(0);
         }
 
-        private void ResetStats()
-        {
-            armorTimer.gameObject.SetActive(false);
-            score2xTimer.gameObject.SetActive(false);
-            airDashBt.SetActive(false);
-            jumpBt.transform.GetChild(0).gameObject.SetActive(true);
-            jumpBt.transform.GetChild(1).gameObject.SetActive(false);
-        }
-
         private void UpdateFinalScore(int finalScore)
         {
             finalScoreTxt.text = finalScore.ToString();
@@ -390,12 +383,22 @@ namespace Untitled_Endless_Runner
             coinsBalance_BPU_Txt.text = GameManager.instance.coinsBalance.ToString();
         }
 
+        private void ResetStats()
+        {
+            armorTimer.gameObject.SetActive(false);
+            score2xTimer.gameObject.SetActive(false);
+            airDashBt.SetActive(false);
+            jumpBt.transform.GetChild(0).gameObject.SetActive(true);
+            jumpBt.transform.GetChild(1).gameObject.SetActive(false);
+        }
+
         private void UpdatePowerUpUI(ObstacleTag detectedTag, int amount)
         {
             switch (detectedTag)
             {
                 //Do Nothing
                 case ObstacleTag.SpeedBoost:
+                case ObstacleTag.Heart:
                     break;
 
                 case ObstacleTag.Coin:
@@ -446,6 +449,7 @@ namespace Untitled_Endless_Runner
             }
         }
 
+        #region ShowTimers
         private void ShowArmorTimer()
         {
             armorTimer.gameObject.SetActive(true);
@@ -490,6 +494,7 @@ namespace Untitled_Endless_Runner
             }
             hjCoroutine = StartCoroutine(StartTimer(ObstacleTag.HigherJump));
         }
+        #endregion ShowTimers
 
         private IEnumerator StartTimer(ObstacleTag tagDetected)           //0 is for coin
         {
@@ -517,7 +522,7 @@ namespace Untitled_Endless_Runner
                             }
 
                             armorTimer.fillAmount = Mathf.Lerp(1, 0, tempTime);
-                            Debug.Log($"Temp Time : {tempTime}, armor FIll Amount : {armorTimer.fillAmount}");
+                            //Debug.Log($"Temp Time : {tempTime}, armor FIll Amount : {armorTimer.fillAmount}");
 
                             yield return null;
                         }
