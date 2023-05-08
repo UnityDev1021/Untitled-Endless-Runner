@@ -18,4 +18,4 @@ MonoBehaviour:
   - 0
   - 4
   disY: []
-  spawnNextAfter: 2
+  spawnNextAfter: 1.6

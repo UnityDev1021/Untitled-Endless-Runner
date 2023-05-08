@@ -133,7 +133,7 @@ namespace Untitled_Endless_Runner
 
         protected virtual void OnTriggerStay2D(Collider2D collision)
         {
-            Debug.Log($"Found Player");
+            //Debug.Log($"Found Player");
 
             if (enableEffects && collision.transform.CompareTag("Player"))
             {

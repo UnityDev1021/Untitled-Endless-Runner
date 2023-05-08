@@ -1,6 +1,6 @@
 #define MOBILE_CONTROLS                     //For Mobile Controls
 //#define TEST_MODE
-#define TEST_CANVAS
+//#define TEST_CANVAS
 
 using GooglePlayGames.BasicApi;
 using System;
@@ -21,7 +21,7 @@ namespace Untitled_Endless_Runner
         [Range(8, 15f)]
         [SerializeField] private float jumpForce;
         [Range(3, 8f)]
-        [SerializeField] private float slideForce;
+        [SerializeField] private float slideForce, moveToOgPosForce;
         [SerializeField] private float heart = 4f, damageFromObstacle = 0.5f, tempPosX;               //By default, total hearts will be 4
         //[SerializeField] private Animator playerAnimator;
         [SerializeField] private SpriteRenderer playerRenderer;
@@ -38,7 +38,7 @@ namespace Untitled_Endless_Runner
 
         [Space]
         private byte jumpCount;
-        private bool hasJumped, isSliding, isDashing, disableSlide, disableJump, captured, gameStarted;        //, unAlive
+        private bool hasJumped, isSliding, isDashing, disableSlide, disableJump, captured, gameStarted, atOgPos;        //, unAlive
         private Vector2 unAlivePos;
         [SerializeField] private GameObject mainCamera;
 
@@ -52,8 +52,8 @@ namespace Untitled_Endless_Runner
 #endif
 
         #region TestVariables
-        [Header("Test Canvas")]
 #if TEST_CANVAS
+        [Header("Test Canvas")]
         [SerializeField] private TMP_Text debugTxt;
 #endif
 #endregion
@@ -98,6 +98,7 @@ namespace Untitled_Endless_Runner
         {
             playerRB = GetComponent<Rigidbody2D>();
             heart = localGameLogic.totalHearts;
+            ReturnBackToOgPos();
 
 #if TEST_CANVAS
             debugTxt = GameObject.Find("DebugText_TC3 (TMP)").GetComponent<TMP_Text>();
@@ -155,7 +156,8 @@ namespace Untitled_Endless_Runner
 #elif TEST_CANVAS
         private void Update()
         {
-            debugTxt.text = $"disableSlide : {disableSlide}\n" +
+            debugTxt.text = $"Player Controls\n" +
+                $"disableSlide : {disableSlide}\n" +
                 $"isDashing : {isDashing}\n" +
                 $"disableJump : {disableJump}\n" +
                 $"isSliding : {isSliding}\n" +
@@ -228,7 +230,13 @@ namespace Untitled_Endless_Runner
             }
         }
 
-        //On the ReturnToOGPos button, under the Test Canvas
+        //On the Test Canvas
+        public void ApplyForce()
+        {
+            playerRB.velocity = transform.up * jumpForce;
+        }
+
+        //On the ReturnToOGPos button, under the Test Canvas                    //On the UseDiamonds button, under the Buy Hearts Panel
         public void Alive(int heartsAmount)
         {
             localGameLogic.OnPowerUpCollected?.Invoke(ObstacleTag.Shield, 1);               //Give a shield to the player
@@ -238,20 +246,33 @@ namespace Untitled_Endless_Runner
             }
             playerRB.bodyType = RigidbodyType2D.Kinematic;
             playerAnimator.Play("GetUp" ,0 ,0f);
-            _ = StartCoroutine(ReturnToOgPos());
+            _ = StartCoroutine(ReturnToOgPosUsnDmnds());
         }
 
-        private IEnumerator ReturnToOgPos()
+        private void ReturnBackToOgPos()
+        {
+            if (!atOgPos)
+            {
+                if (transform.localPosition.x >= -5f)                
+                    atOgPos = true;
+                else
+                    playerRB.AddForce(transform.right * moveToOgPosForce, ForceMode2D.Impulse);
+                //playerRB.velocity = transform.right * jumpForce;
+            }
+            else if (transform.localPosition.x <= -5f)
+                atOgPos = false;
+
+            //Debug.Log($"CAlling Return Back, position : {transform.localPosition.x}");
+            Invoke(nameof(ReturnBackToOgPos), 1f);              //Check back every 1 sec
+        }
+
+        private IEnumerator ReturnToOgPosUsnDmnds()
         {
             Vector2 startPos = transform.position;
-            Vector2 endPos = new Vector2(unAlivePos.x, -1f);
+            //Vector2 endPos = new Vector2(unAlivePos.x, -1f);
+            Vector2 endPos = new Vector2(mainCamera.transform.position.x - 5.58f, mainCamera.transform.position.y - 3.7f);
 
-            if (captured)
-                endPos = new Vector2(mainCamera.transform.position.x - 5.58f, mainCamera.transform.position.y - 3.7f);
-            else
-                endPos = new Vector2(unAlivePos.x, -1f);
             float time = 0f;
-
             while (true)
             {
                 time += Time.deltaTime;
@@ -601,6 +622,7 @@ namespace Untitled_Endless_Runner
         private void UnAlive()
         {
             //Debug.Log($"Player is unalived : {unAlive}");
+            heart = 0f;                                     //In case, the player encounters SpikedHead or others of this type
             playerAnimator.Play("Hit", 0);
             unAlivePos = transform.position;
             playerRB.AddForce(transform.right * 12f, ForceMode2D.Impulse);

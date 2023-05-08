@@ -20,4 +20,4 @@ MonoBehaviour:
   - 5
   - 7.5
   disY: []
-  spawnNextAfter: 5
+  spawnNextAfter: 2

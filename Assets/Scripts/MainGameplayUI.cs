@@ -1,5 +1,5 @@
 //#define TEST_MODE
-#define TEST_CANVAS
+//#define TEST_CANVAS
 
 using System.Collections;
 using TMPro;
@@ -117,7 +117,8 @@ namespace Untitled_Endless_Runner
 #if TEST_CANVAS
         private void Update()
         {
-            debugTxt.text = $"Invincibility : {GameManager.instance.invincibility}\n" +
+            debugTxt.text = $"MainGameplayUI\n" +
+                $"Invincibility : {GameManager.instance.invincibility}\n" +
                 $"Speed Boost : {GameManager.instance.speedBoost}\n" +
                 $"armorTimer : {armorTimer.gameObject.activeSelf}\n" +
                 $"score2xTimer : {score2xTimer.gameObject.activeSelf}\n" +
@@ -158,7 +159,7 @@ namespace Untitled_Endless_Runner
                     }
                 case ObstacleType.Power_Up:
                     {
-                        //Debug.Log($"Calling Heart PowerUp");
+                        //Debug.Log($"Calling Heart PowerUp, currentHeart : {currentHeart}");
 
                         switch (obstacleStat.tag)
                         {
@@ -176,6 +177,7 @@ namespace Untitled_Endless_Runner
                                         //if half-heart, then fill the next heart with half heart, and fill the current heart with full heart
                                         if (halfHeart)
                                         {
+                                            //Debug.Log($"Half HEart");
                                             heartContainer.transform.GetChild(currentHeart).GetComponent<Image>().sprite = heartSprites[0];
                                             heartContainer.transform.GetChild(currentHeart + 1).GetComponent<Image>().sprite = heartSprites[1];
                                         }
@@ -186,6 +188,7 @@ namespace Untitled_Endless_Runner
                                             //byte tempHeartCount = (currentHeart == 0) ? (byte) 0 : (byte) (currentHeart + 1);             //Consider Reset
                                             //Debug.Log($"Temp Heart Count : {tempHeartCount}");
 
+                                            //Debug.Log($"Not Half HEart");
                                             heartContainer.transform.GetChild(currentHeart + 1).GetComponent<Image>().sprite = heartSprites[0];
                                         }
 
@@ -247,13 +250,14 @@ namespace Untitled_Endless_Runner
                  yield return null;
              }
         }*/
-        #endregion OldCode
 
         //On the BuyHeartsBt under the BuyHeartsPanel
-        public void ResetCurrentHeart()
+
+        /*public void ResetCurrentHeart()
         {
             currentHeart = 0;
-        }
+        }*/
+        #endregion OldCode
 
         private void EmptyHearts()
         {
@@ -261,7 +265,8 @@ namespace Untitled_Endless_Runner
             {
                 heartContainer.transform.GetChild(i).GetComponent<Image>().sprite = heartSprites[2];
             }
-            currentHeart = 0;
+            currentHeart = -1;
+            halfHeart = false;
         }
 
         private void FillHearts()
@@ -285,7 +290,8 @@ namespace Untitled_Endless_Runner
 
         private void DisplayBuyHeartsPanel(int restartStatus)
         {
-            Debug.Log($"Restart Status : {restartStatus}");
+            //Debug.Log($"Restart Status : {restartStatus}");
+            EmptyHearts();
 
             if (restartStatus == 1)
                 return;

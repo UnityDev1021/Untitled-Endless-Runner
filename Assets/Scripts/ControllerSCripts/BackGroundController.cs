@@ -1,5 +1,5 @@
 //#define TEST_MODE
-#define TEST_CANVAS
+//#define TEST_CANVAS
 
 using System;
 using System.Collections;
@@ -25,8 +25,8 @@ namespace Untitled_Endless_Runner
         [SerializeField] private GameLogic localGameLogic;
 
         #region TestVariables
-        [Header("Test Canvas")]
 #if TEST_CANVAS
+        [Header("Test Canvas")]
         [SerializeField] private TMP_Text debugTxt;
 #endif
         #endregion
@@ -231,7 +231,7 @@ namespace Untitled_Endless_Runner
         {
             mainCamera.transform.position = new Vector3(0f, mainCamera.transform.position.y, mainCamera.transform.position.z);
 
-            Debug.Log($"Restart Clicked");
+            //Debug.Log($"Restart Clicked");
             int totalGroups = BackGround.transform.childCount;
             //Debug.Log($"Total Groups : {totalGroups}");
 

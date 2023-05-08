@@ -1,5 +1,5 @@
-//#define TEST_MODE
-#define TEST_CANVAS
+#define TEST_MODE
+//#define TEST_CANVAS
 
 using TMPro;
 using UnityEngine;
@@ -41,8 +41,10 @@ namespace Untitled_Endless_Runner
             localGameLogic.OnPlayerHealthOver += ResetStats;
             localGameLogic.OnGameplayContinued += ContinueMainGameplay;
 
-            spawnEnabled = true;
-            Invoke(nameof(SpawnObstacle), initialSpawnTime);
+            //Moving to TapToPlay
+            //spawnEnabled = true;
+            //Invoke(nameof(SpawnObstacle), initialSpawnTime);
+
             //startPosX = transform.position.x;                         //Not Needed Now
         }
 
@@ -69,11 +71,6 @@ namespace Untitled_Endless_Runner
             transform.localPosition = Vector3.zero;
             ToggleSpawn(false);
             //Debug.Log($"Calling For Reset : {spawnEnabled}");
-        }
-
-        public void EnableSpawn()
-        {
-
         }
 
         public void SpawnObstacle()
@@ -117,6 +114,13 @@ namespace Untitled_Endless_Runner
         private void InvokeToggleSpawn()
         {
             ToggleSpawn(true);
+        }
+
+        //On the play button, under the Main Menu Panel
+        public void EnableSpawn()
+        {
+            spawnEnabled = true;
+            Invoke(nameof(SpawnObstacle), initialSpawnTime);
         }
 
         private void ToggleSpawn(bool toggleValue)

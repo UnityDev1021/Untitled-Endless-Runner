@@ -7,9 +7,13 @@ namespace Untitled_Endless_Runner
     {
         //[SerializeField] private byte mode = 0;
         [SerializeField] private float speedMultiplier = 0.7f, topPos, bottomPos;
-        [SerializeField] private bool enableVerticalMove;
+        [SerializeField] private bool enableVerticalMove, destroyed = false;
         private float time, tempPos;
         private Coroutine emergeOut;
+
+        [Header("Collider Controls")]
+        public LayerMask playerLayerMask;
+        public Collider2D powerUpCol, baseCol;
 
         protected override void Start()
         {
@@ -18,11 +22,33 @@ namespace Untitled_Endless_Runner
             emergeOut = StartCoroutine(EmergeOut());
         }
 
+        //Reset on Re-Use
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            EnableEffectAgain();
+            destroyed = false;
+            GetComponent<Animator>().Play("Nothing", 0, 0f);                //If the RockHead is smashed
+            baseCol.enabled = true;
+            //Debug.Log($"On Enable");
+        }
+
         protected override void OnDisable()
         {
             base.OnDisable();
             if (emergeOut != null)
                 StopCoroutine(emergeOut);
+        }
+        protected override void ApplyEffect(GameObject player)
+        {
+            //The Obstacle is destroyed
+            if (GameManager.instance.invincibility && !destroyed && powerUpCol.IsTouchingLayers(playerLayerMask))
+            {
+                //gameObject.SetActive(false);
+                destroyed = true;
+                GetComponent<Animator>().Play("Destroyed", 0, 0f);
+                baseCol.enabled = false;
+            }
         }
 
         public override void AssignGroupTypes(byte groupType, float dummyData)

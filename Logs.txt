@@ -504,6 +504,14 @@ ________________________________________________________________________________
 => [Feature] If a player encounters steppable, then the jump counter resets in succession. So player can do successful triple jumps.
 => Instead of calling OnPowerUpCollected, resetting everything manually.
 
+-------------------------------------------------------------------
+							08 May
+-------------------------------------------------------------------
+=> [Bugs] After Restart, obstacles do not spawn.
+=> [Bugs] Using diamonds, UI Hearts do not appear perfectly. (curret heart)
+=> [Bugs] Player stuck in fire obstacle, does not move even after pressing jump or slide.
+=> [Bugs] Block Spike does not works properly, spikes are not present.
+=> Updating Power-Ups sprites
 _______________________________________________________________________________________________________________
 _______________________________________________________________________________________________________________
 
